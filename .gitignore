@@ -31,10 +31,5 @@
 *.out
 *.app
 
-# Other platforms
-proj.linux
-proj.ios_mac
-proj.android
-
 # Build files
-/richman/win32-build/
+/monopoly/win32-build/
