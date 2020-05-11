@@ -1,4 +1,4 @@
 include ':libcocos2dx'
 project(':libcocos2dx').projectDir = new File(settingsDir, '../cocos2d/cocos/platform/android/libcocos2dx')
-include ':richman'
-project(':richman').projectDir = new File(settingsDir, 'app')
+include ':monopoly'
+project(':monopoly').projectDir = new File(settingsDir, 'app')
