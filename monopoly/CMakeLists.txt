@@ -58,10 +58,168 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
+
+     Classes/Character/Character.cpp
+     Classes/Character/Dice.cpp
+
+     Classes/God/Angel.cpp
+     Classes/God/Earth.cpp
+     Classes/God/Luck.cpp
+     Classes/God/Poor.cpp
+     Classes/God/Unluck.cpp
+     Classes/God/Devil.cpp
+     Classes/God/God.cpp
+     Classes/God/MinePosition.cpp
+     Classes/God/Rich.cpp
+
+     Classes/Incident/Criminal.cpp
+     Classes/Incident/Finance.cpp
+     Classes/Incident/Incident.cpp
+     Classes/Incident/Realtor.cpp
+     Classes/Incident/Stay.cpp
+     Classes/Incident/Economy.cpp
+     Classes/Incident/Holiday.cpp
+     Classes/Incident/Medical.cpp
+     Classes/Incident/Staff.cpp
+
+     Classes/Item/AngelCard.cpp
+     Classes/Item/ControlDice.cpp
+     Classes/Item/HouseChange.cpp
+     Classes/Item/Item.cpp
+     Classes/Item/Pray.cpp
+     Classes/Item/RidHospital.cpp
+     Classes/Item/Sleep.cpp
+     Classes/Item/Turtle.cpp
+     Classes/Item/Average.cpp
+     Classes/Item/DevilCard.cpp
+     Classes/Item/HouseDestory.cpp
+     Classes/Item/Mine.cpp
+     Classes/Item/RedCard.cpp
+     Classes/Item/RidJail.cpp
+     Classes/Item/Stop.cpp
+     Classes/Item/Worker.cpp
+     Classes/Item/BlackCard.cpp
+     Classes/Item/Escape.cpp
+     Classes/Item/HouseExchange.cpp
+     Classes/Item/Missile.cpp
+     Classes/Item/Revenge.cpp
+     Classes/Item/RisePrice.cpp
+     Classes/Item/Transmit.cpp
+     Classes/Item/Car.cpp
+     Classes/Item/Frame.cpp
+     Classes/Item/Impute.cpp
+     Classes/Item/Motor.cpp
+     Classes/Item/RidGod.cpp
+     Classes/Item/Robot.cpp
+     Classes/Item/TurnAround.cpp
+
+     Classes/Land/Aviation.cpp
+     Classes/Land/Business.cpp
+     Classes/Land/Enterprise.cpp
+     Classes/Land/Hotel.cpp
+     Classes/Land/Insurance.cpp
+     Classes/Land/Land.cpp
+     Classes/Land/Lottery.cpp
+     Classes/Land/Oil.cpp
+     Classes/Land/Resort.cpp
+     Classes/Land/Bank.cpp
+     Classes/Land/Chance.cpp
+     Classes/Land/Hospital.cpp
+     Classes/Land/Institute.cpp
+     Classes/Land/Jail.cpp
+     Classes/Land/Life.cpp
+     Classes/Land/Mall.cpp
+     Classes/Land/Park.cpp
+     Classes/Land/Technology.cpp
+
+     Classes/Scene/BankScene.cpp
+     Classes/Scene/IncidentScene.cpp
+     Classes/Scene/MapScene.cpp
+     Classes/Scene/SettingScene.cpp
+     Classes/Scene/StorkScene.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
+
+     Classes/Character/Character.h
+     Classes/Character/Dice.h
+
+     Classes/God/Angel.h
+     Classes/God/Earth.h
+     Classes/God/Luck.h
+     Classes/God/Poor.h
+     Classes/God/Unluck.h
+     Classes/God/Devil.h
+     Classes/God/God.h
+     Classes/God/MinePosition.h 
+     Classes/God/Rich.h
+
+     Classes/Incident/Criminal.h
+     Classes/Incident/Finance.h
+     Classes/Incident/Incident.h
+     Classes/Incident/Realtor.h
+     Classes/Incident/Stay.h
+     Classes/Incident/Economy.h
+     Classes/Incident/Holiday.h
+     Classes/Incident/Medical.h
+     Classes/Incident/Staff.h
+
+          Classes/Item/AngelCard.h
+     Classes/Item/ControlDice.h
+     Classes/Item/HouseChange.h
+     Classes/Item/Item.h
+     Classes/Item/Pray.h
+     Classes/Item/RidHospital.h
+     Classes/Item/Sleep.h
+     Classes/Item/Turtle.h
+     Classes/Item/Average.h
+     Classes/Item/DevilCard.h
+     Classes/Item/HouseDestory.h
+     Classes/Item/Mine.h
+     Classes/Item/RedCard.h
+     Classes/Item/RidJail.h
+     Classes/Item/Stop.h
+     Classes/Item/Worker.h
+     Classes/Item/BlackCard.h
+     Classes/Item/Escape.h
+     Classes/Item/HouseExchange.h
+     Classes/Item/Missile.h
+     Classes/Item/Revenge.h
+     Classes/Item/RisePrice.h
+     Classes/Item/Transmit.h
+     Classes/Item/Car.h
+     Classes/Item/Frame.h
+     Classes/Item/Impute.h
+     Classes/Item/Motor.h
+     Classes/Item/RidGod.h
+     Classes/Item/Robot.h
+     Classes/Item/TurnAround.h
+
+     Classes/Land/Aviation.h
+     Classes/Land/Business.h
+     Classes/Land/Enterprise.h
+     Classes/Land/Hotel.h
+     Classes/Land/Insurance.h
+     Classes/Land/Land.h
+     Classes/Land/Lottery.h
+     Classes/Land/Oil.h
+     Classes/Land/Resort.h
+     Classes/Land/Bank.h
+     Classes/Land/Chance.h
+     Classes/Land/Hospital.h
+     Classes/Land/Institute.h
+     Classes/Land/Jail.h
+     Classes/Land/Life.h
+     Classes/Land/Mall.h
+     Classes/Land/Park.h
+     Classes/Land/Technology.h
+
+     Classes/Scene/BankScene.h
+     Classes/Scene/IncidentScene.h
+     Classes/Scene/MapScene.h
+     Classes/Scene/SettingScene.h
+     Classes/Scene/StorkScene.h
      )
 
 if(ANDROID)
