@@ -1,35 +1,35 @@
 # Prerequisites
-*.d
+monopoly/win32-build/*.d
 
 # Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+monopoly/win32-build/*.slo
+monopoly/win32-build/*.lo
+monopoly/win32-build/*.o
+monopoly/win32-build/*.obj
 
 # Precompiled Headers
-*.gch
-*.pch
+monopoly/win32-build/*.gch
+monopoly/win32-build/*.pch
 
 # Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+monopoly/win32-build/*.so
+monopoly/win32-build/*.dylib
+monopoly/win32-build/*.dll
 
 # Fortran module files
-*.mod
-*.smod
+monopoly/win32-build/*.mod
+monopoly/win32-build/*.smod
 
 # Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+monopoly/win32-build/*.lai
+monopoly/win32-build/*.la
+monopoly/win32-build/*.a
+monopoly/win32-build/*.lib
 
 # Executables
-*.exe
-*.out
-*.app
+monopoly/win32-build/*.exe
+monopoly/win32-build/*.out
+monopoly/win32-build/*.app
 
 # Build files
-/monopoly/win32-build/
+monopoly/win32-build/
