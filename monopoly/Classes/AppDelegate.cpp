@@ -23,8 +23,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
-
+#include "Scene/StartScene.h"
 // #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
@@ -73,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("monopoly", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("monopoly", cocos2d::Rect(0, 0, mediumResolutionSize.width, mediumResolutionSize.height));
 #else
         glview = GLViewImpl::create("monopoly");
 #endif
@@ -108,9 +107,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-
-    // run
+    auto scene = StartScene::createScene();
     director->runWithScene(scene);
 
     return true;

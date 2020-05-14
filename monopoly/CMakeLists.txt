@@ -57,7 +57,6 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
 
      Classes/Character/Character.cpp
      Classes/Character/Dice.cpp
@@ -137,10 +136,13 @@ list(APPEND GAME_SOURCE
      Classes/Scene/MapScene.cpp
      Classes/Scene/SettingScene.cpp
      Classes/Scene/StorkScene.cpp
+     Classes/Scene/ExchangeScene.cpp
+     Classes/Scene/LotteryScene.cpp
+     Classes/Scene/SelectScene.cpp
+     Classes/Scene/StartScene.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
 
      Classes/Character/Character.h
      Classes/Character/Dice.h
@@ -165,7 +167,7 @@ list(APPEND GAME_HEADER
      Classes/Incident/Medical.h
      Classes/Incident/Staff.h
 
-          Classes/Item/AngelCard.h
+     Classes/Item/AngelCard.h
      Classes/Item/ControlDice.h
      Classes/Item/HouseChange.h
      Classes/Item/Item.h
@@ -220,6 +222,10 @@ list(APPEND GAME_HEADER
      Classes/Scene/MapScene.h
      Classes/Scene/SettingScene.h
      Classes/Scene/StorkScene.h
+     Classes/Scene/ExchangeScene.h
+     Classes/Scene/LotteryScene.h
+     Classes/Scene/SelectScene.h
+     Classes/Scene/StartScene.h
      )
 
 if(ANDROID)
