@@ -19,7 +19,12 @@ bool StartScene::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	MenuItemFont::setFontName("ºÚÌå");
+	auto background = Sprite::create("startbackground.png");
+	background->setAnchorPoint(Vec2(0, 0));
+	background->setPosition(origin);
+	this->addChild(background, 0);
+
+	MenuItemFont::setFontName("»ªÎÄçúçê");
 	MenuItemFont::setFontSize(20);
 
 	auto select_item = MenuItemFont::create("Start Game", [&](Ref* render)
@@ -55,7 +60,7 @@ bool StartScene::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-	auto label = Label::createWithTTF("Monopoly", "fonts/Marker Felt.ttf", 50);
+	auto label = Label::createWithTTF("Monopoly", "fonts/Marker Felt.ttf", 60);
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,origin.y + 4*visibleSize.height/5 - label->getContentSize().height));
 	this->addChild(label, 1);
 	return true;
