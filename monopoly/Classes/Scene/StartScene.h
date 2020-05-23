@@ -1,5 +1,5 @@
-#ifndef __START_SCENE_H__
-#define __START_SCENE_H__
+#ifndef _START_SCENE_H_
+#define _START_SCENE_H_
 
 #include "cocos2d.h"
 
