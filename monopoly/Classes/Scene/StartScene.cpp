@@ -1,4 +1,6 @@
 #include "Scene/StartScene.h"
+#include "Scene/SelectScene.h"
+#include "Scene/SettingScene.h"
 
 USING_NS_CC;
 
@@ -24,16 +26,18 @@ bool StartScene::init()
 	background->setPosition(origin);
 	this->addChild(background, 0);
 
-	MenuItemFont::setFontName("»ªÎÄçúçê");
+	MenuItemFont::setFontName("Â»ÂªÃŽÃ„Ã§ÃºÃ§Ãª");
 	MenuItemFont::setFontSize(20);
 
 	auto select_item = MenuItemFont::create("Start Game", [&](Ref* render)
 	{
-		Director::getInstance()->end();
+		auto scene = SelectScene::createScene();
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 	auto setting_item = MenuItemFont::create("Setting", [&](Ref* render)
 	{
-		Director::getInstance()->end();
+		auto scene = SettingScene::createScene();
+		Director::getInstance()->pushScene(scene);
 	});
 	auto close_item = MenuItemFont::create("Close", [&](Ref* render)
 	{
