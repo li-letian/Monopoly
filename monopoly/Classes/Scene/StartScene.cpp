@@ -26,7 +26,7 @@ bool StartScene::init()
 	background->setPosition(origin);
 	this->addChild(background, 0);
 
-	MenuItemFont::setFontName("»ªÎÄçúçê");
+	MenuItemFont::setFontName("Â»ÂªÃŽÃ„Ã§ÃºÃ§Ãª");
 	MenuItemFont::setFontSize(20);
 
 	auto select_item = MenuItemFont::create("Start Game", [&](Ref* render)
