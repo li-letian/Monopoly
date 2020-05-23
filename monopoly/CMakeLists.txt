@@ -141,7 +141,9 @@ list(APPEND GAME_SOURCE
      Classes/Scene/LotteryScene.cpp
      Classes/Scene/SelectScene.cpp
      Classes/Scene/StartScene.cpp
+     Classes/Scene/GameController.cpp
      )
+      
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/ZH.h
@@ -228,6 +230,7 @@ list(APPEND GAME_HEADER
      Classes/Scene/LotteryScene.h
      Classes/Scene/SelectScene.h
      Classes/Scene/StartScene.h
+     Classes/Scene/GameController.h
      )
 
 if(ANDROID)
