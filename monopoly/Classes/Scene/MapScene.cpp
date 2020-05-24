@@ -41,15 +41,16 @@ bool MapScene::mapInit()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	map = TMXTiledMap::create("gamemap.tmx");
+	map = TMXTiledMap::create("map.tmx");
+	assert(map);
 	map->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 	map->setPosition(0,visibleSize.height);
-
-	
-	map->getLayer("grass")->setLocalZOrder(-1);
-	
-	this->addChild(map, -1, "map");
-	
+	map->getLayer("grass")->setLocalZOrder(-10);
+	map->getLayer("lake")->setLocalZOrder(-8);
+	map->getLayer("road")->setLocalZOrder(-6);
+	map->getLayer("land")->setLocalZOrder(-4);
+	map->getLayer("house")->setLocalZOrder(-2);
+	this->addChild(map, -20, "map");
 
 	return true;
 }
