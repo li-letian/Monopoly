@@ -10,10 +10,8 @@ public:
 	Character();
 	~Character() = default;
 	
-	//这里没使用一般的CREATE_FUNC宏与virtual init的组合
-	//主要是为了给init增加参数，方便调整初始值，其余效果一致
-	static Character* create(int tag, const std::string& name, int money = 15000);
-	bool init(int tag, const std::string& name, int money);
+	CREATE_FUNC(Character);
+	virtual bool init();
 
 	//4个动画对象，分别存储人物向下、左、右、上移动的动画
 	CC_SYNTHESIZE(Animate*, character_anim_down_, CharacterAnimDown);

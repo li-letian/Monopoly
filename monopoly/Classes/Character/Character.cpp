@@ -4,29 +4,21 @@
 USING_NS_CC;
 
 Character::Character()
+	:name_(),
+	money_(15000),
+	is_my_turn_(true),
+	stop_times_(0)
 {
-	
+	this->setTag(0);
 }
 
-Character* Character::create(int tag, const std::string& name, int money)
-{
-	Character* character = new Character();
-	character->init(tag,name,money);
-	character->autorelease();
-	return character;
-}
-
-bool Character::init(int tag, const std::string& name, int money)
+bool Character::init()
 {
 	if (!Sprite::init())
 	{
 		return false;
 	}
-	this->setTag(tag);
-	name_ = name;
-	money_ = money;
-	is_my_turn_ = true;
-	stop_times_ = 0;
+	initAnimate();	//初始化动画对象
 	//未完
 	return true;
 }
