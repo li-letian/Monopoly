@@ -8,7 +8,7 @@ USING_NS_CC;
 class Character : public Sprite {
 public:
 	Character();
-	~Character() = default;
+	~Character();
 	
 	CREATE_FUNC(Character);
 	virtual bool init();

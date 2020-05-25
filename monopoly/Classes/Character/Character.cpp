@@ -4,12 +4,25 @@
 USING_NS_CC;
 
 Character::Character()
-	:name_(),
+	:character_anim_down_(),
+	character_anim_left_(),
+	character_anim_right_(),
+	character_anim_up_(),
+	name_(),
 	money_(15000),
 	is_my_turn_(true),
 	stop_times_(0)
 {
 	this->setTag(0);
+}
+
+Character::~Character()
+{
+	//释放先前retain的动画对象
+	character_anim_down_->release();
+	character_anim_left_->release();
+	character_anim_right_->release();
+	character_anim_up_->release();
 }
 
 bool Character::init()
