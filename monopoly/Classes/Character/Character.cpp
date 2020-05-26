@@ -72,12 +72,12 @@ void Character::initAnimate()
 		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_left_vec.pushBack(frame);
 	}
-	for (int i = 4; i < 8; ++i)
+	for (int i = 8; i < 12; ++i)
 	{
 		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_right_vec.pushBack(frame);
 	}
-	for (int i = 4; i < 8; ++i)
+	for (int i = 12; i < 16; ++i)
 	{
 		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_up_vec.pushBack(frame);

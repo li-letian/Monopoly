@@ -69,7 +69,7 @@ void GameController::addEventListenerCustom()
 void GameController::addCharacter(const std::string&name,int tag,int money,int start_pos)
 {
 	auto character = Character::create(name, tag, money, start_pos);
-	characters_.pushBack(character);
+	characters_.push_back(character);
 	character->setPosition(map_scene_->pos_.at(start_pos));
 	map_scene_->map_->addChild(character,10);
 }

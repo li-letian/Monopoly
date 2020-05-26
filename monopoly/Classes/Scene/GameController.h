@@ -26,7 +26,7 @@ private:
 
 	Dice* dice_;							//储存本局游戏的随机数
 	MapScene* map_scene_;					//储存地图场景
-	Vector<Character*>characters_;			//储存本局游戏所有角色的Vector
+	std::vector<Character*>characters_;		//储存本局游戏所有角色的Vector
 	EventListenerCustom* listener_custom_;  //自定义事件分发器
 	Menu* go_button_menu_;					//go_button
 	int whose_turn_;						//记录轮到第几个角色行动
