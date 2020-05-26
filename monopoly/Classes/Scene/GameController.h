@@ -13,8 +13,12 @@ public:
 	CREATE_FUNC(GameController);
 	virtual bool init();
 private:
-	MapScene* map_scene_;
 	void addCharacter(const std::string& name, int tag, int money,Vec2 start_pos);
+	void returnToCharacter(Character*);
+	void addGoButton();
+
+	MapScene* map_scene_;
 	Vector<Character*>characters_;
+	int whose_turn_;	//记录轮到第几个角色行动
 };
 #endif

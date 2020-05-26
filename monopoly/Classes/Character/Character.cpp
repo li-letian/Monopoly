@@ -10,7 +10,6 @@ Character::Character()
 	character_anim_up_(),
 	name_(),
 	money_(15000),
-	is_my_turn_(true),
 	stop_times_(0)
 {
 	this->setTag(0);
@@ -25,16 +24,15 @@ Character::~Character()
 	character_anim_up_->release();
 }
 
-Character* Character::create(const std::string& name, int tag, int money)
+Character* Character::create(const std::string& name, int tag, int money, Vec2 cur_pos)
 {
 	auto* character = new Character();
-	character->init(name, tag, money);
+	character->init(name, tag, money, cur_pos);
 	character->autorelease();
 	return character;
-
 }
 
-bool Character::init(const std::string&name,int tag,int money)
+bool Character::init(const std::string& name, int tag, int money, Vec2 cur_pos)
 {
 	if (!Sprite::init())
 	{
@@ -45,10 +43,11 @@ bool Character::init(const std::string&name,int tag,int money)
 	name_ = name;
 	this->setTag(tag);
 	money_ = money;
+	cur_pos_ = cur_pos;
 
 	initAnimate();	//初始化动画对象
 	initSprite();	//设置人物初始形象
-	
+
 	return true;
 }
 
@@ -99,5 +98,5 @@ void Character::initSprite()
 {
 	auto spf = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-4.png", name_.c_str()));
 	this->initWithSpriteFrame(spf);
-	this->setAnchorPoint(Vec2(0.5f, 0));
+	this->setAnchorPoint(Vec2(0.5f, 0.2f));
 }
