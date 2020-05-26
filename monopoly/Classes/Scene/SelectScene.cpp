@@ -1,6 +1,7 @@
 #include "Scene/SelectScene.h"
 #include "Scene/StartScene.h"
 #include "Scene/MapScene.h"
+#include "Scene/GameController.h"
 
 USING_NS_CC;
 
@@ -38,8 +39,7 @@ bool SelectScene::init()
 	});
 	auto start_item = MenuItemFont::create("Start", [&](Ref* render)
 	{
-		auto scene = MapScene::createScene();
-		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
+			GameController::create();
 	});
 
 	float x = origin.x + visibleSize.width / 7;

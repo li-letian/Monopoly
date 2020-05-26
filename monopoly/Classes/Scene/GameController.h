@@ -4,13 +4,11 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-class GameController : public Layer {
+class GameController : public Ref {
 public:
+	static GameController* createController();
 	CREATE_FUNC(GameController);
 	virtual bool init();
-
-	static GameController* game_controller_instance_;
-	static GameController* getInstance();
 private:
 	
 };
