@@ -10,7 +10,8 @@ Character::Character()
 	character_anim_up_(),
 	name_(),
 	money_(15000),
-	stop_times_(0)
+	stop_times_(0),
+	steps_scope_(walk_steps)
 {
 	this->setTag(0);
 }
@@ -24,7 +25,7 @@ Character::~Character()
 	character_anim_up_->release();
 }
 
-Character* Character::create(const std::string& name, int tag, int money, Vec2 cur_pos)
+Character* Character::create(const std::string& name, int tag, int money, int cur_pos)
 {
 	auto* character = new Character();
 	character->init(name, tag, money, cur_pos);
@@ -32,7 +33,7 @@ Character* Character::create(const std::string& name, int tag, int money, Vec2 c
 	return character;
 }
 
-bool Character::init(const std::string& name, int tag, int money, Vec2 cur_pos)
+bool Character::init(const std::string& name, int tag, int money, int cur_pos)
 {
 	if (!Sprite::init())
 	{
