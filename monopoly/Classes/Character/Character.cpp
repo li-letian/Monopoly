@@ -1,4 +1,4 @@
-#include "Character.h"
+#include "Character/Character.h"
 #include "Common/CommonConstant.h"
 
 USING_NS_CC;
@@ -25,51 +25,61 @@ Character::~Character()
 	character_anim_up_->release();
 }
 
-bool Character::init()
+Character* Character::create(const std::string& name, int tag, int money)
+{
+	auto* character = new Character();
+	character->init(name, tag, money);
+	character->autorelease();
+	return character;
+
+}
+
+bool Character::init(const std::string&name,int tag,int money)
 {
 	if (!Sprite::init())
 	{
 		return false;
 	}
+
+	//设置一些基本属性
+	name_ = name;
+	this->setTag(tag);
+	money_ = money;
+
 	initAnimate();	//初始化动画对象
-	//未完
+	initSprite();	//设置人物初始形象
+	
 	return true;
 }
 
 void Character::initAnimate()
 {
-	auto frameCache = SpriteFrameCache::getInstance();
-	switch (this->getTag())
-	{
-	case miku:
-		frameCache->addSpriteFramesWithFile("miku.plist", "miku.png");
-		break;
-	//在此后新加入角色
-
-	}
+	character_frame_cache_ = SpriteFrameCache::getInstance();
+	character_frame_cache_->addSpriteFramesWithFile(StringUtils::format("%s.plist", name_.c_str()), StringUtils::format("%s.png", name_.c_str()));
 
 	Vector<SpriteFrame*>character_anim_down_vec;
 	Vector<SpriteFrame*>character_anim_left_vec;
 	Vector<SpriteFrame*>character_anim_right_vec;
 	Vector<SpriteFrame*>character_anim_up_vec;
+
 	for (int i = 0; i < 4; ++i)
 	{
-		auto frame = frameCache->getSpriteFrameByName(StringUtils::format("miku-%d.png", i));
+		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_down_vec.pushBack(frame);
 	}
 	for (int i = 4; i < 8; ++i)
 	{
-		auto frame = frameCache->getSpriteFrameByName(StringUtils::format("miku-%d.png", i));
+		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_left_vec.pushBack(frame);
 	}
 	for (int i = 4; i < 8; ++i)
 	{
-		auto frame = frameCache->getSpriteFrameByName(StringUtils::format("miku-%d.png", i));
+		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_right_vec.pushBack(frame);
 	}
 	for (int i = 4; i < 8; ++i)
 	{
-		auto frame = frameCache->getSpriteFrameByName(StringUtils::format("miku-%d.png", i));
+		auto frame = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-%d.png", name_.c_str(), i));
 		character_anim_up_vec.pushBack(frame);
 	}
 	
@@ -83,4 +93,11 @@ void Character::initAnimate()
 	character_anim_left_->retain();
 	character_anim_right_->retain();
 	character_anim_up_->retain();
+}
+
+void Character::initSprite()
+{
+	auto spf = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-4.png", name_.c_str()));
+	this->initWithSpriteFrame(spf);
+	this->setAnchorPoint(Vec2(0.5f, 0));
 }
