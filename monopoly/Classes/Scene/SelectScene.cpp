@@ -29,7 +29,7 @@ bool SelectScene::init()
 	
 
 	MenuItemFont::setFontName("»ªÎÄçúçê");
-	MenuItemFont::setFontSize(20);
+	MenuItemFont::setFontSize(50);
 
 	auto exit_item = MenuItemFont::create("Exit", [&](Ref* render)
 	{
