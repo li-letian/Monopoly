@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-Scene *MapScene::createScene()
+MapScene *MapScene::createScene()
 {
 	return MapScene::create();
 }
@@ -1091,5 +1091,9 @@ bool MapScene::landInit()
 	type_.push_back(0);
 	pos_.push_back(Vec2(tile_size.width * static_cast<float>(50), map_size.height * tile_size.height - tile_size.height * static_cast<float>(82)));
 	type_.push_back(0);
+	for (int i = 0; i < pos_.size(); ++i)
+	{
+		pos_.at(i) += Vec2(0, tile_size.height * static_cast<float>(100));
+	}
 	return true;
 }

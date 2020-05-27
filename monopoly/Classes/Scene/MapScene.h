@@ -8,7 +8,7 @@
 class MapScene : public cocos2d::Scene
 {
 public:
-	static cocos2d::Scene* createScene();
+	static MapScene* createScene();
 
 	bool mapInit();
 	bool landInit();

@@ -142,6 +142,8 @@ list(APPEND GAME_SOURCE
      Classes/Scene/SelectScene.cpp
      Classes/Scene/StartScene.cpp
      Classes/Scene/GameController.cpp
+
+     Classes/Common/CommonMethod.cpp
      )
       
 list(APPEND GAME_HEADER
@@ -231,6 +233,9 @@ list(APPEND GAME_HEADER
      Classes/Scene/SelectScene.h
      Classes/Scene/StartScene.h
      Classes/Scene/GameController.h
+
+     Classes/Common/CommonConstant.h
+     Classes/Common/CommonMethod.h
      )
 
 if(ANDROID)
