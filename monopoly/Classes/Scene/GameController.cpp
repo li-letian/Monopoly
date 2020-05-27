@@ -3,17 +3,6 @@
 #include "Scene/MapScene.h"
 #include "Common/CommonConstant.h"
 
-GameController::GameController()
-	:map_scene_(NULL)
-{
-
-}
-
-GameController::~GameController()
-{
-	Director::getInstance()->getEventDispatcher()->removeEventListener(listener_custom_);
-}
-
 bool GameController::init()
 {
 	if (!Node::init())
@@ -23,66 +12,62 @@ bool GameController::init()
 	//创造map_scene场景并切换
 	dice_ = Dice::create();
 	map_scene_ = MapScene::createScene();
+	map_scene_->addChild(this, -50);
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
-	
+
 	//添加自定义事件监听器
 	addEventListenerCustom();
-	
+
 	//添加角色，暂时固定添加2个:初音未来与南小鸟
 	addCharacter("miku", miku, 15000, 0);
 	addCharacter("nanxiaoniao", nanxiaoniao, 15000, 1);
-	
+
 	whose_turn_ = 0;
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
 
-	
 	return true;
 }
 
 void GameController::addEventListenerCustom()
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
-	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom* event) {
-		char* buf = static_cast<char*>(event->getUserData());
+	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom *event) {
+		char *buf = static_cast<char *>(event->getUserData());
 		int msg = std::atoi(buf);
 		switch (msg)
 		{
-		case(msg_hide_go): //让go按钮消失
+		case (msg_hide_go):												//让go按钮消失
 			go_button_menu_->setPosition(visible_size.width + 1000, 0); //将按钮移到屏幕外
-			StartGo();		//人物开始走路
+			StartGo();													//人物开始走路
 			break;
-		case(msg_make_go_apper):	//让go按钮出现
+		case (msg_make_go_apper): //让go按钮出现
 			whose_turn_++;
-			if (whose_turn_ >= characters_.size());
+			if (whose_turn_ >= characters_.size())
 			{
 				whose_turn_ = 0;
 			}
 			go_button_menu_->setPosition(Vec2(visible_size.width / 2, 3 * visible_size.height / 4));
 			returnToCharacter(characters_.at(whose_turn_));
 		}
-		});
-	auto dispatcher = Director::getInstance()->getEventDispatcher();
-	dispatcher->addEventListenerWithFixedPriority(listener_custom_, 1);
+	});
+	auto dispatcher = map_scene_->map_->getEventDispatcher();
+	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->map_);
 }
 
-void GameController::addCharacter(const std::string&name,int tag,int money,int start_pos)
+void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos)
 {
 	auto character = Character::create(name, tag, money, start_pos);
-	characters_.push_back(character);
+	characters_.pushBack(character);
 	character->setPosition(map_scene_->pos_.at(start_pos));
-	map_scene_->map_->addChild(character,10);
+	map_scene_->map_->addChild(character, 10);
+	log("position: %f %f", character->getPosition().x, character->getPosition().y);
 }
 
-void GameController::returnToCharacter(Character* character)
+void GameController::returnToCharacter(Character *character)
 {
-	auto visible_size = Director::getInstance()->getVisibleSize();
-	auto tile_size = map_scene_->map_->getTileSize();
-
+	map_scene_->perspectiveJump(map_scene_->pos_.at(character->getCurPos()).x, map_scene_->pos_.at(character->getCurPos()).y);
 	//经过某种神奇的坐标变换将视角转到角色
-	map_scene_->map_->setPosition(
-		Vec2(-map_scene_->pos_.at(character->getCurPos()).x + visible_size.width / 2,
-			tile_size.height * static_cast<float>(100) - map_scene_->pos_.at(character->getCurPos()).y + visible_size.height / 2));
 }
 
 void GameController::addGoButton()
@@ -91,16 +76,19 @@ void GameController::addGoButton()
 
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
-	go_button->setCallback([=](Ref* render) {
+	go_button->setCallback([=](Ref *render) {
 		//点击后发送隐藏按钮的信息
-		auto dispatcher = Director::getInstance()->getEventDispatcher();
-		char* buf = new char[10];
+		auto dispatcher = map_scene_->map_->getEventDispatcher();
+		char *buf = new char[10];
 		sprintf(buf, "%d", msg_hide_go);
+
+		log("message sending : %s", buf);
+
 		EventCustom event = EventCustom("monopoly_msg");
 		event.setUserData(buf);
 		dispatcher->dispatchEvent(&event);
 		CC_SAFE_DELETE_ARRAY(buf);
-		});
+	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
 	//设置锚点、初始位置
@@ -120,7 +108,7 @@ void GameController::StartGo()
 
 	//掷骰子得到要走的步数
 	steps_to_go_ = dice_->RollTheDice(character->getStepsScope());
-	steps_has_gone_ = 0;		//已走步数置0
+	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = JudgeDirection(character->getCurPos());
 	MoveOneStep(direction);
@@ -128,10 +116,10 @@ void GameController::StartGo()
 
 int GameController::JudgeDirection(int cur_pos)
 {
-	int cur_x = map_scene_->pos_.at(cur_pos).x;
-	int cur_y = map_scene_->pos_.at(cur_pos).y;
-	int next_x = map_scene_->pos_.at(cur_pos + 1).x;
-	int next_y = map_scene_->pos_.at(cur_pos + 1).y;
+	auto cur_x = map_scene_->pos_.at(cur_pos).x;
+	auto cur_y = map_scene_->pos_.at(cur_pos).y;
+	auto next_x = map_scene_->pos_.at(cur_pos + 1).x;
+	auto next_y = map_scene_->pos_.at(cur_pos + 1).y;
 	if (next_y < cur_y)
 	{
 		return walk_down;
@@ -148,18 +136,19 @@ int GameController::JudgeDirection(int cur_pos)
 	{
 		return walk_up;
 	}
+	return 0;
 }
 
 void GameController::MoveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
-	MoveBy* move_by;
-	Repeat* repeat;
+	MoveBy *move_by = nullptr;
+	Repeat *repeat = nullptr;
 	switch (direction)
 	{
 	case walk_down:
 		move_by = MoveBy::create(character_one_step_time, Vec2(0, -tile_size));
-		repeat = Repeat::create(character->getCharacterAnimDown(),1);
+		repeat = Repeat::create(character->getCharacterAnimDown(), 1);
 		break;
 	case walk_left:
 		move_by = MoveBy::create(character_one_step_time, Vec2(-tile_size, 0));
@@ -174,14 +163,14 @@ void GameController::MoveOneStep(int direction)
 		repeat = Repeat::create(character->getCharacterAnimUp(), 1);
 		break;
 	}
-	auto endGoCallBack = [=]() {
+	auto endGoCallBack = CallFunc::create([=]() {
 		this->endGo();
-	};
+	});
 	auto spawn_action = Sequence::create(Spawn::create(move_by, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
 }
 
-void GameController:: endGo()
+void GameController::endGo()
 {
 	steps_has_gone_++;
 	auto character = characters_.at(whose_turn_);
@@ -194,8 +183,8 @@ void GameController:: endGo()
 	}
 	else
 	{
-		auto dispatcher = Director::getInstance()->getEventDispatcher();
-		char* buf = new char[10];
+		auto dispatcher = map_scene_->map_->getEventDispatcher();
+		char *buf = new char[10];
 		sprintf(buf, "%d", msg_make_go_apper);
 
 		EventCustom event("monopoly_msg");

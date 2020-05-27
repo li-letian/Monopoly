@@ -39,7 +39,6 @@ bool MapScene::init()
 		return false;
 	}
 
-	
 	/*//测试
 	log("test %f %f", pos_[2].x, pos_[2].y);
 	auto sp = Sprite::create("hotel2.png");
@@ -58,7 +57,7 @@ bool MapScene::mapInit()
 	map_ = TMXTiledMap::create("map.tmx");
 	assert(map_);
 	map_->setAnchorPoint(Vec2::ZERO);
-	perspectiveJump(45.f*32.f, 18.f*32.f);
+	perspectiveJump(45.f * 32.f, 18.f * 32.f);
 	map_->getLayer("grass")->setLocalZOrder(-10);
 	map_->getLayer("lake")->setLocalZOrder(-8);
 	map_->getLayer("road")->setLocalZOrder(-6);
@@ -104,7 +103,7 @@ bool MapScene::rollMap()
 		x = std::max(x, visible_size.width - map_size.width * tile_size.width);
 		auto y = std::min(0.0f, delta.y);
 		y = std::max(y, visible_size.height - map_size.height * tile_size.height);
-		event->getCurrentTarget()->setPosition(x,y);
+		event->getCurrentTarget()->setPosition(x, y);
 		//log("your present touching position to the screen in GL direction is x:%.2f y:%.2f", finish_pos.x, finish_pos.y);
 		//log("map position to the parent in GL direction change to x:%.2f y:%.2f", delta.x, delta.y);
 	};
@@ -161,7 +160,6 @@ bool MapScene::panelInit()
 	return true;
 }
 
-
 //将视角跳转到以地图上某个像素坐标为中心的相应位置
 bool MapScene::perspectiveJump(float x, float y)
 {
@@ -180,7 +178,6 @@ bool MapScene::perspectiveJump(float x, float y)
 	map_->setPosition(x, y);
 	return true;
 }
-
 
 //添加地图上道路中心位置相对于地图右下角锚点的GL方向以像素为单位的坐标位置
 bool MapScene::landInit()
@@ -1091,9 +1088,5 @@ bool MapScene::landInit()
 	type_.push_back(0);
 	pos_.push_back(Vec2(tile_size.width * static_cast<float>(50), map_size.height * tile_size.height - tile_size.height * static_cast<float>(82)));
 	type_.push_back(0);
-	for (int i = 0; i < pos_.size(); ++i)
-	{
-		pos_.at(i) += Vec2(0, tile_size.height * static_cast<float>(100));
-	}
 	return true;
 }

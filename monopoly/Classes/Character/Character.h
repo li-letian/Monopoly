@@ -10,7 +10,22 @@ public:
 	Character();
 	~Character();
 	
-	static Character* create(const std::string& name, int tag, int money,int cur_pos);
+	static Character* create(const std::string& name, int tag, int money, int cur_pos)
+	{
+		auto pRet = new(std::nothrow) Character();
+		if (pRet && pRet->init(name, tag, money, cur_pos))
+		{
+			pRet->autorelease();
+			return pRet;
+		}
+		else
+		{
+			delete pRet;
+			pRet = nullptr;
+			return nullptr;
+		}
+	}
+
 	bool init(const std::string& name, int tag, int money, int cur_pos);
 
 	//4个动画对象，分别存储人物向下、左、右、上移动的动画

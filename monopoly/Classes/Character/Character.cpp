@@ -25,13 +25,6 @@ Character::~Character()
 	character_anim_up_->release();
 }
 
-Character* Character::create(const std::string& name, int tag, int money, int cur_pos)
-{
-	auto* character = new Character();
-	character->init(name, tag, money, cur_pos);
-	character->autorelease();
-	return character;
-}
 
 bool Character::init(const std::string& name, int tag, int money, int cur_pos)
 {
