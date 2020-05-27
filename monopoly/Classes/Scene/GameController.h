@@ -18,10 +18,11 @@ private:
 	void addCharacter(const std::string &name, int tag, int money, int start_pos); //添加角色
 	void returnToCharacter(Character *);										   //回到角色视角
 	void addGoButton();															   //添加go按钮
-	void StartGo();																   //指定当前角色开始走
-	int JudgeDirection(int cur_pos);											   //判断要走的方向
-	void MoveOneStep(int direction);											   //指定当前角色按某方向走一格
+	void startGo();																   //指定当前角色开始走
+	int judgeDirection(int cur_pos);											   //判断要走的方向
+	void moveOneStep(int direction);											   //指定当前角色按某方向走一格
 	void endGo();																   //MoveOneStep结束前调用的函数
+	void backToStand();															   //回到站立状态，在endGo中调用
 
 	Dice *dice_ = nullptr;							 //储存本局游戏的随机数
 	MapScene *map_scene_ = nullptr;					 //储存地图场景
