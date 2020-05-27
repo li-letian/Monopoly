@@ -10,7 +10,7 @@ bool GameController::init()
 		return false;
 	}
 	//创造map_scene场景并切换
-	dice_ = Dice::create();
+	dice_ = Dice::create();		//创造骰子
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50);
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
@@ -34,12 +34,12 @@ void GameController::addEventListenerCustom()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom *event) {
 		char *buf = static_cast<char *>(event->getUserData());
-		int msg = std::atoi(buf);
+		int msg = std::atoi(buf);	//解析收到的信息
 		switch (msg)
 		{
 		case (msg_hide_go):												//让go按钮消失
 			go_button_menu_->setPosition(visible_size.width + 1000, 0); //将按钮移到屏幕外
-			StartGo();													//人物开始走路
+			startGo();													//人物开始走路
 			break;
 		case (msg_make_go_apper): //让go按钮出现
 			whose_turn_++;
@@ -98,7 +98,7 @@ void GameController::addGoButton()
 	map_scene_->addChild(go_button_menu_, 11);
 }
 
-void GameController::StartGo()
+void GameController::startGo()
 {
 	//得到当前该走的角色
 	auto character = characters_.at(whose_turn_);
@@ -110,16 +110,21 @@ void GameController::StartGo()
 	steps_to_go_ = dice_->RollTheDice(character->getStepsScope());
 	steps_has_gone_ = 0; //已走步数置0
 
-	int direction = JudgeDirection(character->getCurPos());
-	MoveOneStep(direction);
+	int direction = judgeDirection(character->getCurPos());
+	moveOneStep(direction);
 }
 
-int GameController::JudgeDirection(int cur_pos)
+int GameController::judgeDirection(int cur_pos)
 {
+	int next_pos = cur_pos + 1;
+	if (next_pos >= map_scene_->pos_.size())
+	{
+		next_pos = 0;
+	}
 	auto cur_x = map_scene_->pos_.at(cur_pos).x;
 	auto cur_y = map_scene_->pos_.at(cur_pos).y;
-	auto next_x = map_scene_->pos_.at(cur_pos + 1).x;
-	auto next_y = map_scene_->pos_.at(cur_pos + 1).y;
+	auto next_x = map_scene_->pos_.at(next_pos).x;
+	auto next_y = map_scene_->pos_.at(next_pos).y;
 	if (next_y < cur_y)
 	{
 		return walk_down;
@@ -139,34 +144,36 @@ int GameController::JudgeDirection(int cur_pos)
 	return 0;
 }
 
-void GameController::MoveOneStep(int direction)
+void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
-	MoveBy *move_by = nullptr;
-	Repeat *repeat = nullptr;
+	int next_pos = character->getCurPos() + 1;
+	if (next_pos >= map_scene_->pos_.size())
+	{
+		next_pos = 0;
+	}
+	MoveTo* move_to = MoveTo::create(character_one_step_time,map_scene_->pos_.at(next_pos));
+	Repeat* repeat = nullptr;
 	switch (direction)
 	{
 	case walk_down:
-		move_by = MoveBy::create(character_one_step_time, Vec2(0, -tile_size));
 		repeat = Repeat::create(character->getCharacterAnimDown(), 1);
 		break;
 	case walk_left:
-		move_by = MoveBy::create(character_one_step_time, Vec2(-tile_size, 0));
 		repeat = Repeat::create(character->getCharacterAnimLeft(), 1);
 		break;
 	case walk_right:
-		move_by = MoveBy::create(character_one_step_time, Vec2(tile_size, 0));
 		repeat = Repeat::create(character->getCharacterAnimRight(), 1);
 		break;
 	case walk_up:
-		move_by = MoveBy::create(character_one_step_time, Vec2(0, tile_size));
 		repeat = Repeat::create(character->getCharacterAnimUp(), 1);
 		break;
 	}
 	auto endGoCallBack = CallFunc::create([=]() {
 		this->endGo();
 	});
-	auto spawn_action = Sequence::create(Spawn::create(move_by, repeat, NULL), endGoCallBack, NULL);
+	character->setCurPos(next_pos);
+	auto spawn_action = Sequence::create(Spawn::create(move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
 }
 
@@ -176,13 +183,16 @@ void GameController::endGo()
 	auto character = characters_.at(whose_turn_);
 	if (steps_has_gone_ < steps_to_go_)
 	{
-		character->setCurPos(character->getCurPos() + 1);
-		steps_has_gone_++;
-		auto direction = JudgeDirection(character->getCurPos());
-		MoveOneStep(direction);
+		//继续走下一步
+		auto direction = judgeDirection(character->getCurPos());
+		moveOneStep(direction);
 	}
 	else
 	{
+		//让人物恢复到站立状态，面朝下一格
+		backToStand();
+
+		//发送让go按钮重新出现的消息 （后期将消息发送功能封装）
 		auto dispatcher = map_scene_->map_->getEventDispatcher();
 		char *buf = new char[10];
 		sprintf(buf, "%d", msg_make_go_apper);
@@ -192,5 +202,33 @@ void GameController::endGo()
 		dispatcher->dispatchEvent(&event);
 		CC_SAFE_DELETE_ARRAY(buf);
 		return;
+	}
+}
+
+void GameController::backToStand()
+{
+	auto character = characters_.at(whose_turn_);
+	auto name = character->getPlayerName();
+	auto direction = judgeDirection(character->getCurPos());
+	auto spfcache = SpriteFrameCache::getInstance();
+	SpriteFrame* sprite_frame = nullptr;
+	switch (direction)
+	{
+	case walk_down:
+		sprite_frame = spfcache->getSpriteFrameByName(StringUtils::format("%s-0.png", name.c_str()));
+		character->setSpriteFrame(sprite_frame);
+		break;
+	case walk_left:
+		sprite_frame = spfcache->getSpriteFrameByName(StringUtils::format("%s-4.png", name.c_str()));
+		character->setSpriteFrame(sprite_frame);
+		break;
+	case walk_right:
+		sprite_frame = spfcache->getSpriteFrameByName(StringUtils::format("%s-8.png", name.c_str()));
+		character->setSpriteFrame(sprite_frame);
+		break;
+	case walk_up:
+		sprite_frame = spfcache->getSpriteFrameByName(StringUtils::format("%s-12.png", name.c_str()));
+		character->setSpriteFrame(sprite_frame);
+		break;
 	}
 }
