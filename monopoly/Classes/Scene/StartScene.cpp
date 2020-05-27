@@ -1,4 +1,7 @@
 #include "Scene/StartScene.h"
+#include "Scene/SelectScene.h"
+#include "Scene/SettingScene.h"
+#include "ZH.h"
 
 USING_NS_CC;
 
@@ -17,7 +20,7 @@ bool StartScene::init()
 	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto origin = Director::getInstance()->getVisibleOrigin();
 
 	auto background = Sprite::create("startbackground.png");
 	background->setAnchorPoint(Vec2(0, 0));
@@ -25,42 +28,33 @@ bool StartScene::init()
 	this->addChild(background, 0);
 
 	MenuItemFont::setFontName("华文琥珀");
-	MenuItemFont::setFontSize(20);
+	MenuItemFont::setFontSize(40);
 
-	auto select_item = MenuItemFont::create("Start Game", [&](Ref* render)
+	auto select_item = MenuItemFont::create(ZH("| 开始游戏 |"), [&](Ref* render)
+	{
+		auto scene = SelectScene::createScene();
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
+	});
+	auto setting_item = MenuItemFont::create(ZH("| 游戏设置 |"), [&](Ref* render)
+	{
+		auto scene = SettingScene::createScene();
+		Director::getInstance()->pushScene(scene);
+	});
+	auto close_item = MenuItemFont::create(ZH("| 退出游戏 |"), [&](Ref* render)
 	{
 		Director::getInstance()->end();
 	});
-	auto setting_item = MenuItemFont::create("Setting", [&](Ref* render)
-	{
-		Director::getInstance()->end();
-	});
-	auto close_item = MenuItemFont::create("Close", [&](Ref* render)
-	{
-		Director::getInstance()->end();
-	});
-
-	float x = origin.x + visibleSize.width/7;
-	float y = origin.y + visibleSize.width /5;
-	setting_item->setPosition(Vec2(x, y));
-	
-	x = origin.x + visibleSize.width / 2;
-	y = origin.y + visibleSize.width / 5;
-	select_item->setPosition(Vec2(x, y));
-
-	x = origin.x + visibleSize.width * 6 / 7;
-	y = origin.y + visibleSize.width / 5;
-	close_item->setPosition(Vec2(x, y));
 
 	Vector<MenuItem*> menus;
 	menus.pushBack(setting_item);
 	menus.pushBack(select_item);
 	menus.pushBack(close_item);
 	auto menu = Menu::createWithArray(menus);
-	menu->setPosition(Vec2::ZERO);
+	menu->setPosition(visibleSize.width/2,visibleSize.height/5);
 	this->addChild(menu, 1);
+	menu->alignItemsHorizontally();
 
-	auto label = Label::createWithTTF("Monopoly", "fonts/Marker Felt.ttf", 60);
+	auto label = Label::createWithTTF("Monopoly", "fonts/Marker Felt.ttf", 150);
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,origin.y + 4*visibleSize.height/5 - label->getContentSize().height));
 	this->addChild(label, 1);
 	return true;
