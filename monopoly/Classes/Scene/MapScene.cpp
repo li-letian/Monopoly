@@ -1,7 +1,7 @@
 #include "Scene/StartScene.h"
 #include "Scene/MapScene.h"
 #include "Scene/SettingScene.h"
-#include "ZH.h"
+#include "Common/CommonMethod.h"
 #include <algorithm>
 
 USING_NS_CC;
