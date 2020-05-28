@@ -47,7 +47,7 @@ void GameController::addEventListenerCustom()
 			{
 				whose_turn_ = 0;
 			}
-			go_button_menu_->setPosition(Vec2(visible_size.width / 2, 3 * visible_size.height / 4));
+			go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
 			returnToCharacter(characters_.at(whose_turn_));
 		}
 	});
@@ -93,7 +93,7 @@ void GameController::addGoButton()
 
 	//设置锚点、初始位置
 	go_button_menu_->setAnchorPoint(Vec2(0.5f, 0.5f));
-	go_button_menu_->setPosition(Vec2(visible_size.width / 2, 3 * visible_size.height / 4));
+	go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
 
 	map_scene_->addChild(go_button_menu_, 11);
 }
@@ -117,7 +117,7 @@ void GameController::startGo()
 int GameController::judgeDirection(int cur_pos)
 {
 	int next_pos = cur_pos + 1;
-	if (next_pos >= map_scene_->pos_.size())
+	if (next_pos >= static_cast<int>(map_scene_->pos_.size()))
 	{
 		next_pos = 0;
 	}
@@ -148,7 +148,7 @@ void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + 1;
-	if (next_pos >= map_scene_->pos_.size())
+	if (next_pos >= static_cast<int>(map_scene_->pos_.size()))
 	{
 		next_pos = 0;
 	}
