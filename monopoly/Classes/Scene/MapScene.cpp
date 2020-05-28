@@ -61,7 +61,7 @@ bool MapScene::mapInit()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 	map_ = TMXTiledMap::create("map.tmx");
-	assert(map_);
+	if (!map_) return false;
 	map_->setAnchorPoint(Vec2::ZERO);
 	map_->getLayer("grass")->setLocalZOrder(-10);
 	map_->getLayer("lake")->setLocalZOrder(-8);
@@ -182,9 +182,9 @@ bool MapScene::miniMapInit()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 	mini_map_ = TMXTiledMap::create("camera.tmx");
+	if (!mini_map_) return false;
 	auto map_size = mini_map_->getMapSize();
 	auto tile_size = mini_map_->getTileSize();
-	assert(mini_map_);
 	mini_map_->setAnchorPoint(Vec2::ZERO);
 	mini_map_->setScale(0.08f);
 	mini_map_->getLayer("grass")->setLocalZOrder(12);
