@@ -1,5 +1,5 @@
 #include "Incident.h"
-
+/*
 void Incident::FinanceGain(Character* player) {
 	auto money = (*player).getMoney();
 	money += 5000;
@@ -17,3 +17,4 @@ void Incident::FinanceLost(Character* player) {
 	(*player).setMoney(money);
 	                                             //¶ªÊ§5000
 }
+*/

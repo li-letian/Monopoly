@@ -2,7 +2,7 @@
 #define __INCIDENT_H__
 #endif
 #include "cocos2d.h"
-
+/*
 class Incident :public Node {
 public:
 	void FinanceGain(Character* player);
@@ -15,3 +15,4 @@ public:
 
 
 };
+*/
