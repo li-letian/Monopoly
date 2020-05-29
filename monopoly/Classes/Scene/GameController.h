@@ -29,8 +29,8 @@ private:
 	Vector<Character *> characters_;				 //储存本局游戏所有角色的Vector
 	EventListenerCustom *listener_custom_ = nullptr; //自定义事件分发器
 	Menu *go_button_menu_ = nullptr;				 //go_button
-	int whose_turn_;								 //记录轮到第几个角色行动
-	int steps_to_go_;								 //记录本轮要走几步
-	int steps_has_gone_;							 //记录本轮已走几步
+	int whose_turn_=0;								 //记录轮到第几个角色行动
+	int steps_to_go_=0;								 //记录本轮要走几步
+	int steps_has_gone_=0;							 //记录本轮已走几步
 };
 #endif

@@ -4,13 +4,15 @@
 USING_NS_CC;
 
 Character::Character()
-	:character_anim_down_(),
-	character_anim_left_(),
-	character_anim_right_(),
-	character_anim_up_(),
+	:character_anim_down_(nullptr),
+	character_anim_left_(nullptr),
+	character_anim_right_(nullptr),
+	character_anim_up_(nullptr),
+	character_frame_cache_(nullptr),
 	name_(),
 	money_(15000),
 	stop_times_(0),
+	cur_pos_(0),
 	steps_scope_(walk_steps)
 {
 	this->setTag(0);
