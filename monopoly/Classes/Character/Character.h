@@ -2,7 +2,8 @@
 #define _CHARACTER_H_
 
 #include "cocos2d.h"
-
+#include "Scene/StorkScene.h"
+#include "ZH.h"
 USING_NS_CC;
 
 class Character : public Sprite {
@@ -37,6 +38,9 @@ public:
 
 	void initSprite();		//初始化人物形象
 	void initAnimate();		//初始化动画对象
+	void StockInfInit();    //股票初始化
+	static Vector<Stock*>stockVec; //股票vector
+	static Vector<Stock*> getStockVec();
 private:
 	//角色属性
 	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字

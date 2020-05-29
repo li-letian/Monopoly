@@ -41,7 +41,7 @@ bool Character::init(const std::string& name, int tag, int money, int cur_pos)
 
 	initAnimate();	//初始化动画对象
 	initSprite();	//设置人物初始形象
-
+	StockInfInit();
 	return true;
 }
 
@@ -93,4 +93,15 @@ void Character::initSprite()
 	auto spf = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-4.png", name_.c_str()));
 	this->initWithSpriteFrame(spf);
 	this->setAnchorPoint(Vec2(0.5f, 0.2f));
+}
+
+void Character::StockInfInit() {
+	this->stockVec.pushBack(Stock::create(80010, "eeee", 50, 0, 0, 0));
+	this->stockVec.pushBack(Stock::create(80011,"ssss", 60, 0, 0, 0));
+	this->stockVec.pushBack(Stock::create(80012, "kkkk", 30, 0, 0, 0));
+	this->stockVec.pushBack(Stock::create(80015, "XXXX", 70, 0, 0, 0));
+
+}
+Vector<Stock*> Character::getStockVec() {
+	return (stockVec);
 }
