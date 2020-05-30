@@ -8,4 +8,5 @@
 
 std::string ZH(const std::string& str);
 
+void sendMsg(int msg);
 #endif // !_COMMON_METHOD_H_
