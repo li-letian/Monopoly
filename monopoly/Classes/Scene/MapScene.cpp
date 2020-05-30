@@ -2,7 +2,7 @@
 #include "Scene/MapScene.h"
 #include "Scene/SettingScene.h"
 #include "Scene/StorkScene.h"
-#include "ZH.h"
+#include "Common/CommonMethod.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -21,13 +21,14 @@ bool MapScene::init()
 	}
 
 	MenuItemFont::setFontName("华文琥珀");
-	MenuItemFont::setFontSize(40);
+	MenuItemFont::setFontSize(45);
 
-	if (!MapScene::panelInit())
+	
+	if (!MapScene::mapInit())
 	{
 		return false;
 	}
-	if (!MapScene::mapInit())
+	if (!MapScene::panelInit())
 	{
 		return false;
 	}
@@ -39,6 +40,11 @@ bool MapScene::init()
 	{
 		return false;
 	}
+	if (!MapScene::miniMapInit())
+	{
+		return false;
+	}
+	perspectiveJump(45.f * 32.f, 18.f * 32.f);
 
 	/*//测试
 	log("test %f %f", pos_[2].x, pos_[2].y);
@@ -56,9 +62,8 @@ bool MapScene::mapInit()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 	map_ = TMXTiledMap::create("map.tmx");
-	assert(map_);
+	if (!map_) return false;
 	map_->setAnchorPoint(Vec2::ZERO);
-	perspectiveJump(45.f * 32.f, 18.f * 32.f);
 	map_->getLayer("grass")->setLocalZOrder(-10);
 	map_->getLayer("lake")->setLocalZOrder(-8);
 	map_->getLayer("road")->setLocalZOrder(-6);
@@ -66,20 +71,20 @@ bool MapScene::mapInit()
 	map_->getLayer("house")->setVisible(false);
 
 	//测试
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = [=](Touch *touch, Event *event) {
-		auto touch_pos = touch->getLocation() - event->getCurrentTarget()->getPosition();
-		auto tile_size = map_->getTileSize();
-		auto map_size = map_->getMapSize();
-		//log("visible_size:%.2f,%.2f", visible_size.width, visible_size.height);
-		//log("tile_size:%.2f,%.2f", tile_size.width, tile_size.height);
-		//log("map_size:%.2f,%.2f", map_size.width, map_size.height);
-		auto x = static_cast<float>(static_cast<int>(touch_pos.x / tile_size.width));
-		auto y = static_cast<float>(static_cast<int>(touch_pos.y / tile_size.height));
-		//log("touched tile position to tiles in tilemap direction is x:%f,y:%f", x, y);
-		return true;
-	};
-	map_->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, map_);
+	//auto listener = EventListenerTouchOneByOne::create();
+	//listener->onTouchBegan = [=](Touch *touch, Event *event) {
+	//	auto touch_pos = touch->getLocation() - event->getCurrentTarget()->getPosition();
+	//	auto tile_size = map_->getTileSize();
+	//	auto map_size = map_->getMapSize();
+	//	//log("visible_size:%.2f,%.2f", visible_size.width, visible_size.height);
+	//	//log("tile_size:%.2f,%.2f", tile_size.width, tile_size.height);
+	//	//log("map_size:%.2f,%.2f", map_size.width, map_size.height);
+	//	auto x = static_cast<float>(static_cast<int>(touch_pos.x / tile_size.width));
+	//	auto y = static_cast<float>(static_cast<int>(touch_pos.y / tile_size.height));
+	//	//log("touched tile position to tiles in tilemap direction is x:%f,y:%f", x, y);
+	//	return true;
+	//};
+	//map_->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, map_);
 
 	this->addChild(map_, -20, "map_");
 	return true;
@@ -101,10 +106,13 @@ bool MapScene::rollMap()
 	listener->onTouchMoved = [=](Touch *touch, Event *event) {
 		auto delta = touch->getLocation() - start_pos;
 		auto x = std::min(0.0f, delta.x);
-		x = std::max(x, visible_size.width - map_size.width * tile_size.width);
+		x = std::max(x, visible_size.width -8 * tile_size.width - map_size.width * tile_size.width);
 		auto y = std::min(0.0f, delta.y);
 		y = std::max(y, visible_size.height - map_size.height * tile_size.height);
 		event->getCurrentTarget()->setPosition(x, y);
+
+		auto camera = mini_map_->getChildByName("camera");
+		camera->setPosition(-x, -y);
 		//log("your present touching position to the screen in GL direction is x:%.2f y:%.2f", finish_pos.x, finish_pos.y);
 		//log("map position to the parent in GL direction change to x:%.2f y:%.2f", delta.x, delta.y);
 	};
@@ -116,13 +124,19 @@ bool MapScene::rollMap()
 bool MapScene::panelInit()
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto origin = Director::getInstance()->getVisibleOrigin();
+	auto map_size = map_->getMapSize();
+	auto tile_size = map_->getTileSize();
 
 	//面板初始化
 	this->panel_ = Layer::create();
-	panel_->setAnchorPoint(Vec2(0, 0));
+	panel_->setAnchorPoint(Vec2::ZERO);
 	panel_->setPosition(Vec2::ZERO);
 	this->addChild(panel_, 10);
+	auto sprite = Sprite::create("panel.png");
+	sprite->setAnchorPoint(Vec2::ZERO);
+	sprite->setPosition(Vec2::ZERO);
+	panel_->addChild(sprite, 10);
 
 	//向这个成员变量中添加按钮
 	menu_item_.insert("close", MenuItemFont::create(ZH(" 退出 ")));
@@ -142,10 +156,13 @@ bool MapScene::panelInit()
 	menu->addChild(close_item, 30);
 	menu->addChild(setting_item, 30);
 	menu->addChild(stock_item, 30);
-	menu->setPosition(Vec2(visible_size.width * 2 / 5, visible_size.height * 19 / 20));
-	panel_->addChild(menu, 20);
 
 	menu->alignItemsHorizontally();
+
+	menu->setAnchorPoint(Vec2(0.5f, 0.5f));
+	menu->setPosition(Vec2(visible_size.height /2, visible_size.height -1.5f*tile_size.height));
+	panel_->addChild(menu, 20);
+
 
 	//更改按钮回调的执行
 	close_item->setCallback([=](Ref *render) {
@@ -166,21 +183,80 @@ bool MapScene::panelInit()
 	return true;
 }
 
+bool MapScene::miniMapInit()
+{
+	auto visible_size = Director::getInstance()->getVisibleSize();
+	auto origin = Director::getInstance()->getVisibleOrigin();
+	mini_map_ = TMXTiledMap::create("camera.tmx");
+	if (!mini_map_) return false;
+	auto map_size = mini_map_->getMapSize();
+	auto tile_size = mini_map_->getTileSize();
+	mini_map_->setAnchorPoint(Vec2::ZERO);
+	mini_map_->setScale(0.08f);
+	mini_map_->getLayer("grass")->setLocalZOrder(12);
+	mini_map_->getLayer("lake")->setLocalZOrder(13);
+	mini_map_->getLayer("road")->setLocalZOrder(14);
+	mini_map_->getLayer("land")->setVisible(false);
+	mini_map_->setPosition(visible_size.width - 8.f * tile_size.width, 0.f);
+	panel_->addChild(mini_map_, 11, "mini_map_");
+
+
+	auto camera = Sprite::create("white.png");
+	camera->setAnchorPoint(Vec2::ZERO);
+	mini_map_->addChild(camera, 15,"camera");
+
+	
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->onTouchBegan = [=](Touch* touch, Event* event) {
+		auto touch_pos = touch->getLocation();
+		auto temp_pos = event->getCurrentTarget()->getPosition();
+		if (touch_pos.x > temp_pos.x && touch_pos.y < 8 * tile_size.height)
+		{
+			perspectiveJump((touch_pos - temp_pos) * map_size.width / 8);
+		}
+		return true;
+	};
+	listener->onTouchMoved= [=](Touch* touch, Event* event) {
+		auto touch_pos = touch->getLocation();
+		auto temp_pos = event->getCurrentTarget()->getPosition();
+		if (touch_pos.x > temp_pos.x && touch_pos.y < 8 * tile_size.height)
+		{
+			listener->setSwallowTouches(true);
+			perspectiveJump((touch_pos - temp_pos) * map_size.width / 8);
+		}
+		return true;
+	};
+	listener->onTouchEnded = [=](Touch* touch, Event* event) {
+		listener->setSwallowTouches(false);
+	};
+	
+	mini_map_->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, mini_map_);
+	return true;
+}
+
 //将视角跳转到以地图上某个像素坐标为中心的相应位置
+bool MapScene::perspectiveJump(Vec2 p)
+{
+	return perspectiveJump(p.x, p.y);
+}
+
 bool MapScene::perspectiveJump(float x, float y)
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto map_size = map_->getMapSize();
 	auto tile_size = map_->getTileSize();
 
-	x = visible_size.width / 2.f - x;
+	x = visible_size.width/ 2.f-4*tile_size.width - x;
 	y = visible_size.height / 2.f - y;
 
 	x = std::min(0.0f, x);
-	x = std::max(x, visible_size.width - map_size.width * tile_size.width);
+	x = std::max(x, visible_size.width - 8 * tile_size.width - map_size.width * tile_size.width);
 	y = std::min(0.0f, y);
 	y = std::max(y, visible_size.height - map_size.height * tile_size.height);
 
+	auto camera = mini_map_->getChildByName("camera");
+
+	camera->setPosition(-x, -y);
 	map_->setPosition(x, y);
 	return true;
 }

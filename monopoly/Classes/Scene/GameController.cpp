@@ -10,7 +10,7 @@ bool GameController::init()
 		return false;
 	}
 	//创造map_scene场景并切换
-	dice_ = Dice::create();		//创造骰子
+	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50);
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
@@ -34,7 +34,7 @@ void GameController::addEventListenerCustom()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom *event) {
 		char *buf = static_cast<char *>(event->getUserData());
-		int msg = std::atoi(buf);	//解析收到的信息
+		int msg = std::atoi(buf); //解析收到的信息
 		switch (msg)
 		{
 		case (msg_hide_go):												//让go按钮消失
@@ -47,26 +47,26 @@ void GameController::addEventListenerCustom()
 			{
 				whose_turn_ = 0;
 			}
-			go_button_menu_->setPosition(Vec2(visible_size.width / 2, 3 * visible_size.height / 4));
+			go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
 			returnToCharacter(characters_.at(whose_turn_));
 		}
 	});
-	auto dispatcher = map_scene_->map_->getEventDispatcher();
-	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->map_);
+	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
+	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->getMap());
 }
 
 void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos)
 {
 	auto character = Character::create(name, tag, money, start_pos);
 	characters_.pushBack(character);
-	character->setPosition(map_scene_->pos_.at(start_pos));
-	map_scene_->map_->addChild(character, 10);
+	character->setPosition(map_scene_->pos(start_pos));
+	map_scene_->getMap()->addChild(character, 10);
 	log("position: %f %f", character->getPosition().x, character->getPosition().y);
 }
 
 void GameController::returnToCharacter(Character *character)
 {
-	map_scene_->perspectiveJump(map_scene_->pos_.at(character->getCurPos()).x, map_scene_->pos_.at(character->getCurPos()).y);
+	map_scene_->perspectiveJump(map_scene_->pos(character->getCurPos()).x, map_scene_->pos(character->getCurPos()).y);
 	//经过某种神奇的坐标变换将视角转到角色
 }
 
@@ -78,7 +78,7 @@ void GameController::addGoButton()
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
 		//点击后发送隐藏按钮的信息
-		auto dispatcher = map_scene_->map_->getEventDispatcher();
+		auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 		char *buf = new char[10];
 		sprintf(buf, "%d", msg_hide_go);
 
@@ -93,7 +93,7 @@ void GameController::addGoButton()
 
 	//设置锚点、初始位置
 	go_button_menu_->setAnchorPoint(Vec2(0.5f, 0.5f));
-	go_button_menu_->setPosition(Vec2(visible_size.width / 2, 3 * visible_size.height / 4));
+	go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
 
 	map_scene_->addChild(go_button_menu_, 11);
 }
@@ -117,14 +117,14 @@ void GameController::startGo()
 int GameController::judgeDirection(int cur_pos)
 {
 	int next_pos = cur_pos + 1;
-	if (next_pos >= map_scene_->pos_.size())
+	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	{
 		next_pos = 0;
 	}
-	auto cur_x = map_scene_->pos_.at(cur_pos).x;
-	auto cur_y = map_scene_->pos_.at(cur_pos).y;
-	auto next_x = map_scene_->pos_.at(next_pos).x;
-	auto next_y = map_scene_->pos_.at(next_pos).y;
+	auto cur_x = map_scene_->pos(cur_pos).x;
+	auto cur_y = map_scene_->pos(cur_pos).y;
+	auto next_x = map_scene_->pos(next_pos).x;
+	auto next_y = map_scene_->pos(next_pos).y;
 	if (next_y < cur_y)
 	{
 		return walk_down;
@@ -148,12 +148,12 @@ void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + 1;
-	if (next_pos >= map_scene_->pos_.size())
+	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	{
 		next_pos = 0;
 	}
-	MoveTo* move_to = MoveTo::create(character_one_step_time,map_scene_->pos_.at(next_pos));
-	Repeat* repeat = nullptr;
+	MoveTo *move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
+	Repeat *repeat = nullptr;
 	switch (direction)
 	{
 	case walk_down:
@@ -191,9 +191,9 @@ void GameController::endGo()
 	{
 		//让人物恢复到站立状态，面朝下一格
 		backToStand();
-
+		returnToCharacter(character);
 		//发送让go按钮重新出现的消息 （后期将消息发送功能封装）
-		auto dispatcher = map_scene_->map_->getEventDispatcher();
+		auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 		char *buf = new char[10];
 		sprintf(buf, "%d", msg_make_go_apper);
 
@@ -211,7 +211,7 @@ void GameController::backToStand()
 	auto name = character->getPlayerName();
 	auto direction = judgeDirection(character->getCurPos());
 	auto spfcache = SpriteFrameCache::getInstance();
-	SpriteFrame* sprite_frame = nullptr;
+	SpriteFrame *sprite_frame = nullptr;
 	switch (direction)
 	{
 	case walk_down:
