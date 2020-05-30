@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "Scene/StorkScene.h"
-#include "ZH.h"
+#include "Common/CommonMethod.h"
 USING_NS_CC;
 
 class Character : public Sprite {

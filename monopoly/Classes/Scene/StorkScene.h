@@ -1,6 +1,5 @@
 #ifndef _STORK_SCENE_H_
 #define _STORK_SCENE_H_
-#include "ZH.h"
 #include "cocos2d.h"
 using namespace cocos2d;
 

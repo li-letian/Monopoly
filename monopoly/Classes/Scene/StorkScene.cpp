@@ -1,7 +1,6 @@
 #include "StorkScene.h"
-#include "ZH.h"
 #include "Character/Character.h"
-
+#include "Common/CommonMethod.h"
 Stock* Stock::create(int stockCode_, std::string stockName, int nowPrice, int makeDealPrice, float percent, int storeNumber) {
 	Stock* stock = new Stock(stockCode_,stockName,nowPrice,makeDealPrice,percent,storeNumber);
 	stock->init();
