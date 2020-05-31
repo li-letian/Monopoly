@@ -2,6 +2,7 @@
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
 #include "Common/CommonConstant.h"
+#include "Land/Land.h"
 
 bool GameController::init()
 {
