@@ -13,7 +13,10 @@ Scene *SelectScene::createScene()
 bool SelectScene::init()
 {
 
-	return false;
+	if (!Scene::init())
+	{
+		return false;
+	}
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();

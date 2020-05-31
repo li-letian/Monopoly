@@ -10,17 +10,18 @@ class Land;
 class MapScene : public cocos2d::Scene
 {
 protected:
-	cocos2d::Layer *panel_ = nullptr;
-	cocos2d::TMXTiledMap *map_ = nullptr;
-	cocos2d::TMXTiledMap *mini_map_ = nullptr;
+	cocos2d::Layer* panel_=nullptr;
+	cocos2d::TMXTiledMap* map_=nullptr;
+	cocos2d::TMXTiledMap* mini_map_=nullptr;
 
-	cocos2d::Map<std::string, cocos2d::MenuItem *> menu_item_;
-	std::vector<cocos2d::Vec2> pos_;
-	std::vector<int> type_;
-	std::vector<Land *> lands_;
+	cocos2d::Map<std::string, cocos2d::MenuItem*>menu_item_;
+	std::vector<cocos2d::Vec2>pos_;
+	std::vector<int>type_;
+	std::vector<Land*>lands_;
 
 public:
-	static MapScene *createScene();
+
+	static MapScene* createScene();
 	bool mapInit();
 	bool landInit();
 	bool rollMap();
@@ -50,25 +51,28 @@ public:
 	//name表列：
 	//道具 item
 	//股市 stock
-	bool setMenuCallback(const std::string &name, std::function<void(Ref *render)> fun)
+	bool setMenuCallback(const std::string &name,std::function<void(Ref* render)>fun)
 	{
 		menu_item_.at(name)->setCallback(fun);
 		return true;
 	}
-
-	cocos2d::TMXTiledMap *getMap()
+	
+	cocos2d::TMXTiledMap* getMap()
 	{
 		return map_;
 	}
-
-	cocos2d::TMXTiledMap *getMiniMap()
+	
+	cocos2d::TMXTiledMap* getMiniMap()
 	{
 		return mini_map_;
 	}
-	cocos2d::Layer *getPanel()
+	cocos2d::Layer* getPanel()
 	{
 		return panel_;
 	}
+
 };
+
+
 
 #endif
