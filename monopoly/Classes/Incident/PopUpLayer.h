@@ -14,7 +14,6 @@ USING_NS_CC;
 	pop->setContent("测试一下文本显示正常，以及长句子会不会自动换行以防止到屏幕外,以下只是为了让一条长句子显得稍微长一点而已");
 	pop->setCallBack([=](Ref* sender) {
 		log("confirm button ok");
-		pop->fade();
 		});
 
 
@@ -34,7 +33,6 @@ public:
 	//设置回调函数，可只设置确认按钮也可设置确认按钮与取消按钮
 	void setCallBack(std::function<void(Ref * render)> confirm_call_back);
 	void setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back);
-	void fade();
 
 private:
 	Sprite* back_ground_ = nullptr;

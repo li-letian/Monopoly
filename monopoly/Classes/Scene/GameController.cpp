@@ -3,6 +3,7 @@
 #include "Scene/MapScene.h"
 #include "Common/CommonConstant.h"
 #include "Land/Land.h"
+#include "Land/Hotel.h"
 #include "Common/CommonMethod.h"
 
 bool GameController::init()
@@ -184,8 +185,15 @@ void GameController::endGo()
 		//让人物恢复到站立状态，面朝下一格
 		backToStand();
 		returnToCharacter(character);
+		auto pos = character->getCurPos();
+		auto& land = map_scene_->getLand(pos);
+		if (!land)
+		{
+			if(map_scene_->getType(pos)==3) land = Hotel::create(map_scene_, pos);
+		}
+		if (land) land->onLand(character);
+		else sendMsg(msg_make_go_apper);
 		//发送让go按钮重新出现的消息 （后期将消息发送功能封装）
-		sendMsg(msg_make_go_apper);
 		return;
 	}
 }

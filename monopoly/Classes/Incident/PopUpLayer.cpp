@@ -53,7 +53,9 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 {
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(30);
-	auto confirm_item = MenuItemFont::create(ZH("确认"), confirm_call_back);
+	auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
+		confirm_call_back(ref);
+		this->removeFromParentAndCleanup(true); });
 	confirm_item->setColor(Color3B(0, 0, 0));
 	auto menu = Menu::create(confirm_item, nullptr);
 	menu->setAnchorPoint(Vec2(0.5f, 0));
@@ -66,12 +68,17 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(30);
 
-	auto confirm_item = MenuItemFont::create(ZH("确认"), confirm_call_back);
+	auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
+		confirm_call_back(ref);
+		this->removeFromParentAndCleanup(true); });
 	confirm_item->setColor(Color3B(0, 0, 0));
 	confirm_item->setAnchorPoint(Vec2(0, 0));
 	confirm_item->setPosition(Vec2(back_ground_height_ / 2, 4 * grid_distance));
 
-	auto cancel_item = MenuItemFont::create(ZH("取消"), cancel_call_back);
+	auto cancel_item = MenuItemFont::create(ZH("取消"), [=](Ref* ref) {
+		cancel_call_back(ref);
+		this->removeFromParentAndCleanup(true);
+	});
 	cancel_item->setColor(Color3B(0, 0, 0));
 	cancel_item->setAnchorPoint(Vec2(1.0f, 0));
 	cancel_item->setPosition(Vec2(back_ground_width_ - 4 * grid_distance, 4 * grid_distance));
@@ -80,9 +87,4 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	menu->setAnchorPoint(Vec2(0, 0));
 	menu->setPosition(Vec2(0,0));
 	back_ground_->addChild(menu);
-}
-
-void PopUpLayer::fade()
-{
-	this->removeFromParentAndCleanup(true);
 }

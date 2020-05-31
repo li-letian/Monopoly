@@ -41,6 +41,18 @@ public:
 		return pos_.at(index % size);
 	}
 
+	Land*& getLand(int index)
+	{
+		auto size = pos_.size();
+		return lands_.at(index % size);
+	}
+
+	int getType(int index)
+	{
+		auto size = pos_.size();
+		return type_.at(index % size);
+	}
+
 	//返回地图上位置总数
 	std::size_t totalPosition()
 	{
@@ -57,11 +69,13 @@ public:
 		return true;
 	}
 	
+	//返回地图
 	cocos2d::TMXTiledMap* getMap()
 	{
 		return map_;
 	}
 	
+	//返回小地图，因为小地图是在显示的时候才缩放的，所以可以放心的使用和大地图相同尺寸的坐标addchild和setposition
 	cocos2d::TMXTiledMap* getMiniMap()
 	{
 		return mini_map_;

@@ -86,7 +86,7 @@ bool MapScene::mapInit()
 	//};
 	//map_->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, map_);
 
-	this->addChild(map_, -20, "map_");
+	this->addChild(map_, -20, "map");
 	return true;
 }
 
@@ -134,7 +134,7 @@ bool MapScene::panelInit()
 	this->panel_ = Layer::create();
 	panel_->setAnchorPoint(Vec2::ZERO);
 	panel_->setPosition(Vec2::ZERO);
-	this->addChild(panel_, 10);
+	this->addChild(panel_, 10,"panel");
 	auto sprite = Sprite::create("panel.png");
 	sprite->setAnchorPoint(Vec2::ZERO);
 	sprite->setPosition(Vec2::ZERO);
@@ -264,7 +264,6 @@ bool MapScene::perspectiveJump(float x, float y)
 //添加地图上道路中心位置相对于地图右下角锚点的GL方向以像素为单位的坐标位置
 bool MapScene::landInit()
 {
-	Land::setMap(this);
 	auto tile_size = map_->getTileSize();
 	auto map_size = map_->getMapSize();
 	pos_.push_back(Vec2(tile_size.width * static_cast<float>(48), map_size.height * tile_size.height - tile_size.height * static_cast<float>(82)));
