@@ -18,9 +18,9 @@ constexpr int walk_up = 4;
 constexpr int walk_steps = 11;
 constexpr int drive_steps = 23;
 
-//格与格之间的距离
-constexpr int tile_size = 64;
-
 constexpr int msg_hide_go = 1;
 constexpr int msg_make_go_apper = 2;
+
+constexpr float grid_distance = 16.0f;
+
 #endif

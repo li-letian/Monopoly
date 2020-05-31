@@ -3,6 +3,7 @@
 #include "Scene/MapScene.h"
 #include "Common/CommonConstant.h"
 #include "Land/Land.h"
+#include "Common/CommonMethod.h"
 
 bool GameController::init()
 {
@@ -78,17 +79,7 @@ void GameController::addGoButton()
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		//点击后发送隐藏按钮的信息
-		auto dispatcher = map_scene_->getMap()->getEventDispatcher();
-		char *buf = new char[10];
-		sprintf(buf, "%d", msg_hide_go);
-
-		log("message sending : %s", buf);
-
-		EventCustom event = EventCustom("monopoly_msg");
-		event.setUserData(buf);
-		dispatcher->dispatchEvent(&event);
-		CC_SAFE_DELETE_ARRAY(buf);
+		sendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
@@ -194,14 +185,7 @@ void GameController::endGo()
 		backToStand();
 		returnToCharacter(character);
 		//发送让go按钮重新出现的消息 （后期将消息发送功能封装）
-		auto dispatcher = map_scene_->getMap()->getEventDispatcher();
-		char *buf = new char[10];
-		sprintf(buf, "%d", msg_make_go_apper);
-
-		EventCustom event("monopoly_msg");
-		event.setUserData(buf);
-		dispatcher->dispatchEvent(&event);
-		CC_SAFE_DELETE_ARRAY(buf);
+		sendMsg(msg_make_go_apper);
 		return;
 	}
 }
