@@ -52,6 +52,11 @@ void GameController::addEventListenerCustom()
 			}
 			go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
 			returnToCharacter(characters_.at(whose_turn_));
+
+			
+			auto character = characters_.at(whose_turn_);
+			//在这里处理本回合走之前应该处理的事情
+
 		}
 	});
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
@@ -141,7 +146,13 @@ void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + 1;
-	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
+	/*if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
+	{
+		next_pos = 0;
+	}*/
+
+	//测试
+	if (next_pos >= 40)
 	{
 		next_pos = 0;
 	}
@@ -176,6 +187,9 @@ void GameController::endGo()
 	auto character = characters_.at(whose_turn_);
 	if (steps_has_gone_ < steps_to_go_)
 	{
+
+		//这里可以处理一些过路的事情
+
 		//继续走下一步
 		auto direction = judgeDirection(character->getCurPos());
 		moveOneStep(direction);
@@ -186,10 +200,51 @@ void GameController::endGo()
 		backToStand();
 		returnToCharacter(character);
 		auto pos = character->getCurPos();
+
+		//这里处理一些着陆后的事情
+
+		//首先得处理一下神灵
+
+		//然后这里处理着陆到位置触发的事件
 		auto& land = map_scene_->getLand(pos);
 		if (!land)
 		{
-			if(map_scene_->getType(pos)==3) land = Hotel::create(map_scene_, pos);
+			switch (map_scene_->getType(pos))
+			{
+			case land_chance:
+				break;
+			case land_life:
+				break;
+			case land_hotel:
+				land = Hotel::create(map_scene_, pos);
+				break;
+			case land_business:
+				break;
+			case land_park:
+				break;
+			case land_resort:
+				break;
+			case land_mall:
+				break;
+			case land_institute:
+				break;
+			case land_insurance:
+				break;
+			case land_oil:
+				break;
+			case land_technology:
+				break;
+			case land_aviation:
+				break;
+			case land_hospital:
+				break;
+			case land_jail:
+				break;
+			case land_bank:
+				break;
+			case land_lottery:
+				break;
+			}
 		}
 		if (land) land->onLand(character);
 		else sendMsg(msg_make_go_apper);

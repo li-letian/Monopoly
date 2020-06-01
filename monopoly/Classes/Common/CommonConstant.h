@@ -4,6 +4,24 @@
 constexpr int miku = 1;		   //初音未来
 constexpr int nanxiaoniao = 2; //南小鸟
 
+//各种类型位置的代号
+constexpr int land_chance = 1;
+constexpr int land_life = 2;
+constexpr int land_hotel = 3;
+constexpr int land_business = 4;
+constexpr int land_park = 5;
+constexpr int land_resort = 6;
+constexpr int land_mall = 7;
+constexpr int land_institute = 8;
+constexpr int land_insurance = 9;
+constexpr int land_oil = 10;
+constexpr int land_technology = 11;
+constexpr int land_aviation = 12;
+constexpr int land_hospital = 13;
+constexpr int land_jail = 14;
+constexpr int land_bank = 15;
+constexpr int land_lottery = 16;
+
 //人物行走的时间
 constexpr float character_walk_delay_time = 0.05f;						 //帧间隔
 constexpr float character_one_step_time = 4 * character_walk_delay_time; //每走一格所花时间

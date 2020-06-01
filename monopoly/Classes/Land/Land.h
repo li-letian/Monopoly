@@ -13,15 +13,6 @@ public:
 	{
 		return true;
 	}
-	virtual bool promote()
-	{
-		return true;
-	}
-	virtual bool demote()
-	{
-		return true;
-	}
-
 	void setMapScene(MapScene* map_scene)
 	{
 		map_scene_ = map_scene;

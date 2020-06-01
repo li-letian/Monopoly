@@ -37,6 +37,7 @@ Hotel* Hotel::create(MapScene *map_scene,int index)
 
 bool Hotel::promote()
 {
+	if (rank_ >= 4) return false;
 	rank_++;
 	sell_value_ = hotel_sell_value[rank_];
 	rent_value_ = hotel_rent_value[rank_];
@@ -75,6 +76,10 @@ bool Hotel::onLand(Character* standing)
 			{
 				standing->setMoney(money - sell_value_);
 				owner_ = standing;
+				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
+				color_->setPosition(map_scene_->pos(index_));
+				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
+				map_scene_->getMap()->addChild(color_, 1);
 				promote();
 				sendMsg(msg_make_go_apper);
 				//画点东西表示已经买完了
@@ -97,7 +102,7 @@ bool Hotel::onLand(Character* standing)
 	}
 	else
 	{
-		if (standing->getTag() == owner_->getTag())
+		if (standing->getTag() == owner_->getTag()&&rank_<4)
 		{
 			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格升级这块土地吗？");
 			pop->setContent(text);
@@ -128,8 +133,32 @@ bool Hotel::onLand(Character* standing)
 		}
 		else
 		{
-			auto rent_value = static_cast<int>(rent_value_ * rent_rise_);
-			auto text = std::string("这里是 ") + std::string(owner_->getName()) + std::string(" 的旅店地产，你需要缴纳住宿费 ") + StringUtils::format("%d", rent_value) + std::string("，感谢您的光临");
+			auto rent = rent_value_;
+			for (int index = index_+1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
+			{
+				if (map_scene_->getType(index) == land_business) continue;
+				auto land = map_scene_->getLand(index);
+				if (!land) continue;
+				auto hotel = static_cast<Hotel*>(map_scene_->getLand(index));
+				if (hotel->owner_->getTag() == owner_->getTag())
+				{
+					rent += hotel->rent_value_;
+				}
+			}
+			for (int index = index_ -1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index--)
+			{
+				if (map_scene_->getType(index) == land_business) continue;
+				auto land = map_scene_->getLand(index);
+				if (!land) continue;
+				auto hotel = dynamic_cast<Hotel*>(map_scene_->getLand(index));
+				if (hotel->owner_->getTag() == owner_->getTag())
+				{
+					rent += hotel->rent_value_;
+				}
+			}
+			auto rent_value = static_cast<int>(rent * rent_rise_);
+			auto text = std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的旅店地产，你需要缴纳住宿费 ") + StringUtils::format("%d", rent_value) + std::string("，感谢您的光临");
+			log("hotel of %s", owner_->getPlayerName().c_str());
 			pop->setContent(text);
 			auto yes = [=](Ref* ref)
 			{

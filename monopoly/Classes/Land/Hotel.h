@@ -14,15 +14,17 @@ class Hotel : public Land {
 protected:
 	std::string name_;
 	Character* owner_= nullptr;
+	Sprite* color_ = nullptr;
 	int rank_=0;
 	int sell_value_ = 0;
 	int rent_value_ = 0;
 	float rent_rise_ = 1.f;
 
 public:
+	friend class Hotel;
 	virtual bool onLand(Character* standing) override;
-	virtual bool promote() override;
-	virtual bool demote()override;
+	bool promote();
+	bool demote();
 	static Hotel* create(MapScene * map_scene,int index);
 };
 
