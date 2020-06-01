@@ -10,7 +10,7 @@ public:
 	int nowPrice;             //当前价格
 	int makeDealPrice;        //成交价格
 	float percent;            //涨幅
-	int storeNumber;          //持有数量
+	Vector<int> storeNumber;          //持有数量
 
 public:
 	Stock(int stockCode_, std::string stockName_, int nowPrice_, int makeDealPrice_, float percent_, int storeNumber_);
@@ -25,10 +25,11 @@ public:
 	static Scene* createScene();
 	virtual bool init();
 	CREATE_FUNC(StockScene);
-	void initLabel(Vector<Stock*> vec);
+	void initLabel();
 	void StockInfInit();    //股票初始化
     Vector<Stock*>stockVec; //股票vector
-	
+	void initFirstLabel();
+	void stockUpdate();
 
 };
 #endif
