@@ -2,7 +2,6 @@
 #define _CHARACTER_H_
 
 #include "cocos2d.h"
-#include "Scene/StorkScene.h"
 #include "Common/CommonMethod.h"
 USING_NS_CC;
 

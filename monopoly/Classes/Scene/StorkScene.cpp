@@ -1,7 +1,8 @@
 #include "StorkScene.h"
-#include "Character/Character.h"
 #include "Common/CommonMethod.h"
+#include "Character/Character.h"
 #include <ctime>
+#include <vector>
 using namespace std;
 Stock* Stock::create(int stockCode_, std::string stockName, int nowPrice, int makeDealPrice, float percent, int storeNumber) {
 	Stock* stock = new Stock(stockCode_,stockName,nowPrice,makeDealPrice,percent,storeNumber);
@@ -16,10 +17,14 @@ Stock::Stock(int stockCode_, std::string stockName_, int nowPrice_, int makeDeal
 	this->percent = percent_;
 	//this->storeNumber = storeNumber_;
 	this->makeDealPrice = makeDealPrice_;
+	int num[4] = { 0 };
+	vector<int> vec(num, num + 4);
+	this->storeNumber = vec;
+	/*
 	for (int i = 0; i < 4; i++) {
 		this->storeNumber.pushBack(0);
 	}
-	
+	*/
 
 }
 
@@ -57,7 +62,7 @@ void StockScene::initLabel() {
 		valPrice = Value(stockVec.at(i)->nowPrice);
 		valDeal = Value(stockVec.at(i)->makeDealPrice);
 		valPer = Value(static_cast<int>((stockVec.at(i)->percent)*100));
-		valStore = Value(stockVec.at(i)->storeNumber.at(0));
+		valStore = Value(stockVec.at(i)->storeNumber[0]);
 		valpercent = "%";
 		valBlank = Value("  ");
 		valPer = valPer.asString().c_str() + valpercent.asString();
@@ -81,16 +86,16 @@ void StockScene::initLabel() {
 		labelStore->setAnchorPoint(Vec2(0, 0.5));
 		labelStore->setPosition(Vec2(500, VisibleSize.height - 197 - 64 * (1 + i)));
 		this->addChild(labelStore, 25);
-
-		auto labelBuy = Label::createWithSystemFont(valStore.asString().c_str(), "fonts/arial.ttf", 40);
+		
+		auto labelBuy = Label::createWithSystemFont(ZH("买入"), "fonts/arial.ttf", 38);
 		auto menuItem_buy= MenuItemLabel::create(labelBuy);
 		menuItem_buy->setCallback([=](Ref* render) {
 			
 			});
 		menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
-		menuItem_buy->setPosition(Vec2(580, VisibleSize.height - 197 - 64 * (1 + i)));
+		menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
 		this->addChild(menuItem_buy, 25);
-
+		
 			/*
 				auto labelCode = Label::createWithSystemFont(valCode.asString().c_str(), "fonts/arial.ttf", 44);
 				if (valPer.asFloat() <= 0)
@@ -212,10 +217,67 @@ void StockScene::initFirstLabel() {
 void StockScene::stockUpdate() {
 	srand(time(0));
 	for (int i = 0; i < 8; i++) {
-		float per_ = rand() / (10*RAND_MAX+0.001);
+		float per_ = rand() / (10*RAND_MAX+static_cast<float>(0.001));
 		if (rand() % 2)per_ *= (-1.0);
 		stockVec.at(i)->percent = per_;
 		stockVec.at(i)->nowPrice *= (1.0+per_);
+
+	}
+}
+
+void StockScene::remakeLabel(Character* player) {
+
+	this->removeAllChildren();
+	initFirstLabel();
+	Size VisibleSize = Director::getInstance()->getVisibleSize();	//获得屏幕大小
+	
+	for (int i = 0; i < 8; i++) {
+		Value valCode, valName, valPrice, valDeal, valPer, valLabel, valStore, valBlank, valpercent;
+
+		valCode = Value(stockVec.at(i)->stockCode);
+		valName = Value(stockVec.at(i)->stockName);
+		valPrice = Value(stockVec.at(i)->nowPrice);
+		valDeal = Value(stockVec.at(i)->makeDealPrice);
+		valPer = Value(static_cast<int>((stockVec.at(i)->percent) * 100));
+		valStore = Value(stockVec.at(i)->storeNumber[(*player).getTag()]);
+		valpercent = "%";
+		valBlank = Value("  ");
+		valPer = valPer.asString().c_str() + valpercent.asString();
+		valLabel = valCode.asString().c_str() + valBlank.asString() + valName.asString() + valBlank.asString() +
+			valBlank.asString() + valPrice.asString().c_str() + valBlank.asString() + valBlank.asString() + valPer.asString().c_str();
+
+		auto label = Label::createWithSystemFont(valLabel.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
+		if (valPer.asFloat() <= 0)
+			label->setTextColor(Color4B::GREEN);
+		else
+			label->setTextColor(Color4B::RED);
+		label->setAnchorPoint(Vec2(0, 0.5));
+		label->setPosition(Vec2(5, VisibleSize.height - 197 - 64 * (1 + i)));
+		this->addChild(label, 25);
+
+		auto labelStore = Label::createWithSystemFont(valStore.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
+		if (valPer.asFloat() <= 0)
+			labelStore->setTextColor(Color4B::GREEN);
+		else
+			labelStore->setTextColor(Color4B::RED);
+		labelStore->setAnchorPoint(Vec2(0, 0.5));
+		labelStore->setPosition(Vec2(500, VisibleSize.height - 197 - 64 * (1 + i)));
+		this->addChild(labelStore, 25);
+
+		auto labelBuy = Label::createWithSystemFont(ZH("买入"), "fonts/arial.ttf", 38);
+		auto menuItem_buy = MenuItemLabel::create(labelBuy);
+		menuItem_buy->setCallback([=](Ref* render) {
+			int money_ = player->getMoney;
+			if (money_ >= valPrice.asInt() * 100) {
+				player->setMoney(money_ - valPrice.asInt() * 100);
+				stockVec.at(i)->storeNumber[player->getTag()] += 100;
+				remakeLabel(player);
+
+			}
+			});
+		menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
+		menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
+		this->addChild(menuItem_buy, 25);
 
 	}
 }
