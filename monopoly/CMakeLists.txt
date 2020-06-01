@@ -80,6 +80,7 @@ list(APPEND GAME_SOURCE
      Classes/Incident/Holiday.cpp
      Classes/Incident/Medical.cpp
      Classes/Incident/Staff.cpp
+     Classes/Incident/PopUpLayer.cpp
 
      Classes/Item/AngelCard.cpp
      Classes/Item/ControlDice.cpp
@@ -170,6 +171,7 @@ list(APPEND GAME_HEADER
      Classes/Incident/Holiday.h
      Classes/Incident/Medical.h
      Classes/Incident/Staff.h
+     Classes/Incident/PopUpLayer.h
 
      Classes/Item/AngelCard.h
      Classes/Item/ControlDice.h

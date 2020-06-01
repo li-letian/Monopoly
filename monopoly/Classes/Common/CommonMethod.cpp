@@ -1,6 +1,8 @@
-#include<string>
+#include <string>
 #include "cocos2d.h"
 #include "Common/CommonMethod.h"
+#include "Common/CommonConstant.h"
+USING_NS_CC;
 
 std::string ZH(const std::string& str)
 {
@@ -27,4 +29,18 @@ std::string ZH(const std::string& str)
 	pBuf = NULL;
 
 	return retStr;
+}
+
+void sendMsg(int msg)
+{
+	auto dispatcher = Director::getInstance()->getEventDispatcher();
+	char* buf = new char[10];
+	sprintf(buf, "%d", msg);
+
+	log("message sending : %s", buf);
+
+	EventCustom event = EventCustom("monopoly_msg");
+	event.setUserData(buf);
+	dispatcher->dispatchEvent(&event);
+	CC_SAFE_DELETE_ARRAY(buf);
 }
