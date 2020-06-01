@@ -32,6 +32,6 @@ public:
     Vector<Stock*>stockVec; //¹ÉÆ±vector
 	void initFirstLabel();
 	void stockUpdate();
-	void remakeLabel(Character* player );
+	void remakeLabel(Character* player);
 };
 #endif

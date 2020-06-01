@@ -267,14 +267,10 @@ void StockScene::remakeLabel(Character* player) {
 		auto labelBuy = Label::createWithSystemFont(ZH("ÂòÈë"), "fonts/arial.ttf", 38);
 		auto menuItem_buy = MenuItemLabel::create(labelBuy);
 		menuItem_buy->setCallback([=](Ref* render) {
-			int money_ = player->getMoney;
-			if (money_ >= valPrice.asInt() * 100) {
-				player->setMoney(money_ - valPrice.asInt() * 100);
-				stockVec.at(i)->storeNumber[player->getTag()] += 100;
-				remakeLabel(player);
 
+			
 			}
-			});
+			);
 		menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
 		menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
 		this->addChild(menuItem_buy, 25);
