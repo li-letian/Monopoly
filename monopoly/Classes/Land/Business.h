@@ -15,15 +15,19 @@ class Business : public Land {
 protected:
 	std::string name_;
 	Character* owner_ = nullptr;
-	Business *building_=nullptr;
-	int type = 0;
+	Sprite* color_ = nullptr;
+	Sprite* color_larger_ = nullptr;
+	int index_larger_ = 0;
+	int type_ = land_business;
 	int sell_value_ = business_land_value;
+	int rent_value_ = business_rent_value;
 
 public:
 	virtual bool onLand(Character* standing) override;
-	virtual bool promote();
-	virtual bool demote();
+	bool onBusinessLand(Character* standing);
+	bool promote();
+	bool demote();
 	static Business* create(MapScene* map_scene, int index);
 };
 
-#endif // !_HOTEL_H_
+#endif // !_BUSINESS_H_

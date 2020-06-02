@@ -45,19 +45,18 @@ void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<
 	for (decltype(pic.size()) i = 0; i < pic.size(); i+=6)
 	{
 		auto menu = Menu::create();
-		for (int j = i; j < i + 6; j++)
+		for (decltype(i) j = i; j < i + 6; j++)
 		{
 			if (j >= pic.size()) break;
-			auto menu_item = MenuItemImage::create(pic.at(i), pic.at(i), [=](Ref* ref) { callback.at(i)(ref); this->removeFromParentAndCleanup(true); });
+			auto menu_item = MenuItemImage::create(pic.at(j), pic.at(j), [=](Ref* ref) { callback.at(j)(ref); this->removeFromParentAndCleanup(true); });
 			menu->addChild(menu_item);
 		}
 		if (!menu->getChildrenCount()) break;
 		menu->alignItemsHorizontally();
 		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
-		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - (5+i) * grid_distance));
+		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - (7+i) * grid_distance));
 		back_ground_->addChild(menu);
 	}
-	setCallBack([=](Ref* ref) {},"取消");
 }
 
 void PopUpLayer::setContent(const std::string& content)
@@ -70,7 +69,7 @@ void PopUpLayer::setContent(const std::string& content)
 	back_ground_->addChild(content_label);
 }
 
-void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back,const std::string text="确认")
+void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back,const std::string text)
 {
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(25);
