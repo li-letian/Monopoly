@@ -11,9 +11,11 @@ Character::Character()
 	character_frame_cache_(nullptr),
 	name_(),
 	money_(150000),
-	stop_times_(0),
 	cur_pos_(0),
-	steps_scope_(walk_steps)
+	steps_scope_(walk_steps),
+	stop_times_(0),
+	condition_(0),
+	estate_value_(0)
 {
 	this->setTag(0);
 }
@@ -43,7 +45,7 @@ bool Character::init(const std::string& name, int tag, int money, int cur_pos)
 
 	initAnimate();	//初始化动画对象
 	initSprite();	//设置人物初始形象
-
+	
 	return true;
 }
 
@@ -96,3 +98,4 @@ void Character::initSprite()
 	this->initWithSpriteFrame(spf);
 	this->setAnchorPoint(Vec2(0.5f, 0.15f));
 }
+

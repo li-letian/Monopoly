@@ -19,7 +19,7 @@ Hotel* Hotel::create(MapScene *map_scene,int index)
 		pRet->index_ = index;
 		pRet->rank_ = -1;
 		pRet->name_ = std::string("家庭旅馆")+StringUtils::format("%d", index);
-		pRet->sell_value_ = 300;
+		pRet->sell_value_ = hotel_land_value;
 		pRet->rent_value_ = 0;
 		pRet->setAnchorPoint(Vec2(0.5f, 0));
 		pRet->setPosition(map_scene->pos(index)+Vec2(0,tile_size.height));
@@ -75,6 +75,7 @@ bool Hotel::onLand(Character* standing)
 			if (money > sell_value_)
 			{
 				standing->setMoney(money - sell_value_);
+				standing->setEstateValue(standing->getEstateValue() + sell_value_);
 				owner_ = standing;
 				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
 				color_->setPosition(map_scene_->pos(index_));
@@ -112,6 +113,7 @@ bool Hotel::onLand(Character* standing)
 				if (money > sell_value_)
 				{
 					standing->setMoney(money - sell_value_);
+					standing->setEstateValue(standing->getEstateValue() + sell_value_);
 					promote();
 					sendMsg(msg_make_go_apper);
 					//画点东西表示已经买完了
@@ -166,6 +168,7 @@ bool Hotel::onLand(Character* standing)
 				if (money > rent_value)
 				{
 					standing->setMoney(money - rent_value);
+					owner_->setGainValue(owner_->getGainValue() + rent_value);
 					owner_->setMoney(owner_->getMoney() + rent_value);
 					sendMsg(msg_make_go_apper);
 				}

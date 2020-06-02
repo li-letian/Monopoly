@@ -68,7 +68,8 @@ public:
 		menu_item_.at(name)->setCallback(fun);
 		return true;
 	}
-	
+
+
 	//·µ»ØµØÍ¼
 	cocos2d::TMXTiledMap* getMap()
 	{

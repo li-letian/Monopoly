@@ -2,6 +2,7 @@
 #include "Scene/MapScene.h"
 #include "Land/Land.h"
 #include "Scene/SettingScene.h"
+#include "Scene/StorkScene.h"
 #include "Common/CommonMethod.h"
 #include <algorithm>
 
@@ -180,7 +181,6 @@ bool MapScene::panelInit()
 		auto scene = SettingScene::createScene();
 		Director::getInstance()->pushScene(scene);
 	});
-
 	return true;
 }
 
