@@ -3,42 +3,21 @@
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 
-Criminal::Criminal(MapScene* map_scene, int stop_times)
-	:Stay(map_scene, stop_times)
+bool SendToJail(Character* character)
 {
-
-}
-
-bool Criminal::eventTrigger(Character* character)
-{
-	character_ = character;
-	if (character_->getStopTimes() > 0)
+	if (character->getStopTimes() > 0)
 	{
 		return false;
 	}
 	else
 	{
-		character_->setStopTimes(stop_times_);
-		character_->setCondition(in_jail);
-		popUpDialog();
+		character->setStopTimes(default_stop_times);
+		character->setCondition(in_jail);
+		return true;
 	}
 }
 
-void Criminal::popUpDialog()
-{
-	auto pop = PopUpLayer::create();
-	pop->setTitle("入狱");
-	auto text = StringUtils::format("%s", character_->getPlayerName().c_str())
-		+ std::string("被判罪入狱") + StringUtils::format("%d", stop_times_) + std::string("天");
-	pop->setContent(text);
-	pop->setCallBack([=](Ref* sender) {
-		sendMsg(msg_make_go_apper);
-		});
-	pop->setPosition(Vec2(0, 0));
-	map_scene_->addChild(pop, 50);
-}
-
-void Criminal::popUpDialog(Character* character, MapScene* map_scene)
+void PopUpJailDialog(Character* character,MapScene* map_scene)
 {
 	int stop_times = character->getStopTimes();
 	auto pop = PopUpLayer::create();
@@ -54,6 +33,7 @@ void Criminal::popUpDialog(Character* character, MapScene* map_scene)
 			+ std::string("已出狱");
 		character->setCondition(normal);
 	}
+	pop->setTitle("出狱预告");
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* sender) {
 		sendMsg(msg_make_go_apper);
