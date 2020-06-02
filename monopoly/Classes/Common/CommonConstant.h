@@ -54,7 +54,7 @@ constexpr int default_stop_times = 3;
 constexpr int normal = 0;
 constexpr int in_jail = 1;
 constexpr int in_hospital = 2;
-constexpr int on_vacation = 3;
+constexpr int on_holiday = 3;
 
 
 #endif
