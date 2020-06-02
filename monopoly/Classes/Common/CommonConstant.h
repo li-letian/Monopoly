@@ -57,7 +57,19 @@ constexpr int default_stop_times = 3;
 constexpr int normal = 0;
 constexpr int in_jail = 1;
 constexpr int in_hospital = 2;
-constexpr int on_vacation = 3;
+constexpr int on_holiday = 3;
 
+//股市状态
+constexpr int normal_market = 0;
+constexpr int up_market = 1;
+constexpr int down_market = 3;
+constexpr int market_duration_time = 5;
+
+//税率 = 1/tax_rate
+constexpr int tax_rate = 20;
+
+//因为地产奖励的奖金
+constexpr int reward_estate_money = 20000;
+constexpr int help_estate_money = 10000;
 
 #endif
