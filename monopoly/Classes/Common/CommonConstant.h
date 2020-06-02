@@ -42,14 +42,15 @@ constexpr int msg_make_go_apper = 2;
 constexpr float grid_distance = 16.0f;
 
 //旅店地产的售价和过路费
-const int hotel_land_value = 300;
-const int hotel_sell_value[5] = { 500,1000,2000,4000,0 };
-const int hotel_rent_value[5] = { 100,400,1200,3000,7000 };
+constexpr int hotel_land_value = 300;
+constexpr int hotel_sell_value[5] = { 500,1000,2000,4000,0 };
+constexpr int hotel_rent_value[5] = { 100,400,1200,3000,7000 };
 
-const int business_land_value = 800;
+constexpr int business_land_value = 2000;
+constexpr int business_rent_value = 200;
 
 //股市常数
-const int buy_number_min = 10;
+constexpr int buy_number_min = 10;
 //默认停止次数
 constexpr int default_stop_times = 3;
 

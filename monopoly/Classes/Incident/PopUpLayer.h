@@ -31,7 +31,7 @@ public:
 	void setContent(const std::string& content);
 
 	//设置回调函数，可只设置确认按钮也可设置确认按钮与取消按钮
-	void setCallBack(std::function<void(Ref * render)> confirm_call_back, std::string text="确认");
+	void setCallBack(std::function<void(Ref * render)> confirm_call_back, std::string text = "确认");
 	void setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back);
 	//第一个是文件图片数组，第二个是回调函数数组
 	void setMenu(const std::vector< std::string>image, const std::vector<std::function<void(Ref* ref)>>callback);

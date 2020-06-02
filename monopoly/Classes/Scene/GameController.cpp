@@ -4,7 +4,7 @@
 #include "Scene/MapScene.h"
 #include "Common/CommonConstant.h"
 #include "StorkScene.h"
-#include "Land/Land.h"
+#include "Land/Business.h"
 #include "Land/Hotel.h"
 
 #include "Incident/Incident.h"
@@ -250,14 +250,7 @@ void GameController::endGo()
 				land = Hotel::create(map_scene_, pos);
 				break;
 			case land_business:
-				break;
-			case land_park:
-				break;
-			case land_resort:
-				break;
-			case land_mall:
-				break;
-			case land_institute:
+				land = Business::create(map_scene_, pos);
 				break;
 			case land_insurance:
 				break;

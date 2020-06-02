@@ -63,10 +63,10 @@ bool Hotel::demote()
 
 bool Hotel::onLand(Character* standing)
 {
-	auto pop = PopUpLayer::create();
-	pop->setTitle(name_);
 	if (!owner_)
 	{
+		auto pop = PopUpLayer::create();
+		pop->setTitle(name_);
 		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格购买这块土地吗？");
 		pop->setContent(text);
 		auto yes = [=](Ref* ref)
@@ -105,6 +105,8 @@ bool Hotel::onLand(Character* standing)
 	{
 		if (standing->getTag() == owner_->getTag()&&rank_<4)
 		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle(name_);
 			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格升级这块土地吗？");
 			pop->setContent(text);
 			auto yes = [=](Ref* ref)
@@ -135,6 +137,8 @@ bool Hotel::onLand(Character* standing)
 		}
 		else
 		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle(name_);
 			auto rent = rent_value_;
 			for (int index = index_+1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
 			{
