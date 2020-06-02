@@ -43,7 +43,7 @@ bool StockScene::init() {
 	stockSprite->setAnchorPoint(Vec2(0, 0));
 	this->addChild(stockSprite,24);
 	stockInfInit(); //初始化股票信息
-	
+	stockUpdate();
 	initLabel();                       //考虑传进来stock_vec_
 	return true;
 
@@ -55,22 +55,22 @@ void StockScene::initLabel() {
 	Size VisibleSize = Director::getInstance()->getVisibleSize();	//获得屏幕大小
 	initFirstLabel();
 	for (int i = 0; i < 8; i++) {
-		Value valCode, valName, valPrice, valDeal,valPer,valLabel,valStore,valBlank, valpercent_;
+		Value val_code, val_name, val_price, val_deal,val_per,valLabel,val_store,val_blank, val_percent;
 		
-		valCode = Value(stock_vec_.at(i)->stock_code_);
-		valName = Value(stock_vec_.at(i)->stock_name_);
-		valPrice = Value(stock_vec_.at(i)->now_price_);
-		valDeal = Value(stock_vec_.at(i)->make_deal_price_);
-		valPer = Value(static_cast<int>((stock_vec_.at(i)->percent_)*100));
-		valStore = Value(stock_vec_.at(i)->store_number_[0]);
-		valpercent_ = "%";
-		valBlank = Value("  ");
-		valPer = valPer.asString().c_str() + valpercent_.asString();
-		valLabel = valCode.asString().c_str() +valBlank.asString()+valName.asString() + valBlank.asString() +
-			valBlank.asString()+valPrice.asString().c_str() + valBlank.asString() + valBlank.asString() + valPer.asString().c_str() ;
+		val_code = Value(stock_vec_.at(i)->stock_code_);
+		val_name = Value(stock_vec_.at(i)->stock_name_);
+		val_price = Value(stock_vec_.at(i)->now_price_);
+		val_deal = Value(stock_vec_.at(i)->make_deal_price_);
+		val_per = Value(static_cast<int>((stock_vec_.at(i)->percent_)*100));
+		val_store = Value(stock_vec_.at(i)->store_number_[0]);
+		val_percent = "%";
+		val_blank = Value("  ");
+		val_per = val_per.asString().c_str() + val_percent.asString();
+		valLabel = val_code.asString().c_str() +val_blank.asString()+val_name.asString() + val_blank.asString() +
+			val_blank.asString()+val_price.asString().c_str() + val_blank.asString() + val_blank.asString() + val_per.asString().c_str() ;
 			
 		auto label = Label::createWithSystemFont(valLabel.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
-		if (valPer.asFloat() <= 0)
+		if (val_per.asFloat() <= 0)
 			label->setTextColor(Color4B::GREEN);
 		else
 			label->setTextColor(Color4B::RED);
@@ -78,8 +78,8 @@ void StockScene::initLabel() {
 		label->setPosition(Vec2(5, VisibleSize.height - 197 - 64 * (1 + i)));
 		this->addChild(label, 25);
 		
-		auto label_store = Label::createWithSystemFont(valStore.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
-		if (valPer.asFloat() <= 0)
+		auto label_store = Label::createWithSystemFont(val_store.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
+		if (val_per.asFloat() <= 0)
 			label_store->setTextColor(Color4B::GREEN);
 		else
 			label_store->setTextColor(Color4B::RED);
@@ -94,11 +94,26 @@ void StockScene::initLabel() {
 			});
 		menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
 		menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
-		this->addChild(menuItem_buy, 25);
+		//this->addChild(menuItem_buy, 25);
+
+		auto label_sell = Label::createWithSystemFont(ZH("卖出"), "fonts/arial.ttf", 38);
+		auto menuItem_sell = MenuItemLabel::create(label_sell);
+		menuItem_sell->setCallback([=](Ref* render) {
+
+
+			}
+		);
+		menuItem_sell->setAnchorPoint(Vec2(0, 0.5));
+		menuItem_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
+		//this->addChild(menuItem_sell, 25);
+		auto menu_sell_buy = Menu::create();
+		menu_sell_buy->addChild(menuItem_sell);
+		menu_sell_buy->addChild(menuItem_buy);
+		this->addChild(menu_sell_buy, 40);
 		
 			/*
-				auto label_code = Label::createWithSystemFont(valCode.asString().c_str(), "fonts/arial.ttf", 44);
-				if (valPer.asFloat() <= 0)
+				auto label_code = Label::createWithSystemFont(val_code.asString().c_str(), "fonts/arial.ttf", 44);
+				if (val_per.asFloat() <= 0)
 					label_code->setTextColor(Color4B::GREEN);
 				else 
 					label_code->setTextColor(Color4B::RED);
@@ -108,8 +123,8 @@ void StockScene::initLabel() {
 				
 
 			
-				auto label_name = Label::createWithSystemFont(valName.asString().c_str(), "fonts/arial.ttf", 40);
-				if (valPer.asFloat() <= 0)
+				auto label_name = Label::createWithSystemFont(val_name.asString().c_str(), "fonts/arial.ttf", 40);
+				if (val_per.asFloat() <= 0)
 					label_name->setTextColor(Color4B::GREEN);
 				else
 					label_name->setTextColor(Color4B::RED);
@@ -120,8 +135,8 @@ void StockScene::initLabel() {
 
 
 			
-				auto label_price = Label::createWithBMFont(valPrice.asString().c_str(), "fonts/arial.ttf", 46);
-				if (valPer.asFloat() <= 0)
+				auto label_price = Label::createWithBMFont(val_price.asString().c_str(), "fonts/arial.ttf", 46);
+				if (val_per.asFloat() <= 0)
 					label_price->setTextColor(Color4B::GREEN);
 				else
 					label_price->setTextColor(Color4B::RED);
@@ -131,8 +146,8 @@ void StockScene::initLabel() {
 				
 
 			
-				auto label_per = Label::createWithSystemFont(StringUtils::format("%.0f%%",valPer.asFloat()*100),"fonts/arial.ttf", 38);
-				if (valPer.asFloat() <= 0)
+				auto label_per = Label::createWithSystemFont(StringUtils::format("%.0f%%",val_per.asFloat()*100),"fonts/arial.ttf", 38);
+				if (val_per.asFloat() <= 0)
 					label_per->setTextColor(Color4B::GREEN);
 				else
 					label_per->setTextColor(Color4B::RED);
@@ -140,8 +155,8 @@ void StockScene::initLabel() {
 				label_per->setPosition(Vec2(390, VisibleSize.height - 197 - 64 * (1+i)));
 				this->addChild(label_per, 25);
 				
-				auto label_store = Label::createWithSystemFont(valStore.asString().c_str(), "fonts/arial.ttf", 46);
-				if (valPer.asFloat() <= 0)
+				auto label_store = Label::createWithSystemFont(val_store.asString().c_str(), "fonts/arial.ttf", 46);
+				if (val_per.asFloat() <= 0)
 					label_store->setTextColor(Color4B::GREEN);
 				else
 					label_store->setTextColor(Color4B::RED);
@@ -267,13 +282,39 @@ void StockScene::remakeLabel(Character* player) {
 		auto labelBuy = Label::createWithSystemFont(ZH("买入"), "fonts/arial.ttf", 38);
 		auto menuItem_buy = MenuItemLabel::create(labelBuy);
 		menuItem_buy->setCallback([=](Ref* render) {
+			int money_ = player->getMoney();
+			if (money_ >= val_price.asInt() * 100) {
+				player->setMoney(money_ - val_price.asInt() * 100);
+				stock_vec_.at(i)->store_number_[player->getTag()] += 100;
+				remakeLabel(player);
 
-			
 			}
-			);
+			});
+			
 		menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
 		menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
-		this->addChild(menuItem_buy, 25);
+		//this->addChild(menuItem_buy, 25);
 
+
+		auto label_sell = Label::createWithSystemFont(ZH("卖出"), "fonts/arial.ttf", 38);
+		auto menuItem_sell = MenuItemLabel::create(label_sell);
+		menuItem_sell->setCallback([=](Ref* render) {
+			if (stock_vec_.at(i)->store_number_[player->getTag()] >= 100) {
+				int money_ = player->getMoney();
+				stock_vec_.at(i)->store_number_[player->getTag()] -= 100;
+				int stock_money = 100 * val_price.asInt();
+				player->setMoney(money_ + stock_money);
+				remakeLabel(player);
+			}
+
+			}
+		);
+		menuItem_sell->setAnchorPoint(Vec2(0, 0.5));
+		menuItem_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
+		//this->addChild(menuItem_sell, 25);
+		auto menu_sell_buy = Menu::create();
+		menu_sell_buy->addChild(menuItem_sell);
+		menu_sell_buy->addChild(menuItem_buy);
+		this->addChild(menu_sell_buy, 40);
 	}
 }

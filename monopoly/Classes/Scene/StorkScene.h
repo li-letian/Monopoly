@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 using namespace cocos2d;
-
+#include "Character/Character.h"
 class Stock :public cocos2d::Sprite {
 public:
 	int stock_code_;            //¹ÉÆ±´úÂë
@@ -33,5 +33,6 @@ public:
 	void initFirstLabel();
 	void stockUpdate();
 	void remakeLabel(Character* player);
+	
 };
 #endif
