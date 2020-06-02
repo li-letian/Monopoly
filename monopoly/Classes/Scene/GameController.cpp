@@ -2,7 +2,8 @@
 
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
-
+#include "Common/CommonConstant.h"
+#include "StorkScene.h"
 #include "Land/Land.h"
 #include "Land/Hotel.h"
 
@@ -21,6 +22,7 @@ bool GameController::init()
 	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50);
+	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器
@@ -33,7 +35,7 @@ bool GameController::init()
 	whose_turn_ = 0;
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
-
+	stock_layer_->remakeLabel(characters_.at(whose_turn_));
 	return true;
 }
 
@@ -57,8 +59,11 @@ void GameController::addEventListenerCustom()
 			}
 
 			auto character = characters_.at(whose_turn_);
+			stock_layer_->stockUpdate();
+			stock_layer_->remakeLabel(character);
+			//在这里处理本回合走之前应该处理的事情
 			returnToCharacter(character);
-			
+
 			//在后面添加回合开始前要做的事
 
 			//1.先判断人物状态
@@ -115,7 +120,7 @@ void GameController::startGo()
 {
 	//得到当前该走的角色
 	auto character = characters_.at(whose_turn_);
-	
+
 	//视角回到该角色的所在位置
 	returnToCharacter(character);
 
@@ -221,7 +226,7 @@ void GameController::endGo()
 		//首先得处理一下神灵
 
 		//然后这里处理着陆到位置触发的事件
-		auto& land = map_scene_->getLand(pos);
+		auto &land = map_scene_->getLand(pos);
 		if (!land)
 		{
 			switch (map_scene_->getType(pos))
@@ -263,8 +268,10 @@ void GameController::endGo()
 				break;
 			}
 		}
-		if (land) land->onLand(character);
-		else sendMsg(msg_make_go_apper);
+		if (land)
+			land->onLand(character);
+		else
+			sendMsg(msg_make_go_apper);
 
 		return;
 	}

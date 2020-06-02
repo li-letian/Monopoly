@@ -44,7 +44,7 @@ bool Character::init(const std::string& name, int tag, int money, int cur_pos)
 
 	initAnimate();	//初始化动画对象
 	initSprite();	//设置人物初始形象
-
+	
 	return true;
 }
 
@@ -97,3 +97,4 @@ void Character::initSprite()
 	this->initWithSpriteFrame(spf);
 	this->setAnchorPoint(Vec2(0.5f, 0.15f));
 }
+
