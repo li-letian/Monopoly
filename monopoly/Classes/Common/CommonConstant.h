@@ -47,5 +47,14 @@ const int hotel_rent_value[5] = { 100,400,1200,3000,7000 };
 
 //股市常数
 const int buy_number_min = 10;
+//默认停止次数
+constexpr int default_stop_times = 3;
+
+//人物状态
+constexpr int normal = 0;
+constexpr int in_jail = 1;
+constexpr int in_hospital = 2;
+constexpr int on_vacation = 3;
+
 
 #endif

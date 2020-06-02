@@ -11,9 +11,10 @@ Character::Character()
 	character_frame_cache_(nullptr),
 	name_(),
 	money_(150000),
-	stop_times_(0),
 	cur_pos_(0),
-	steps_scope_(walk_steps)
+	steps_scope_(walk_steps),
+	stop_times_(0),
+	condition_(0)
 {
 	this->setTag(0);
 }
