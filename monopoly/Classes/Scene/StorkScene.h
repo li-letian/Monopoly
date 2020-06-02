@@ -35,6 +35,10 @@ public:
 	void stockUpdate();
 	void remakeLabel(Character* player);
 
+	void open(Ref* ref);
+	void close(Ref* ref);
+	
+
 protected:
 	MapScene* map_scene_ = nullptr;
 };

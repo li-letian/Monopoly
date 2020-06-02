@@ -29,6 +29,17 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 }
 
 
+void StockScene::open(Ref* ref)
+{
+	this->setPosition(Vec2(0, 0));
+	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {close(ref); });
+}
+
+void StockScene::close(Ref* ref)
+{
+	this->setPosition(Vec2(6000, 6000));
+	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {open(ref); });
+}
 
 StockScene* StockScene::createScene(MapScene *map_scene)
 {
@@ -38,17 +49,7 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 	stock_layer->setPosition(Vec2(6000, 6000));
 	stock_layer->map_scene_->addChild(stock_layer, 23);
 	auto label_stock = Label::createWithSystemFont(ZH("π… –1"), "fonts/arial.ttf", 40);
-	std::function<void(Ref* render)>open, close;
-	open = [=](Ref* render) {
-		stock_layer->setPosition(Vec2(0, 0));
-		stock_layer->map_scene_->setMenuCallback("stock", close,0); 
-	};
-	close = [=](Ref* render) {
-		stock_layer->setPosition(Vec2(6000, 6000));
-		log("close stock panel");
-		stock_layer->map_scene_->setMenuCallback("stock", open);
-	};
-	stock_layer->map_scene_->setMenuCallback("stock", open);
+	stock_layer->map_scene_->setMenuCallback("stock", [=](Ref* ref) {stock_layer->open(ref); });
 	return stock_layer;
 }
 
