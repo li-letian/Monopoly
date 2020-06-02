@@ -14,7 +14,8 @@ Character::Character()
 	cur_pos_(0),
 	steps_scope_(walk_steps),
 	stop_times_(0),
-	condition_(0)
+	condition_(0),
+	estate_value_(0)
 {
 	this->setTag(0);
 }

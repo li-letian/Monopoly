@@ -39,5 +39,7 @@ public:
 
 protected:
 	MapScene* map_scene_ = nullptr;
+	CC_SYNTHESIZE(int, condition_, Condition);
+	CC_SYNTHESIZE(int, duration_time_, DurationTime);
 };
 #endif

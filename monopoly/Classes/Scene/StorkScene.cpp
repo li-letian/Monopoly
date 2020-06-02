@@ -4,6 +4,7 @@
 #include "Common/CommonConstant.h"
 #include <ctime>
 #include <vector>
+#include "Incident/Incident.h"
 using namespace std;
 Stock* Stock::create(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number) {
 	Stock* stock = new Stock(stock_code,stock_name,now_price,make_deal_price,percent,store_number);
@@ -70,6 +71,8 @@ bool StockScene::init() {
 	if (!Layer::init()) {
 		return false;
 	}
+	condition_ = normal_market;
+	duration_time_ = 0;
 	auto stock_sprite = Sprite::create("pic.png");
 	stock_sprite->setAnchorPoint(Vec2(0, 0));
 	this->addChild(stock_sprite,24,"sprite");
@@ -263,7 +266,30 @@ void StockScene::stockUpdate() {
 	srand(time(0));
 	for (int i = 0; i < 8; i++) {
 		float per_ = rand() / (10*RAND_MAX+static_cast<float>(0.001));
-		if (rand() % 2)per_ *= (-1.0);
+		switch (condition_)
+		{
+		case normal_market:
+			if (rand() % 2)per_ *= (-1.0);
+			break;
+		case up_market:
+			duration_time_--;
+			if (duration_time_ == 0)
+			{
+				condition_ = normal;
+				PopUpMarketCalm(map_scene_);
+			}
+			break;
+		case down_market:
+			duration_time_--;
+			if (duration_time_ == 0)
+			{
+				condition_ = normal;
+				PopUpMarketRecover(map_scene_);
+			}
+			per_ *= (-1.0);
+			break;
+		}
+		
 		stock_vec_.at(i)->percent_ = per_;
 		stock_vec_.at(i)->now_price_ *= (1.0+per_);
 
