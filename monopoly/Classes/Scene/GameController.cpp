@@ -1,9 +1,14 @@
 #include <cstdlib>
+
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
-#include "Common/CommonConstant.h"
+
 #include "Land/Land.h"
 #include "Land/Hotel.h"
+
+#include "Incident/Criminal.h"
+
+#include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 
 bool GameController::init()
@@ -50,13 +55,23 @@ void GameController::addEventListenerCustom()
 			{
 				whose_turn_ = 0;
 			}
-			go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
-			returnToCharacter(characters_.at(whose_turn_));
 
-			
 			auto character = characters_.at(whose_turn_);
-			//在这里处理本回合走之前应该处理的事情
+			returnToCharacter(character);
+			
+			//在后面添加回合开始前要做的事
 
+			//1.先判断人物状态
+			switch (character->getCondition())
+			{
+			case normal:
+				go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
+				break;
+			case in_jail:
+				character->setStopTimes(character->getStopTimes() - 1);
+				Criminal::popUpDialog(character, map_scene_);
+			}
+			break;
 		}
 	});
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
@@ -100,7 +115,7 @@ void GameController::startGo()
 {
 	//得到当前该走的角色
 	auto character = characters_.at(whose_turn_);
-
+	
 	//视角回到该角色的所在位置
 	returnToCharacter(character);
 
@@ -214,7 +229,9 @@ void GameController::endGo()
 			case land_chance:
 				break;
 			case land_life:
+			{
 				break;
+			}
 			case land_hotel:
 				land = Hotel::create(map_scene_, pos);
 				break;
@@ -248,7 +265,7 @@ void GameController::endGo()
 		}
 		if (land) land->onLand(character);
 		else sendMsg(msg_make_go_apper);
-		//发送让go按钮重新出现的消息 （后期将消息发送功能封装）
+
 		return;
 	}
 }

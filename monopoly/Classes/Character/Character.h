@@ -41,9 +41,11 @@ private:
 	//角色属性
 	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字
 	CC_SYNTHESIZE(int, money_, Money);				//金钱
-	CC_SYNTHESIZE(int, stop_times_, StopTimes);		//停止时间（可能在医院、监狱、度假)
 	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置
 	CC_SYNTHESIZE(int, steps_scope_, StepsScope);	//一次可走的格数范围
+
+	CC_SYNTHESIZE(int, stop_times_, StopTimes);		//停止时间（可能在医院、监狱、度假)
+	CC_SYNTHESIZE(int, condition_, Condition);		//人物状态（可能为在医院、在监狱、在度假）
 };
 
 #endif // !_CHARACTER_H_
