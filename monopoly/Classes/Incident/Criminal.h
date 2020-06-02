@@ -1,14 +1,10 @@
 #ifndef _CHRIMINAL_H_
 #define _CHRIMINAL_H_
 
-#include "Incident/Stay.h"
+#include "Character/Character.h"
+#include "Scene/MapScene.h"
 
-class Criminal :public Stay {
-public:
-	Criminal(MapScene* map_scene, int stop_times);
-	virtual bool eventTrigger(Character* character);
-	void popUpDialog();
-	static void popUpDialog(Character* character, MapScene* map_scene);
-};
+bool SendToJail(Character* character);//送到监狱
+void PopUpJailDialog(Character* character, MapScene* map_scene);//弹出还有几天出狱或者已出狱的对话框
 
 #endif
