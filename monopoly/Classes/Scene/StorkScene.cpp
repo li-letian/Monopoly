@@ -1,6 +1,7 @@
 #include "StorkScene.h"
 #include "Common/CommonMethod.h"
 #include "Character/Character.h"
+#include "Common/CommonConstant.h"
 #include <ctime>
 #include <vector>
 using namespace std;
@@ -27,7 +28,17 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 	*/
 
 }
+void StockScene::open(Ref* ref)
+{
+	this->setPosition(Vec2(0, 0));
+	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {close(ref); });
+}
 
+void StockScene::close(Ref* ref)
+{
+	this->setPosition(Vec2(6000, 6000));
+	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {open(ref); });
+}
 
 
 StockScene* StockScene::createScene(MapScene *map_scene)
@@ -41,7 +52,7 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 	std::function<void(Ref* render)>open, close;
 	open = [=](Ref* render) {
 		stock_layer->setPosition(Vec2(0, 0));
-		stock_layer->map_scene_->setMenuCallback("stock", close,0); 
+		stock_layer->map_scene_->setMenuCallback("stock", close);
 	};
 	close = [=](Ref* render) {
 		stock_layer->setPosition(Vec2(6000, 6000));
@@ -49,6 +60,7 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 		stock_layer->map_scene_->setMenuCallback("stock", open);
 	};
 	stock_layer->map_scene_->setMenuCallback("stock", open);
+	stock_layer->map_scene_->setMenuCallback("stock", [=](Ref* ref) {stock_layer->open(ref); });
 	return stock_layer;
 }
 
@@ -197,10 +209,10 @@ void StockScene::initLabel() {
 void StockScene::stockInfInit() {
 	this->stock_vec_.pushBack(Stock::create(8010, ZH("天地银行"), 50, 0, static_cast < float>(0.0), 0));       //股票代码 股票名称 当前价格 成交价格 涨幅 持仓数 
 	this->stock_vec_.pushBack(Stock::create(8011, ZH("宇宙房产"), 60, 0, static_cast < float>(0.01), 0));
-	this->stock_vec_.pushBack(Stock::create(8012, ZH("玄学制药"), 30, 0, static_cast<float>(-0.09), 0));
+	this->stock_vec_.pushBack(Stock::create(8012, ZH("玄学制药"), 37, 0, static_cast<float>(-0.09), 0));
 	this->stock_vec_.pushBack(Stock::create(8015, ZH("缪斯学院"), 70, 0, static_cast < float>(0.04), 0));
-	this->stock_vec_.pushBack(Stock::create(8016, ZH("保险公司"), 20, 0, static_cast < float>(0.01), 0));
-	this->stock_vec_.pushBack(Stock::create(8017, ZH("石油公司"), 10, 0, static_cast < float>(0.08), 0));
+	this->stock_vec_.pushBack(Stock::create(8016, ZH("保险公司"), 50, 0, static_cast < float>(0.01), 0));
+	this->stock_vec_.pushBack(Stock::create(8017, ZH("石油公司"), 45, 0, static_cast < float>(0.08), 0));
 	this->stock_vec_.pushBack(Stock::create(8018, ZH("科技公司"), 80, 0, static_cast < float>(0.03), 0));
 	this->stock_vec_.pushBack(Stock::create(8019, ZH("航空公司"), 30, 0, static_cast < float>(0.07), 0));
 }
@@ -300,42 +312,48 @@ void StockScene::remakeLabel(Character* player) {
 		label_store->setPosition(Vec2(500, VisibleSize.height - 197 - 64 * (1 + i)));
 		this->addChild(label_store, 25);
 
-		auto labelBuy = Label::createWithSystemFont(ZH("买入"), "fonts/arial.ttf", 38);
-		auto menuItem_buy = MenuItemLabel::create(labelBuy);
+		auto label_buy = Label::createWithSystemFont(ZH("买入"), "fonts/arial.ttf", 36);
+		auto menuItem_buy = MenuItemLabel::create(label_buy);
 		menuItem_buy->setCallback([=](Ref* render) {
 			int money_ = player->getMoney();
-			if (money_ >= val_price.asInt() * 100) {
-				player->setMoney(money_ - val_price.asInt() * 100);
-				stock_vec_.at(i)->store_number_[player->getTag()] += 100;
+			if (money_ >= val_price.asInt() * buy_number_min) {
+				player->setMoney(money_ - val_price.asInt() * buy_number_min);
+				stock_vec_.at(i)->store_number_[player->getTag()] += buy_number_min;
 				remakeLabel(player);
 
 			}
 			});
 			
-		menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
-		menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
+		//menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
+		//menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
 		//this->addChild(menuItem_buy, 25);
 
 
-		auto label_sell = Label::createWithSystemFont(ZH("卖出"), "fonts/arial.ttf", 38);
+		auto label_sell = Label::createWithSystemFont(ZH("卖出"), "fonts/arial.ttf", 36);
+		//label_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
 		auto menuItem_sell = MenuItemLabel::create(label_sell);
+
 		menuItem_sell->setCallback([=](Ref* render) {
-			if (stock_vec_.at(i)->store_number_[player->getTag()] >= 100) {
+			if (stock_vec_.at(i)->store_number_[player->getTag()] >= buy_number_min) {
 				int money_ = player->getMoney();
-				stock_vec_.at(i)->store_number_[player->getTag()] -= 100;
-				int stock_money = 100 * val_price.asInt();
+				stock_vec_.at(i)->store_number_[player->getTag()] -= buy_number_min;
+				int stock_money = buy_number_min * val_price.asInt();
 				player->setMoney(money_ + stock_money);
 				remakeLabel(player);
 			}
 
 			}
 		);
-		menuItem_sell->setAnchorPoint(Vec2(0, 0.5));
-		menuItem_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
+		//menuItem_sell->setAnchorPoint(Vec2(0, 0.5));
+		//menuItem_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
 		//this->addChild(menuItem_sell, 25);
-		auto menu_sell_buy = Menu::create();
-		menu_sell_buy->addChild(menuItem_sell);
-		menu_sell_buy->addChild(menuItem_buy);
-		this->addChild(menu_sell_buy, 40);
+		auto menu_sell = Menu::create();
+		auto menu_buy = Menu::create();
+		menu_sell->addChild(menuItem_sell);
+		menu_buy->addChild(menuItem_buy);
+		menu_sell->setPosition(Vec2(715, VisibleSize.height - 197 - 64 * (1 + i)));
+		menu_buy->setPosition(Vec2(630, VisibleSize.height - 197 - 64 * (1 + i)));
+		this->addChild(menu_sell, 26);
+		this->addChild(menu_buy, 26);
 	}
 }

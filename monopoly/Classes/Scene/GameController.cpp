@@ -30,7 +30,7 @@ bool GameController::init()
 	whose_turn_ = 0;
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
-
+	stock_layer_->remakeLabel(characters_.at(whose_turn_));
 	return true;
 }
 
@@ -57,6 +57,7 @@ void GameController::addEventListenerCustom()
 
 			
 			auto character = characters_.at(whose_turn_);
+			stock_layer_->stockUpdate();
 			stock_layer_->remakeLabel(character);
 			//在这里处理本回合走之前应该处理的事情
 

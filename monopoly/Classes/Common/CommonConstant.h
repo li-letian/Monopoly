@@ -45,5 +45,7 @@ constexpr float grid_distance = 16.0f;
 const int hotel_sell_value[5] = { 500,1000,2000,4000,0 };
 const int hotel_rent_value[5] = { 100,400,1200,3000,7000 };
 
+//股市常数
+const int buy_number_min = 10;
 
 #endif
