@@ -1,6 +1,7 @@
 #include "PopUpLayer.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
+#include "Scene/MapScene.h"
 
 bool PopUpLayer::init()
 {
@@ -39,6 +40,25 @@ void PopUpLayer::setTitle(const std::string& title)
 	back_ground_->addChild(title_label);
 }
 
+void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<std::function<void(Ref* ref)>>callback)
+{
+	for (decltype(pic.size()) i = 0; i < pic.size(); i+=6)
+	{
+		auto menu = Menu::create();
+		for (int j = i; j < i + 6; j++)
+		{
+			if (j >= pic.size()) break;
+			auto menu_item = MenuItemImage::create(pic.at(i), pic.at(i), [=](Ref* ref) { callback.at(i)(ref); this->removeFromParentAndCleanup(true); });
+			menu->addChild(menu_item);
+		}
+		menu->alignItemsHorizontally();
+		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
+		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - 5 * grid_distance));
+		back_ground_->addChild(menu);
+	}
+	setCallBack([=](Ref* ref) {},"取消");
+}
+
 void PopUpLayer::setContent(const std::string& content)
 {
 	auto content_label = Label::createWithSystemFont(ZH(content), "华文琥珀", 20);
@@ -49,11 +69,11 @@ void PopUpLayer::setContent(const std::string& content)
 	back_ground_->addChild(content_label);
 }
 
-void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back)
+void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back,const std::string text="确认")
 {
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(25);
-	auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
+	auto confirm_item = MenuItemFont::create(ZH(text), [=](Ref* ref) {
 		confirm_call_back(ref);
 		this->removeFromParentAndCleanup(true); });
 	confirm_item->setColor(Color3B(0, 0, 0));
@@ -90,3 +110,4 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	menu->setPosition(Vec2(0,0));
 	back_ground_->addChild(menu);
 }
+

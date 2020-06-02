@@ -19,7 +19,7 @@ Hotel* Hotel::create(MapScene *map_scene,int index)
 		pRet->index_ = index;
 		pRet->rank_ = -1;
 		pRet->name_ = std::string("¼ÒÍ¥ÂÃ¹Ý")+StringUtils::format("%d", index);
-		pRet->sell_value_ = 300;
+		pRet->sell_value_ = hotel_land_value;
 		pRet->rent_value_ = 0;
 		pRet->setAnchorPoint(Vec2(0.5f, 0));
 		pRet->setPosition(map_scene->pos(index)+Vec2(0,tile_size.height));
