@@ -29,6 +29,17 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 }
 
 
+void StockScene::open(Ref* ref)
+{
+	this->setPosition(Vec2(0, 0));
+	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {close(ref); });
+}
+
+void StockScene::close(Ref* ref)
+{
+	this->setPosition(Vec2(6000, 6000));
+	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {open(ref); });
+}
 
 StockScene* StockScene::createScene(MapScene *map_scene)
 {
@@ -37,11 +48,12 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 	stock_layer->map_scene_ = map_scene;
 	stock_layer->setPosition(Vec2(6000, 6000));
 	stock_layer->map_scene_->addChild(stock_layer, 23);
+
 	auto label_stock = Label::createWithSystemFont(ZH("π… –1"), "fonts/arial.ttf", 40);
 	std::function<void(Ref* render)>open, close;
 	open = [=](Ref* render) {
 		stock_layer->setPosition(Vec2(0, 0));
-		stock_layer->map_scene_->setMenuCallback("stock", close,0); 
+		stock_layer->map_scene_->setMenuCallback("stock", close); 
 	};
 	close = [=](Ref* render) {
 		stock_layer->setPosition(Vec2(6000, 6000));
@@ -49,6 +61,10 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 		stock_layer->map_scene_->setMenuCallback("stock", open);
 	};
 	stock_layer->map_scene_->setMenuCallback("stock", open);
+
+	
+	stock_layer->map_scene_->setMenuCallback("stock", [=](Ref* ref) {stock_layer->open(ref); });
+
 	return stock_layer;
 }
 
@@ -127,7 +143,7 @@ void StockScene::initLabel() {
 		auto menu_sell_buy = Menu::create();
 		menu_sell_buy->addChild(menuItem_sell);
 		menu_sell_buy->addChild(menuItem_buy);
-		this->addChild(menu_sell_buy, 40);
+		this->addChild(menu_sell_buy, 25);
 		
 			/*
 				auto label_code = Label::createWithSystemFont(val_code.asString().c_str(), "fonts/arial.ttf", 44);
@@ -336,6 +352,6 @@ void StockScene::remakeLabel(Character* player) {
 		auto menu_sell_buy = Menu::create();
 		menu_sell_buy->addChild(menuItem_sell);
 		menu_sell_buy->addChild(menuItem_buy);
-		this->addChild(menu_sell_buy, 40);
+		this->addChild(menu_sell_buy, 25);
 	}
 }
