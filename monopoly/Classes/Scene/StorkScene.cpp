@@ -28,27 +28,45 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 
 }
 
-Scene* StockScene::createScene() {
-	auto scene = Scene::create();
-	auto layer = StockScene::create();
-	scene->addChild(layer);
-	return scene;
 
+
+StockScene* StockScene::createScene(MapScene *map_scene)
+{
+	auto visible_size = Director::getInstance()->getVisibleSize();
+	auto stock_layer = StockScene::create();
+	stock_layer->map_scene_ = map_scene;
+	stock_layer->setPosition(Vec2(6000, 6000));
+	stock_layer->map_scene_->addChild(stock_layer, 23);
+	auto label_stock = Label::createWithSystemFont(ZH("股市1"), "fonts/arial.ttf", 40);
+	std::function<void(Ref* render)>open, close;
+	open = [=](Ref* render) {
+		stock_layer->setPosition(Vec2(0, 0));
+		stock_layer->map_scene_->setMenuCallback("stock", close,0); 
+	};
+	close = [=](Ref* render) {
+		stock_layer->setPosition(Vec2(6000, 6000));
+		log("close stock panel");
+		stock_layer->map_scene_->setMenuCallback("stock", open);
+	};
+	stock_layer->map_scene_->setMenuCallback("stock", open);
+	return stock_layer;
 }
+
+
+
 bool StockScene::init() {
 	if (!Layer::init()) {
 		return false;
 	}
-	auto stockSprite = Sprite::create("pic.png");
-	stockSprite->setAnchorPoint(Vec2(0, 0));
-	this->addChild(stockSprite,24);
+	auto stock_sprite = Sprite::create("pic.png");
+	stock_sprite->setAnchorPoint(Vec2(0, 0));
+	this->addChild(stock_sprite,24,"sprite");
 	stockInfInit(); //初始化股票信息
 	stockUpdate();
 	initLabel();                       //考虑传进来stock_vec_
 	return true;
-
-
 }
+
 void StockScene::initLabel() {
 	
 
@@ -241,8 +259,11 @@ void StockScene::stockUpdate() {
 }
 
 void StockScene::remakeLabel(Character* player) {
-
+	auto stock_sprite = this->getChildByName("sprite");
+	stock_sprite->retain();
 	this->removeAllChildren();
+	this->addChild(stock_sprite, 24, "sprite");
+	stock_sprite->release();
 	initFirstLabel();
 	Size VisibleSize = Director::getInstance()->getVisibleSize();	//获得屏幕大小
 	

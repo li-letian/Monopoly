@@ -181,10 +181,6 @@ bool MapScene::panelInit()
 		auto scene = SettingScene::createScene();
 		Director::getInstance()->pushScene(scene);
 	});
-	stock_item->setCallback([=](Ref* render) {
-		
-		
-		});
 	return true;
 }
 

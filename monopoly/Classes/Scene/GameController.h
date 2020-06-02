@@ -14,7 +14,6 @@ class GameController : public Node
 public:
 	CREATE_FUNC(GameController);
 	virtual bool init();
-	void initStock();
 
 private:
 	void addEventListenerCustom();												   //添加自定义事件监听器

@@ -17,7 +17,7 @@ bool GameController::init()
 	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50);
-	initStock();             //初始化stock
+	stock_layer_=StockScene::createScene(map_scene_);             //初始化stock
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器
@@ -283,23 +283,4 @@ void GameController::backToStand()
 		break;
 	}
 }
-void GameController::initStock() {
-	auto visible_size = Director::getInstance()->getVisibleSize();
-	stock_layer_ = StockScene::create();
-	stock_layer_->setPosition(Vec2(6000, 6000));
-	map_scene_->addChild(stock_layer_, 60);
-	auto label_stock = Label::createWithSystemFont(ZH("股市1"), "fonts/arial.ttf", 40);
-	auto menuItem_stock = MenuItemLabel::create(label_stock);
-	menuItem_stock->setCallback([=](Ref* render) {
-		stock_layer_->setPosition(Vec2(0, 0));
 
-		}
-	);
-	menuItem_stock->setAnchorPoint(Vec2(0, 0.5));
-	menuItem_stock->setPosition(Vec2(705, visible_size.height - 120 ));
-	auto menu_stock = Menu::create();
-	menu_stock->addChild(menuItem_stock, 40);
-	auto menu_layer = Layer::create();
-	menu_layer->addChild(menu_stock, 20);
-	map_scene_->addChild(menu_layer, 25);
-}

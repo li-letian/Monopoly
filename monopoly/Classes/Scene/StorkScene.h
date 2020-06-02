@@ -5,6 +5,7 @@
 using namespace std;
 using namespace cocos2d;
 #include "Character/Character.h"
+#include "MapScene.h"
 class Stock :public cocos2d::Sprite {
 public:
 	int stock_code_;            //¹ÉÆ±´úÂë
@@ -24,7 +25,7 @@ public:
 
 class StockScene :public Layer {
 public:
-	static Scene* createScene();
+	static StockScene* StockScene::createScene(MapScene* map_scene);
 	virtual bool init();
 	CREATE_FUNC(StockScene);
 	void initLabel();
@@ -33,6 +34,8 @@ public:
 	void initFirstLabel();
 	void stockUpdate();
 	void remakeLabel(Character* player);
-	
+
+protected:
+	MapScene* map_scene_ = nullptr;
 };
 #endif
