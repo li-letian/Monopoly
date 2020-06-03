@@ -246,6 +246,8 @@ bool MapScene::perspectiveJump(float x, float y)
 	auto map_size = map_->getMapSize();
 	auto tile_size = map_->getTileSize();
 
+	y = y + 4 * tile_size.height;
+
 	x = visible_size.width / 2.f - 4 * tile_size.width - x;
 	y = visible_size.height / 2.f - y;
 

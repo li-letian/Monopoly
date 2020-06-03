@@ -263,7 +263,7 @@ void StockScene::initFirstLabel() {
 }
 
 void StockScene::stockUpdate() {
-	srand(time(0));
+	srand(static_cast<unsigned int>(time(static_cast<time_t>(0))));
 	for (int i = 0; i < 8; i++) {
 		float per_ = rand() / (10*RAND_MAX+static_cast<float>(0.001));
 		switch (condition_)
@@ -291,7 +291,7 @@ void StockScene::stockUpdate() {
 		}
 		
 		stock_vec_.at(i)->percent_ = per_;
-		stock_vec_.at(i)->now_price_ *= (1.0+per_);
+		stock_vec_.at(i)->now_price_ = static_cast<int>(stock_vec_.at(i)->now_price_*(1.0+per_));
 
 	}
 }

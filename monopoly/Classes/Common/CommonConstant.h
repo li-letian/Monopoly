@@ -33,6 +33,7 @@ constexpr int walk_right = 3;
 constexpr int walk_up = 4;
 
 //人物行走的格数
+constexpr int total_position = 24;
 constexpr int walk_steps = 3;
 constexpr int drive_steps = 23;
 
@@ -47,7 +48,7 @@ constexpr int hotel_sell_value[5] = { 500,1000,2000,4000,0 };
 constexpr int hotel_rent_value[5] = { 100,400,1200,3000,7000 };
 
 constexpr int business_land_value = 2000;
-constexpr int business_rent_value = 200;
+constexpr int business_rent_value = 300;
 
 //股市常数
 constexpr int buy_number_min = 10;

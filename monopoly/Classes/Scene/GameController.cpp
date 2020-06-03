@@ -181,7 +181,7 @@ void GameController::moveOneStep(int direction)
 	}*/
 
 	//²âÊÔ
-	if (next_pos >= 40)
+	if (next_pos >= total_position)
 	{
 		next_pos = 0;
 	}
