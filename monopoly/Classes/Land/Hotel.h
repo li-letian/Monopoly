@@ -19,13 +19,19 @@ protected:
 	int sell_value_ = 0;
 	int rent_value_ = 0;
 	float rent_rise_ = 1.f;
+	float sell_rise_ = 1.f;
 
 public:
 	friend class Hotel;
 	virtual bool onLand(Character* standing) override;
 	bool promote();
 	bool demote();
-	static Hotel* create(MapScene * map_scene,int index);
+	static Hotel* create(MapScene* map_scene, int index);
+	bool setRentRise(float rise_rate);
+	bool setSellRise(float rise_rate);
+	int getRank()const;
+	Character* getOwner()const;
+	bool setOwner(Character* character);	//character可为空,代表旅馆再次无主
 };
 
 #endif // !_HOTEL_H_
