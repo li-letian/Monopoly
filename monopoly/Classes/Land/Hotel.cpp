@@ -203,3 +203,19 @@ bool Hotel::setSellRise(float rise_rate)
 	sell_rise_ = static_cast<float>(sell_rise_ * (1 + rise_rate));
 	return true;
 }
+
+int Hotel::getRank()const
+{
+	return rank_;
+}
+
+Character* Hotel::getOwner()const
+{
+	return owner_;
+}
+
+bool Hotel::setOwner(Character* character)
+{
+	owner_ = character;
+	return true;
+}

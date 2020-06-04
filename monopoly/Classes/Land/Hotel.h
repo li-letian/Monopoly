@@ -29,6 +29,9 @@ public:
 	static Hotel* create(MapScene* map_scene, int index);
 	bool setRentRise(float rise_rate);
 	bool setSellRise(float rise_rate);
+	int getRank()const;
+	Character* getOwner()const;
+	bool setOwner(Character* character);	//character可为空,代表旅馆再次无主
 };
 
 #endif // !_HOTEL_H_
