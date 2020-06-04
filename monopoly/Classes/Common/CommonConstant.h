@@ -69,9 +69,12 @@ constexpr int market_duration_time = 5;
 
 //税率 = 1/tax_rate
 constexpr int tax_rate = 20;
+//房价、租价上涨或下降率
+constexpr int land_price_rate = 0.3;
 
-//因为地产奖励的奖金
+//政府奖励或补助的资金
 constexpr int reward_estate_money = 20000;
 constexpr int help_estate_money = 10000;
+constexpr int help_stock_money = 20000;
 
 #endif

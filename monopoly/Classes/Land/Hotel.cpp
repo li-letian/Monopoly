@@ -65,17 +65,18 @@ bool Hotel::onLand(Character* standing)
 {
 	if (!owner_)
 	{
+		auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
 		auto pop = PopUpLayer::create();
 		pop->setTitle(name_);
-		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格购买这块土地吗？");
+		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格购买这块土地吗？");
 		pop->setContent(text);
 		auto yes = [=](Ref* ref)
 		{
 			auto money = standing->getMoney();
-			if (money > sell_value_)
+			if (money > sell_value)
 			{
-				standing->setMoney(money - sell_value_);
-				standing->setEstateValue(standing->getEstateValue() + sell_value_);
+				standing->setMoney(money - sell_value);
+				standing->setEstateValue(standing->getEstateValue() + sell_value);
 				owner_ = standing;
 				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
 				color_->setPosition(map_scene_->pos(index_));
@@ -105,17 +106,18 @@ bool Hotel::onLand(Character* standing)
 	{
 		if (standing->getTag() == owner_->getTag()&&rank_<4)
 		{
+			auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
 			auto pop = PopUpLayer::create();
 			pop->setTitle(name_);
-			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格升级这块土地吗？");
+			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格升级这块土地吗？");
 			pop->setContent(text);
 			auto yes = [=](Ref* ref)
 			{
 				auto money = standing->getMoney();
-				if (money > sell_value_)
+				if (money > sell_value)
 				{
-					standing->setMoney(money - sell_value_);
-					standing->setEstateValue(standing->getEstateValue() + sell_value_);
+					standing->setMoney(money - sell_value);
+					standing->setEstateValue(standing->getEstateValue() + sell_value);
 					promote();
 					sendMsg(msg_make_go_apper);
 					//画点东西表示已经买完了
@@ -187,5 +189,17 @@ bool Hotel::onLand(Character* standing)
 			map_scene_->addChild(pop, 50);
 		}
 	}
+	return true;
+}
+
+bool Hotel::setRentRise(float rise_rate)
+{
+	rent_rise_ = static_cast<float>(sell_rise_ * (1 + rise_rate));
+	return true;
+}
+
+bool Hotel::setSellRise(float rise_rate)
+{
+	sell_rise_ = static_cast<float>(sell_rise_ * (1 + rise_rate));
 	return true;
 }
