@@ -1,6 +1,6 @@
 #include "Character/Character.h"
 #include "Common/CommonConstant.h"
-
+#include "Common/CommonMethod.h"
 USING_NS_CC;
 
 Character::Character()
@@ -99,3 +99,80 @@ void Character::initSprite()
 	this->setAnchorPoint(Vec2(0.5f, 0.15f));
 }
 
+void Information::updateInformation(Character* player) {
+	
+	this->removeAllChildren();
+	
+	int tag = player->getTag();
+	Size visible_size = Director::getInstance()->getVisibleSize();
+	
+	
+	Value val_cash,val_cash_pre,val_cash_label;
+	val_cash_pre = Value(ZH("现金: "));
+	int money = player->getMoney();
+	val_cash = Value(money);
+	val_cash_label = val_cash_pre.asString() + val_cash.asString().c_str();
+	auto label_cash = Label::createWithSystemFont(val_cash_label.asString().c_str(), "fonts/arial.ttf", 30);
+	label_cash->setTextColor(Color4B::BLACK);
+	label_cash->setAnchorPoint(Vec2(0, 0.5));
+	label_cash->setPosition(Vec2(810, visible_size.height - 370));
+	this->addChild(label_cash,25);                                                      //现金标签
+	
+	if (tag == 1) {
+		auto sprite_head = Sprite::create("miku_avatar.png");
+		sprite_head->setPosition(Vec2(847, visible_size.height - 290));
+		this->addChild(sprite_head, 25);
+
+		auto sprite_color = Sprite::create("character_avatar1.png");
+		sprite_color->setPosition(Vec2(940, visible_size.height - 290));
+		this->addChild(sprite_color, 25);
+
+		
+	}
+	else if (tag == 2) {
+		auto sprite_head = Sprite::create("kotori_avatar.png");
+		sprite_head->setPosition(Vec2(847, visible_size.height - 290));
+		this->addChild(sprite_head, 25);
+
+		auto sprite_color = Sprite::create("character_avatar2.png");
+		sprite_color->setPosition(Vec2(940, visible_size.height - 290));
+		this->addChild(sprite_color, 25);
+		day_++;
+		
+	}
+	Value val_year(ZH("年")), val_mon(ZH("月")), val_day(ZH("日")),val_date;
+	if (day_ >= 31) {
+		day_ = 1;
+		month_++;
+	}
+	if (month_ >= 12) {
+		month_ = 1;
+		year_++;
+	}
+	val_date = Value(year_).asString().c_str() + val_year.asString() + Value(month_).asString().c_str() +
+		val_mon.asString() + Value(day_).asString().c_str() + val_day.asString();
+	auto label_date=Label::createWithSystemFont(val_date.asString().c_str(), "fonts/arial.ttf", 30);
+	label_date->setTextColor(Color4B::BLACK);
+	label_date->setAnchorPoint(Vec2(0, 0.5));
+	label_date->setPosition(Vec2(800, visible_size.height - 200));
+	this->addChild(label_date, 25);
+	
+    
+
+}
+bool Information::init() {
+	if (!Layer::init()) {
+		return false;
+	}
+	
+	
+	return true;
+}
+
+Information* Information::createScene(MapScene* map_scene) {
+	auto information_layer= Information::create();
+	information_layer->map_scene_ = map_scene;
+	information_layer->map_scene_->addChild(information_layer,30);
+	return  information_layer;
+	
+}

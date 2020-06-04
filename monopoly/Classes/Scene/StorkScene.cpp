@@ -42,11 +42,12 @@ void StockScene::close(Ref* ref)
 }
 
 
-StockScene* StockScene::createScene(MapScene *map_scene)
+StockScene* StockScene::createScene(MapScene *map_scene,Information* information_scene)
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto stock_layer = StockScene::create();
 	stock_layer->map_scene_ = map_scene;
+	stock_layer->information_scene_ = information_scene;
 	stock_layer->setPosition(Vec2(6000, 6000));
 	stock_layer->map_scene_->addChild(stock_layer, 23);
 	auto label_stock = Label::createWithSystemFont(ZH("股市1"), "fonts/arial.ttf", 40);
@@ -78,7 +79,8 @@ bool StockScene::init() {
 	this->addChild(stock_sprite,24,"sprite");
 	stockInfInit(); //初始化股票信息
 	stockUpdate();
-	initLabel();                       //考虑传进来stock_vec_
+	initLabel();  //考虑传进来stock_vec_
+	
 	return true;
 }
 
@@ -346,7 +348,7 @@ void StockScene::remakeLabel(Character* player) {
 				player->setMoney(money_ - val_price.asInt() * buy_number_min);
 				stock_vec_.at(i)->store_number_[player->getTag()] += buy_number_min;
 				remakeLabel(player);
-
+				information_scene_->updateInformation(player);
 			}
 			});
 			
@@ -366,6 +368,7 @@ void StockScene::remakeLabel(Character* player) {
 				int stock_money = buy_number_min * val_price.asInt();
 				player->setMoney(money_ + stock_money);
 				remakeLabel(player);
+				information_scene_->updateInformation(player);
 			}
 
 			}

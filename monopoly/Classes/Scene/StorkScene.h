@@ -25,7 +25,7 @@ public:
 
 class StockScene :public Layer {
 public:
-	static StockScene* StockScene::createScene(MapScene* map_scene);
+	static StockScene* StockScene::createScene(MapScene* map_scene,Information* information_scene);
 	virtual bool init();
 	CREATE_FUNC(StockScene);
 	void initLabel();
@@ -39,6 +39,7 @@ public:
 
 protected:
 	MapScene* map_scene_ = nullptr;
+	Information* information_scene_ = nullptr;
 	CC_SYNTHESIZE(int, condition_, Condition);
 	CC_SYNTHESIZE(int, duration_time_, DurationTime);
 };
