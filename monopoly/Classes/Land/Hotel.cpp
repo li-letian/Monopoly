@@ -103,37 +103,44 @@ bool Hotel::onLand(Character* standing)
 	}
 	else
 	{
-		if (standing->getTag() == owner_->getTag()&&rank_<4)
+		if (standing->getTag() == owner_->getTag())
 		{
-			auto pop = PopUpLayer::create();
-			pop->setTitle(name_);
-			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格升级这块土地吗？");
-			pop->setContent(text);
-			auto yes = [=](Ref* ref)
+			if (rank_ < 4)
 			{
-				auto money = standing->getMoney();
-				if (money > sell_value_)
+				auto pop = PopUpLayer::create();
+				pop->setTitle(name_);
+				auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格升级这块土地吗？");
+				pop->setContent(text);
+				auto yes = [=](Ref* ref)
 				{
-					standing->setMoney(money - sell_value_);
-					standing->setEstateValue(standing->getEstateValue() + sell_value_);
-					promote();
-					sendMsg(msg_make_go_apper);
-					//画点东西表示已经买完了
-				}
-				else
-				{
-					auto fail = PopUpLayer::create();
-					fail->setTitle("购买失败");
-					fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
-					fail->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); });
-					fail->setPosition(Vec2(0, 0));
-					map_scene_->addChild(fail, 51);
-				}
-			};
-			auto no = [=](Ref* ref) {sendMsg(msg_make_go_apper); };
-			pop->setCallBack(yes, no);
-			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 50);
+					auto money = standing->getMoney();
+					if (money > sell_value_)
+					{
+						standing->setMoney(money - sell_value_);
+						standing->setEstateValue(standing->getEstateValue() + sell_value_);
+						promote();
+						sendMsg(msg_make_go_apper);
+						//画点东西表示已经买完了
+					}
+					else
+					{
+						auto fail = PopUpLayer::create();
+						fail->setTitle("购买失败");
+						fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
+						fail->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); });
+						fail->setPosition(Vec2(0, 0));
+						map_scene_->addChild(fail, 51);
+					}
+				};
+				auto no = [=](Ref* ref) {sendMsg(msg_make_go_apper); };
+				pop->setCallBack(yes, no);
+				pop->setPosition(Vec2(0, 0));
+				map_scene_->addChild(pop, 50);
+			}
+			else
+			{
+				sendMsg(msg_make_go_apper);
+			}
 		}
 		else
 		{

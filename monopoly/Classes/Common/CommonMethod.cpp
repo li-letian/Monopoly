@@ -31,7 +31,7 @@ std::string ZH(const std::string& str)
 	return retStr;
 }
 
-void sendMsg(int msg)
+void sendMessage(int msg)
 {
 	auto dispatcher = Director::getInstance()->getEventDispatcher();
 	char* buf = new char[10];
@@ -43,4 +43,9 @@ void sendMsg(int msg)
 	event.setUserData(buf);
 	dispatcher->dispatchEvent(&event);
 	CC_SAFE_DELETE_ARRAY(buf);
+}
+
+void sendMsg(int msg)
+{
+	sendMessage(msg);
 }

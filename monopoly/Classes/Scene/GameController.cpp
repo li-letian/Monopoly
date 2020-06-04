@@ -22,8 +22,7 @@ bool GameController::init()
 	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50);
-    information_scene_ = Information::createScene(map_scene_);             //初始化信息栏
-	stock_layer_ = StockScene::createScene(map_scene_,information_scene_); //初始化stock
+	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
 	
 	
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
@@ -39,7 +38,8 @@ bool GameController::init()
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
-	information_scene_->updateInformation(characters_.at(whose_turn_));
+	map_scene_->setInfoOnDisplay(characters_.at(whose_turn_));
+	map_scene_->updateInformation(characters_.at(whose_turn_));
 	return true;
 }
 
@@ -66,7 +66,8 @@ void GameController::addEventListenerCustom()
 
 			stock_layer_->stockUpdate();
 			stock_layer_->remakeLabel(character);
-			information_scene_->updateInformation(character);
+			map_scene_->setInfoOnDisplay(character);
+			map_scene_->updateInformation(character);
 
 			//在这里处理本回合走之前应该处理的事情
 			returnToCharacter(character);
@@ -101,7 +102,7 @@ void GameController::addEventListenerCustom()
 
 void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos)
 {
-	auto character = Character::create(name, tag, money, start_pos);
+	auto character = Character::create(name, tag, money, start_pos,map_scene_);
 	characters_.pushBack(character);
 	character->setPosition(map_scene_->pos(start_pos));
 	map_scene_->getMap()->addChild(character, 10);

@@ -6,16 +6,18 @@
 #include "Common/CommonMethod.h"
 USING_NS_CC;
 
+class MapScene;
 class Character : public Sprite {
 public:
 	Character();
 	~Character();
 	
-	static Character* create(const std::string& name, int tag, int money, int cur_pos)
+	static Character* create(const std::string& name, int tag, int money, int cur_pos,MapScene* map_scene)
 	{
 		auto pRet = new(std::nothrow) Character();
 		if (pRet && pRet->init(name, tag, money, cur_pos))
 		{
+			pRet->map_scene_ = map_scene;
 			pRet->autorelease();
 			return pRet;
 		}
@@ -42,8 +44,20 @@ public:
 
 private:
 	//角色属性
-	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字
-	CC_SYNTHESIZE(int, money_, Money);				//金钱
+	MapScene* map_scene_ = nullptr;
+	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字				
+	int money_;//金钱
+public:
+	int getMoney()const
+	{
+		return money_;
+	}
+public:
+	void setMoney(int money)
+	{
+		money_ = money;
+		map_scene_->updateInformation(this);
+	}
 	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置
 	CC_SYNTHESIZE(int, steps_scope_, StepsScope);	//一次可走的格数范围
 
@@ -55,16 +69,4 @@ private:
 };
 
 
-class Information :public Layer {
-public:
-	void updateInformation(Character* player);
-	static Information* Information::createScene(MapScene* map_scene);
-	virtual bool init();
-	CREATE_FUNC(Information);
-protected:
-	MapScene* map_scene_= nullptr ;            //记录map场景
-	int year_ = 1;
-	int month_ = 1;
-	int day_ = 1;
-};
 #endif // !_CHARACTER_H_
