@@ -10,7 +10,7 @@ USING_NS_CC;
 
 MapScene *MapScene::createScene()
 {
-	return MapScene::create();
+	return  MapScene::create();
 }
 
 bool MapScene::init()

@@ -2,6 +2,7 @@
 #define _CHARACTER_H_
 
 #include "cocos2d.h"
+#include "Scene/MapScene.h"
 #include "Common/CommonMethod.h"
 USING_NS_CC;
 
@@ -37,6 +38,7 @@ public:
 
 	void initSprite();		//初始化人物形象
 	void initAnimate();		//初始化动画对象
+	
 
 private:
 	//角色属性
@@ -52,4 +54,17 @@ private:
 	CC_SYNTHESIZE(int, gain_value_, GainValue);		//上次缴纳所得税起的所得价值
 };
 
+
+class Information :public Layer {
+public:
+	void updateInformation(Character* player);
+	static Information* Information::createScene(MapScene* map_scene);
+	virtual bool init();
+	CREATE_FUNC(Information);
+protected:
+	MapScene* map_scene_= nullptr ;            //记录map场景
+	int year_ = 1;
+	int month_ = 1;
+	int day_ = 1;
+};
 #endif // !_CHARACTER_H_
