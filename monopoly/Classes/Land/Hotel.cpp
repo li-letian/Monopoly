@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-Hotel* Hotel::create(MapScene *map_scene,int index)
+Hotel* Hotel::create(MapScene* map_scene, int index)
 {
 	auto pRet = new(std::nothrow) Hotel();
 	if (pRet && pRet->init())
@@ -18,11 +18,11 @@ Hotel* Hotel::create(MapScene *map_scene,int index)
 		pRet->setMapScene(map_scene);
 		pRet->index_ = index;
 		pRet->rank_ = -1;
-		pRet->name_ = std::string("å®¶åº­æ—…é¦†")+StringUtils::format("%d", index);
+		pRet->name_ = std::string("¼ÒÍ¥ÂÃ¹Ý") + StringUtils::format("%d", index);
 		pRet->sell_value_ = hotel_land_value;
 		pRet->rent_value_ = 0;
 		pRet->setAnchorPoint(Vec2(0.5f, 0));
-		pRet->setPosition(map_scene->pos(index)+Vec2(0,tile_size.height));
+		pRet->setPosition(map_scene->pos(index) + Vec2(0, tile_size.height));
 		map_scene->getMap()->addChild(pRet, 1);
 		pRet->autorelease();
 		return pRet;
@@ -68,7 +68,7 @@ bool Hotel::onLand(Character* standing)
 		auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
 		auto pop = PopUpLayer::create();
 		pop->setTitle(name_);
-		auto text = std::string("çœ‹èµ·æ¥çœŸæ˜¯å¾ˆæœ‰å‰æ™¯çš„ä¸€å—åœ°å‘¢ï¼Œç¡®è®¤ä»¥ ") + StringUtils::format("%d", sell_value) + std::string("çš„ä»·æ ¼è´­ä¹°è¿™å—åœŸåœ°å—ï¼Ÿ");
+		auto text = std::string("¿´ÆðÀ´ÕæÊÇºÜÓÐÇ°¾°µÄÒ»¿éµØÄØ£¬È·ÈÏÒÔ ") + StringUtils::format("%d", sell_value) + std::string("µÄ¼Û¸ñ¹ºÂòÕâ¿éÍÁµØÂð£¿");
 		pop->setContent(text);
 		auto yes = [=](Ref* ref)
 		{
@@ -84,20 +84,20 @@ bool Hotel::onLand(Character* standing)
 				map_scene_->getMap()->addChild(color_, 1);
 				promote();
 				sendMsg(msg_make_go_apper);
-				//ç”»ç‚¹ä¸œè¥¿è¡¨ç¤ºå·²ç»ä¹°å®Œäº†
+				//»­µã¶«Î÷±íÊ¾ÒÑ¾­ÂòÍêÁË
 			}
 			else
 			{
 				auto fail = PopUpLayer::create();
-				fail->setTitle("è´­ä¹°å¤±è´¥");
-				fail->setContent("é’±éƒ½ä¸å¤Ÿäº†å’‹è¿˜è¿˜å‰æ‰‹å‘¢ï¼Ÿå¿«åŽ»æ•´ç‚¹é’±å§");
+				fail->setTitle("¹ºÂòÊ§°Ü");
+				fail->setContent("Ç®¶¼²»¹»ÁËÕ¦»¹»¹¶çÊÖÄØ£¿¿ìÈ¥ÕûµãÇ®°É");
 				fail->setCallBack([=](Ref* ref) {
 					sendMsg(msg_make_go_apper); });
 				fail->setPosition(Vec2(0, 0));
 				map_scene_->addChild(fail, 51);
 			}
 		};
-		auto no = [=](Ref* ref){ sendMsg(msg_make_go_apper); };
+		auto no = [=](Ref* ref) { sendMsg(msg_make_go_apper); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
 		map_scene_->addChild(pop, 50);
@@ -108,10 +108,10 @@ bool Hotel::onLand(Character* standing)
 		{
 			if (rank_ < 4)
 			{
-        auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
+				auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
 				auto pop = PopUpLayer::create();
 				pop->setTitle(name_);
-				auto text = std::string("çœ‹èµ·æ¥çœŸæ˜¯å¾ˆæœ‰å‰æ™¯çš„ä¸€å—åœ°å‘¢ï¼Œç¡®è®¤ä»¥ ") + StringUtils::format("%d", sell_value) + std::string("çš„ä»·æ ¼å‡çº§è¿™å—åœŸåœ°å—ï¼Ÿ");
+				auto text = std::string("¿´ÆðÀ´ÕæÊÇºÜÓÐÇ°¾°µÄÒ»¿éµØÄØ£¬È·ÈÏÒÔ ") + StringUtils::format("%d", sell_value) + std::string("µÄ¼Û¸ñÉý¼¶Õâ¿éÍÁµØÂð£¿");
 				pop->setContent(text);
 				auto yes = [=](Ref* ref)
 				{
@@ -122,13 +122,13 @@ bool Hotel::onLand(Character* standing)
 						standing->setEstateValue(standing->getEstateValue() + sell_value);
 						promote();
 						sendMsg(msg_make_go_apper);
-						//ç”»ç‚¹ä¸œè¥¿è¡¨ç¤ºå·²ç»ä¹°å®Œäº†
+						//»­µã¶«Î÷±íÊ¾ÒÑ¾­ÂòÍêÁË
 					}
 					else
 					{
 						auto fail = PopUpLayer::create();
-						fail->setTitle("è´­ä¹°å¤±è´¥");
-						fail->setContent("é’±éƒ½ä¸å¤Ÿäº†å’‹è¿˜è¿˜å‰æ‰‹å‘¢ï¼Ÿå¿«åŽ»æ•´ç‚¹é’±å§");
+						fail->setTitle("¹ºÂòÊ§°Ü");
+						fail->setContent("Ç®¶¼²»¹»ÁËÕ¦»¹»¹¶çÊÖÄØ£¿¿ìÈ¥ÕûµãÇ®°É");
 						fail->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); });
 						fail->setPosition(Vec2(0, 0));
 						map_scene_->addChild(fail, 51);
@@ -149,7 +149,7 @@ bool Hotel::onLand(Character* standing)
 			auto pop = PopUpLayer::create();
 			pop->setTitle(name_);
 			auto rent = rent_value_;
-			for (int index = index_+1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
+			for (int index = index_ + 1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
 			{
 				if (map_scene_->getType(index) == land_business) continue;
 				auto land = map_scene_->getLand(index);
@@ -160,7 +160,7 @@ bool Hotel::onLand(Character* standing)
 					rent += hotel->rent_value_;
 				}
 			}
-			for (int index = index_ -1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index--)
+			for (int index = index_ - 1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index--)
 			{
 				if (map_scene_->getType(index) == land_business) continue;
 				auto land = map_scene_->getLand(index);
@@ -172,7 +172,7 @@ bool Hotel::onLand(Character* standing)
 				}
 			}
 			auto rent_value = static_cast<int>(rent * rent_rise_);
-			auto text = std::string("è¿™é‡Œæ˜¯ ") + owner_->getPlayerName() + std::string(" çš„æ—…åº—åœ°äº§ï¼Œä½ éœ€è¦ç¼´çº³ä½å®¿è´¹ ") + StringUtils::format("%d", rent_value) + std::string("ï¼Œæ„Ÿè°¢æ‚¨çš„å…‰ä¸´");
+			auto text = std::string("ÕâÀïÊÇ ") + owner_->getPlayerName() + std::string(" µÄÂÃµêµØ²ú£¬ÄãÐèÒª½ÉÄÉ×¡ËÞ·Ñ ") + StringUtils::format("%d", rent_value) + std::string("£¬¸ÐÐ»ÄúµÄ¹âÁÙ");
 			log("hotel of %s", owner_->getPlayerName().c_str());
 			pop->setContent(text);
 			auto yes = [=](Ref* ref)
@@ -187,7 +187,7 @@ bool Hotel::onLand(Character* standing)
 				}
 				else
 				{
-					//è¿™é‡Œå¼„ç ´äº§
+					//ÕâÀïÅªÆÆ²ú
 					sendMsg(msg_make_go_apper);
 				}
 			};
