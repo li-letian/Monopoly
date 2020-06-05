@@ -4,7 +4,9 @@
 #include "Character/Character.h"
 #include "Scene/MapScene.h"
 
-bool GoOnHoliday(Character* character);	//送去度假
-void PopUpHolidayDialog(Character* character, MapScene* map_scene);	//弹出还有几天度假回来或者已度假回来的对话框
+//送去度假
+bool GoOnHoliday(Character* character);
+//弹出还有几天度假回来或者已度假回来的对话框
+void PopUpHolidayDialog(Character* character, MapScene* map_scene);
 
 #endif

@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-Hotel* Hotel::create(MapScene *map_scene,int index)
+Hotel* Hotel::create(MapScene* map_scene, int index)
 {
 	auto pRet = new(std::nothrow) Hotel();
 	if (pRet && pRet->init())
@@ -18,11 +18,11 @@ Hotel* Hotel::create(MapScene *map_scene,int index)
 		pRet->setMapScene(map_scene);
 		pRet->index_ = index;
 		pRet->rank_ = -1;
-		pRet->name_ = std::string("家庭旅馆")+StringUtils::format("%d", index);
+		pRet->name_ = std::string("家庭旅馆") + StringUtils::format("%d", index);
 		pRet->sell_value_ = hotel_land_value;
 		pRet->rent_value_ = 0;
 		pRet->setAnchorPoint(Vec2(0.5f, 0));
-		pRet->setPosition(map_scene->pos(index)+Vec2(0,tile_size.height));
+		pRet->setPosition(map_scene->pos(index) + Vec2(0, tile_size.height));
 		map_scene->getMap()->addChild(pRet, 1);
 		pRet->autorelease();
 		return pRet;
@@ -65,17 +65,18 @@ bool Hotel::onLand(Character* standing)
 {
 	if (!owner_)
 	{
+		auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
 		auto pop = PopUpLayer::create();
 		pop->setTitle(name_);
-		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格购买这块土地吗？");
+		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格购买这块土地吗？");
 		pop->setContent(text);
 		auto yes = [=](Ref* ref)
 		{
 			auto money = standing->getMoney();
-			if (money > sell_value_)
+			if (money > sell_value)
 			{
-				standing->setMoney(money - sell_value_);
-				standing->setEstateValue(standing->getEstateValue() + sell_value_);
+				standing->setMoney(money - sell_value);
+				standing->setEstateValue(standing->getEstateValue() + sell_value);
 				owner_ = standing;
 				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
 				color_->setPosition(map_scene_->pos(index_));
@@ -96,7 +97,7 @@ bool Hotel::onLand(Character* standing)
 				map_scene_->addChild(fail, 51);
 			}
 		};
-		auto no = [=](Ref* ref){ sendMsg(msg_make_go_apper); };
+		auto no = [=](Ref* ref) { sendMsg(msg_make_go_apper); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
 		map_scene_->addChild(pop, 50);
@@ -107,17 +108,18 @@ bool Hotel::onLand(Character* standing)
 		{
 			if (rank_ < 4)
 			{
+				auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
 				auto pop = PopUpLayer::create();
 				pop->setTitle(name_);
-				auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格升级这块土地吗？");
+				auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格升级这块土地吗？");
 				pop->setContent(text);
 				auto yes = [=](Ref* ref)
 				{
 					auto money = standing->getMoney();
-					if (money > sell_value_)
+					if (money > sell_value)
 					{
-						standing->setMoney(money - sell_value_);
-						standing->setEstateValue(standing->getEstateValue() + sell_value_);
+						standing->setMoney(money - sell_value);
+						standing->setEstateValue(standing->getEstateValue() + sell_value);
 						promote();
 						sendMsg(msg_make_go_apper);
 						//画点东西表示已经买完了
@@ -147,7 +149,7 @@ bool Hotel::onLand(Character* standing)
 			auto pop = PopUpLayer::create();
 			pop->setTitle(name_);
 			auto rent = rent_value_;
-			for (int index = index_+1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
+			for (int index = index_ + 1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
 			{
 				if (map_scene_->getType(index) == land_business) continue;
 				auto land = map_scene_->getLand(index);
@@ -158,7 +160,7 @@ bool Hotel::onLand(Character* standing)
 					rent += hotel->rent_value_;
 				}
 			}
-			for (int index = index_ -1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index--)
+			for (int index = index_ - 1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index--)
 			{
 				if (map_scene_->getType(index) == land_business) continue;
 				auto land = map_scene_->getLand(index);
@@ -194,5 +196,33 @@ bool Hotel::onLand(Character* standing)
 			map_scene_->addChild(pop, 50);
 		}
 	}
+	return true;
+}
+
+bool Hotel::setRentRise(float rise_rate)
+{
+	rent_rise_ = static_cast<float>(sell_rise_ * (1 + rise_rate));
+	return true;
+}
+
+bool Hotel::setSellRise(float rise_rate)
+{
+	sell_rise_ = static_cast<float>(sell_rise_ * (1 + rise_rate));
+	return true;
+}
+
+int Hotel::getRank()const
+{
+	return rank_;
+}
+
+Character* Hotel::getOwner()const
+{
+	return owner_;
+}
+
+bool Hotel::setOwner(Character* character)
+{
+	owner_ = character;
 	return true;
 }
