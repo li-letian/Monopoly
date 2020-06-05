@@ -65,6 +65,7 @@ bool Business::promote()
 		initWithFile("park.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
+		sendMsg(msg_make_go_apper);
 	});
 	pic.push_back("resort.png");
 	callback.push_back([=](Ref* ref) {
@@ -72,6 +73,7 @@ bool Business::promote()
 		initWithFile("resort.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
+		sendMsg(msg_make_go_apper);
 	});
 	pic.push_back("mall.png");
 	callback.push_back([=](Ref* ref) {
@@ -79,6 +81,7 @@ bool Business::promote()
 		initWithFile("mall.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
+		sendMsg(msg_make_go_apper);
 	});
 	pic.push_back("institute.png");
 	callback.push_back([=](Ref* ref) {
@@ -246,7 +249,6 @@ bool Business::onLand(Character* standing)
 			auto yes = [=](Ref* ref)
 			{
 				promote();
-				sendMsg(msg_make_go_apper);
 			};
 			auto no = [=](Ref* ref) {sendMsg(msg_make_go_apper); };
 			pop->setCallBack(yes, no);

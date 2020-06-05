@@ -8,12 +8,14 @@
 
 class Land;
 class Character;
+class Stock;
 class MapScene : public cocos2d::Scene
 {
 protected:
 	cocos2d::Layer* panel_=nullptr;
 	cocos2d::TMXTiledMap* map_=nullptr;
 	cocos2d::TMXTiledMap* mini_map_=nullptr;
+	
 
 	cocos2d::Map<std::string, cocos2d::MenuItem*>menu_item_;
 	std::vector<cocos2d::Vec2>pos_;

@@ -19,10 +19,10 @@ int LevyStockTax(Character* character, StockScene* stock_scene)
 {
 	int own_sum = 0, tax = 0;
 	int tag = character->getTag();
-	for (int i = 0; i < stock_scene->stock_vec_.size(); i++)
+	for (int i = 0; i < stock_scene->getStock().size(); i++)
 	{
-		int own_num = stock_scene->stock_vec_.at(i)->store_number_.at(tag);
-		int price = stock_scene->stock_vec_.at(i)->now_price_;
+		int own_num = stock_scene->getStock().at(i)->store_number_.at(tag);
+		int price = stock_scene->getStock().at(i)->now_price_;
 		own_sum += own_num * price;
 	}
 	tax = own_sum / tax_rate;
@@ -68,10 +68,10 @@ Character* GetMostStock(const Vector<Character*>& characters, StockScene* stock_
 		auto character = characters.at(i);
 		int own_sum = -2;
 		int tag = character->getTag();
-		for (int j = 0; i < stock_scene->stock_vec_.size(); i++)
+		for (int j = 0; i < stock_scene->getStock().size(); i++)
 		{
-			int own_num = stock_scene->stock_vec_.at(i)->store_number_.at(tag);
-			int price = stock_scene->stock_vec_.at(i)->now_price_;
+			int own_num = stock_scene->getStock().at(i)->store_number_.at(tag);
+			int price = stock_scene->getStock().at(i)->now_price_;
 			own_sum += own_num * price;
 		}
 		if (own_sum > most_value)

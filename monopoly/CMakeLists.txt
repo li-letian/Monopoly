@@ -116,20 +116,15 @@ list(APPEND GAME_SOURCE
      Classes/Land/Aviation.cpp
      Classes/Land/Business.cpp
      Classes/Land/Enterprise.cpp
-     Classes/Land/Hotel.cpp
-     Classes/Land/Insurance.cpp
+	 Classes/Land/Insurance.cpp
+	 Classes/Land/Hotel.cpp
      Classes/Land/Land.cpp
      Classes/Land/Lottery.cpp
-     Classes/Land/Oil.cpp
-     Classes/Land/Resort.cpp
      Classes/Land/Bank.cpp
      Classes/Land/Chance.cpp
      Classes/Land/Hospital.cpp
-     Classes/Land/Institute.cpp
      Classes/Land/Jail.cpp
      Classes/Land/Life.cpp
-     Classes/Land/Mall.cpp
-     Classes/Land/Park.cpp
      Classes/Land/Technology.cpp
 
      Classes/Scene/BankScene.cpp
@@ -212,15 +207,11 @@ list(APPEND GAME_HEADER
      Classes/Land/Land.h
      Classes/Land/Lottery.h
      Classes/Land/Oil.h
-     Classes/Land/Resort.h
      Classes/Land/Bank.h
      Classes/Land/Chance.h
      Classes/Land/Hospital.h
-     Classes/Land/Institute.h
      Classes/Land/Jail.h
      Classes/Land/Life.h
-     Classes/Land/Mall.h
-     Classes/Land/Park.h
      Classes/Land/Technology.h
 
      Classes/Scene/BankScene.h

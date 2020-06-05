@@ -63,7 +63,7 @@ public:
 
 	CC_SYNTHESIZE(int, stop_times_, StopTimes);		//停止时间（可能在医院、监狱、度假)
 	CC_SYNTHESIZE(int, condition_, Condition);		//人物状态（可能为在医院、在监狱、在度假）
-
+	CC_SYNTHESIZE(int, insurance_times, Insurance);
 	CC_SYNTHESIZE(int, estate_value_, EstateValue);	//地产价值
 	CC_SYNTHESIZE(int, gain_value_, GainValue);		//上次缴纳所得税起的所得价值
 };

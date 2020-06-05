@@ -11,6 +11,8 @@ bool SendToJail(Character* character)
 	}
 	else
 	{
+		character->setVisible(false);
+		character->setCurPos(283);
 		character->setStopTimes(default_stop_times);
 		character->setCondition(in_jail);
 		return true;
@@ -32,6 +34,7 @@ void PopUpJailDialog(Character* character,MapScene* map_scene)
 		text = StringUtils::format("%s", character->getPlayerName().c_str())
 			+ std::string("已出狱");
 		character->setCondition(normal);
+		character->setVisible(true);
 	}
 	pop->setTitle("出狱预告");
 	pop->setContent(text);

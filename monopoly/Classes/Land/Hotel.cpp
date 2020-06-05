@@ -5,7 +5,7 @@
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
-
+#include "Incident/Incident.h"
 
 USING_NS_CC;
 
@@ -172,28 +172,38 @@ bool Hotel::onLand(Character* standing)
 				}
 			}
 			auto rent_value = static_cast<int>(rent * rent_rise_);
-			auto text = std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的旅店地产，你需要缴纳住宿费 ") + StringUtils::format("%d", rent_value) + std::string("，感谢您的光临");
-			log("hotel of %s", owner_->getPlayerName().c_str());
-			pop->setContent(text);
-			auto yes = [=](Ref* ref)
+			if (owner_->getCondition() == normal)
 			{
-				auto money = standing->getMoney();
-				if (money > rent_value)
+				auto text = std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的旅店地产，你需要缴纳住宿费 ") + StringUtils::format("%d", rent_value) + std::string("，感谢您的光临");
+				pop->setContent(text);
+				auto yes = [=](Ref* ref)
 				{
-					standing->setMoney(money - rent_value);
-					owner_->setGainValue(owner_->getGainValue() + rent_value);
-					owner_->setMoney(owner_->getMoney() + rent_value);
-					sendMsg(msg_make_go_apper);
-				}
-				else
-				{
-					//这里弄破产
-					sendMsg(msg_make_go_apper);
-				}
-			};
-			pop->setCallBack(yes);
-			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 50);
+					auto money = standing->getMoney();
+					if (money > rent_value)
+					{
+						standing->setMoney(money - rent_value);
+						owner_->setGainValue(owner_->getGainValue() + rent_value);
+						owner_->setMoney(owner_->getMoney() + rent_value);
+						sendMsg(msg_make_go_apper);
+					}
+					else
+					{
+						//这里弄破产
+						sendMsg(msg_make_go_apper);
+					}
+				};
+				pop->setCallBack(yes);
+				pop->setPosition(Vec2(0, 0));
+				map_scene_->addChild(pop, 50);
+			}
+			else
+			{
+				auto text = std::string("此处房产的所有者当前没空收取费用，本次过路免费");
+				pop->setContent(text);
+				pop->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); });
+				pop->setPosition(Vec2(0, 0));
+				map_scene_->addChild(pop, 50);
+			}
 		}
 	}
 	return true;
@@ -223,6 +233,12 @@ Character* Hotel::getOwner()const
 
 bool Hotel::setOwner(Character* character)
 {
+	owner_->setEstateValue(owner_->getEstateValue() - sell_value_ * sell_rise_);
+	character->setEstateValue(character->getEstateValue() + sell_value_*sell_rise_);
 	owner_ = character;
+	color_ = Sprite::create(StringUtils::format("character%d.png", character->getTag()));
+	color_->setPosition(map_scene_->pos(index_));
+	color_->setAnchorPoint(Vec2(0.5f, 0.5f));
+	map_scene_->getMap()->addChild(color_, 1);
 	return true;
 }

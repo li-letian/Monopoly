@@ -5,6 +5,7 @@
 #include "Scene/StorkScene.h"
 #include "Common/CommonMethod.h"
 #include "Character/Character.h"
+#include "StorkScene.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -223,28 +224,15 @@ void MapScene::updateInformation(Character* player)
 	label_cash->setPosition(Vec2(810, visible_size.height - 370));
 	information_layer->addChild(label_cash, 25);                                                      //现金标签
 
-	if (tag == 1) {
-		auto sprite_head = Sprite::create("miku_avatar.png");
-		sprite_head->setPosition(Vec2(847, visible_size.height - 290));
-		information_layer->addChild(sprite_head, 25);
 
-		auto sprite_color = Sprite::create("character_avatar1.png");
-		sprite_color->setPosition(Vec2(940, visible_size.height - 290));
-		information_layer->addChild(sprite_color, 25);
+	auto sprite_head = Sprite::create(player->getPlayerName()+string("_avatar.png"));
+	sprite_head->setPosition(Vec2(847, visible_size.height - 290));
+	information_layer->addChild(sprite_head, 25);
+	auto sprite_color = Sprite::create(StringUtils::format("character_avatar%d.png",tag));
+	sprite_color->setPosition(Vec2(940, visible_size.height - 290));
+	information_layer->addChild(sprite_color, 25);
 
 
-	}
-	else if (tag == 2) {
-		auto sprite_head = Sprite::create("kotori_avatar.png");
-		sprite_head->setPosition(Vec2(847, visible_size.height - 290));
-		information_layer->addChild(sprite_head, 25);
-
-		auto sprite_color = Sprite::create("character_avatar2.png");
-		sprite_color->setPosition(Vec2(940, visible_size.height - 290));
-		information_layer->addChild(sprite_color, 25);
-		day_++;
-
-	}
 	Value val_year(ZH("年")), val_mon(ZH("月")), val_day(ZH("日")), val_date;
 	if (day_ >= 31) {
 		day_ = 1;

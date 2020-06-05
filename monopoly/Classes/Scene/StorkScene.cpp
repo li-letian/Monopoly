@@ -5,6 +5,8 @@
 #include <ctime>
 #include <vector>
 #include "Incident/Incident.h"
+#include "MapScene.h"
+
 using namespace std;
 Stock* Stock::create(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number) {
 	Stock* stock = new Stock(stock_code,stock_name,now_price,make_deal_price,percent,store_number);
@@ -48,19 +50,8 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 	auto stock_layer = StockScene::create();
 	stock_layer->map_scene_ = map_scene;
 	stock_layer->setPosition(Vec2(6000, 6000));
-	stock_layer->map_scene_->addChild(stock_layer, 23);
+	stock_layer->map_scene_->addChild(stock_layer, 23,"stock_scene");
 	auto label_stock = Label::createWithSystemFont(ZH("股市1"), "fonts/arial.ttf", 40);
-	std::function<void(Ref* render)>open, close;
-	open = [=](Ref* render) {
-		stock_layer->setPosition(Vec2(0, 0));
-		stock_layer->map_scene_->setMenuCallback("stock", close);
-	};
-	close = [=](Ref* render) {
-		stock_layer->setPosition(Vec2(6000, 6000));
-		log("close stock panel");
-		stock_layer->map_scene_->setMenuCallback("stock", open);
-	};
-	stock_layer->map_scene_->setMenuCallback("stock", open);
 	stock_layer->map_scene_->setMenuCallback("stock", [=](Ref* ref) {stock_layer->open(ref); });
 	return stock_layer;
 }
@@ -89,7 +80,7 @@ void StockScene::initLabel() {
 	Size VisibleSize = Director::getInstance()->getVisibleSize();	//获得屏幕大小
 	initFirstLabel();
 	for (int i = 0; i < 8; i++) {
-		Value val_code, val_name, val_price, val_deal,val_per,valLabel,val_store,val_blank, val_percent;
+		Value val_code, val_name, val_price, val_deal,val_per,val_label,val_store,val_blank, val_percent;
 		
 		val_code = Value(stock_vec_.at(i)->stock_code_);
 		val_name = Value(stock_vec_.at(i)->stock_name_);
@@ -100,10 +91,10 @@ void StockScene::initLabel() {
 		val_percent = "%";
 		val_blank = Value("  ");
 		val_per = val_per.asString().c_str() + val_percent.asString();
-		valLabel = val_code.asString().c_str() +val_blank.asString()+val_name.asString() + val_blank.asString() +
+		val_label = val_code.asString().c_str() +val_blank.asString()+val_name.asString() + val_blank.asString() +
 			val_blank.asString()+val_price.asString().c_str() + val_blank.asString() + val_blank.asString() + val_per.asString().c_str() ;
 			
-		auto label = Label::createWithSystemFont(valLabel.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
+		auto label = Label::createWithSystemFont(val_label.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
 		if (val_per.asFloat() <= 0)
 			label->setTextColor(Color4B::GREEN);
 		else
@@ -152,7 +143,7 @@ void StockScene::initLabel() {
 				else 
 					label_code->setTextColor(Color4B::RED);
 				label_code->setAnchorPoint(Vec2(0, 0.5));
-				label_code->setPosition(Vec2(5, VisibleSize.height - 197 - 64 * (1+i)));
+				label_code->setPosition(Vec2(5, Visible_size.height - 197 - 64 * (1+i)));
 				this->addChild(label_code, 25);
 				
 
@@ -163,7 +154,7 @@ void StockScene::initLabel() {
 				else
 					label_name->setTextColor(Color4B::RED);
 				label_name->setAnchorPoint(Vec2(0, 0.5));
-				label_name->setPosition(Vec2(120, VisibleSize.height - 197 - 64 * (1+i)));
+				label_name->setPosition(Vec2(120, Visible_size.height - 197 - 64 * (1+i)));
 				this->addChild(label_name, 25);
 				
 
@@ -175,7 +166,7 @@ void StockScene::initLabel() {
 				else
 					label_price->setTextColor(Color4B::RED);
 				label_price->setAnchorPoint(Vec2(0, 0.5));
-				label_price->setPosition(Vec2(310, VisibleSize.height - 197 - 64 * (1+i)));
+				label_price->setPosition(Vec2(310, Visible_size.height - 197 - 64 * (1+i)));
 				this->addChild(label_price, 25);
 				
 
@@ -186,7 +177,7 @@ void StockScene::initLabel() {
 				else
 					label_per->setTextColor(Color4B::RED);
 				label_per->setAnchorPoint(Vec2(0, 0.5));
-				label_per->setPosition(Vec2(390, VisibleSize.height - 197 - 64 * (1+i)));
+				label_per->setPosition(Vec2(390, Visible_size.height - 197 - 64 * (1+i)));
 				this->addChild(label_per, 25);
 				
 				auto label_store = Label::createWithSystemFont(val_store.asString().c_str(), "fonts/arial.ttf", 46);
@@ -195,7 +186,7 @@ void StockScene::initLabel() {
 				else
 					label_store->setTextColor(Color4B::RED);
 				label_store->setAnchorPoint(Vec2(0, 0.5));
-				label_store->setPosition(Vec2(500, VisibleSize.height - 197 - 64 * (1+i)));
+				label_store->setPosition(Vec2(500, Visible_size.height - 197 - 64 * (1+i)));
 				this->addChild(label_store, 25);
 			
 			*/
@@ -270,7 +261,7 @@ void StockScene::stockUpdate() {
 		switch (condition_)
 		{
 		case normal_market:
-			if (rand() % 2)per_ *= (-1.0);
+			if (rand() % 2) per_ *= (-1.0);
 			break;
 		case up_market:
 			duration_time_--;
@@ -292,7 +283,7 @@ void StockScene::stockUpdate() {
 		}
 		
 		stock_vec_.at(i)->percent_ = per_;
-		stock_vec_.at(i)->now_price_ = static_cast<int>(stock_vec_.at(i)->now_price_*(1.0+per_));
+		stock_vec_.at(i)->now_price_ = static_cast<int>(1.0f+stock_vec_.at(i)->now_price_*(1.0+per_));
 
 	}
 }
@@ -304,7 +295,7 @@ void StockScene::remakeLabel(Character* player) {
 	this->addChild(stock_sprite, 24, "sprite");
 	stock_sprite->release();
 	initFirstLabel();
-	Size VisibleSize = Director::getInstance()->getVisibleSize();	//获得屏幕大小
+	Size Visible_size = Director::getInstance()->getVisibleSize();	//获得屏幕大小
 	
 	for (int i = 0; i < 8; i++) {
 		Value val_code, val_name, val_price, val_deal, val_per, valLabel_, val_store, val_blank, val_percent;
@@ -314,7 +305,7 @@ void StockScene::remakeLabel(Character* player) {
 		val_price = Value(stock_vec_.at(i)->now_price_);
 		val_deal = Value(stock_vec_.at(i)->make_deal_price_);
 		val_per = Value(static_cast<int>((stock_vec_.at(i)->percent_) * 100));
-		val_store = Value(stock_vec_.at(i)->store_number_[(*player).getTag()]);
+		val_store = Value(stock_vec_.at(i)->store_number_[player->getTag()]);
 		val_percent = "%";
 		val_blank = Value("  ");
 		val_per = val_per.asString().c_str() + val_percent.asString();
@@ -327,7 +318,7 @@ void StockScene::remakeLabel(Character* player) {
 		else
 			label_->setTextColor(Color4B::RED);
 		label_->setAnchorPoint(Vec2(0, 0.5));
-		label_->setPosition(Vec2(5, VisibleSize.height - 197 - 64 * (1 + i)));
+		label_->setPosition(Vec2(5, Visible_size.height - 197 - 64 * (1 + i)));
 		this->addChild(label_, 25);
 
 		auto label_store = Label::createWithSystemFont(val_store.asString().c_str(), "fonts/arial.ttf", 40);//创建一个标签
@@ -336,7 +327,7 @@ void StockScene::remakeLabel(Character* player) {
 		else
 			label_store->setTextColor(Color4B::RED);
 		label_store->setAnchorPoint(Vec2(0, 0.5));
-		label_store->setPosition(Vec2(500, VisibleSize.height - 197 - 64 * (1 + i)));
+		label_store->setPosition(Vec2(500, Visible_size.height - 197 - 64 * (1 + i)));
 		this->addChild(label_store, 25);
 
 		auto label_buy = Label::createWithSystemFont(ZH("买入"), "fonts/arial.ttf", 36);
@@ -352,12 +343,12 @@ void StockScene::remakeLabel(Character* player) {
 			});
 			
 		//menuItem_buy->setAnchorPoint(Vec2(0, 0.5));
-		//menuItem_buy->setPosition(Vec2(590, VisibleSize.height - 197 - 64 * (1 + i)));
+		//menuItem_buy->setPosition(Vec2(590, Visible_size.height - 197 - 64 * (1 + i)));
 		//this->addChild(menuItem_buy, 25);
 
 
 		auto label_sell = Label::createWithSystemFont(ZH("卖出"), "fonts/arial.ttf", 36);
-		//label_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
+		//label_sell->setPosition(Vec2(675, Visible_size.height - 197 - 64 * (1 + i)));
 		auto menuItem_sell = MenuItemLabel::create(label_sell);
 
 		menuItem_sell->setCallback([=](Ref* render) {
@@ -373,14 +364,14 @@ void StockScene::remakeLabel(Character* player) {
 			}
 		);
 		//menuItem_sell->setAnchorPoint(Vec2(0, 0.5));
-		//menuItem_sell->setPosition(Vec2(675, VisibleSize.height - 197 - 64 * (1 + i)));
+		//menuItem_sell->setPosition(Vec2(675, Visible_size.height - 197 - 64 * (1 + i)));
 		//this->addChild(menuItem_sell, 25);
 		auto menu_sell = Menu::create();
 		auto menu_buy = Menu::create();
 		menu_sell->addChild(menuItem_sell);
 		menu_buy->addChild(menuItem_buy);
-		menu_sell->setPosition(Vec2(715, VisibleSize.height - 197 - 64 * (1 + i)));
-		menu_buy->setPosition(Vec2(630, VisibleSize.height - 197 - 64 * (1 + i)));
+		menu_sell->setPosition(Vec2(715, Visible_size.height - 197 - 64 * (1 + i)));
+		menu_buy->setPosition(Vec2(630, Visible_size.height - 197 - 64 * (1 + i)));
 		this->addChild(menu_sell, 26);
 		this->addChild(menu_buy, 26);
 	}

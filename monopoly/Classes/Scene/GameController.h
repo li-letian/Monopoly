@@ -28,7 +28,13 @@ private:
 
 	Dice *dice_ = nullptr;							 //储存本局游戏的随机数
 	MapScene *map_scene_ = nullptr;					 //储存地图场景
-	Vector<Character *> characters_;				 //储存本局游戏所有角色的Vector
+	Vector<Character*>characters_;//储存本局游戏所有角色的Vector
+public:
+	Vector<Character*>& getCharacters()
+	{
+		return characters_;
+	}
+protected:
 	EventListenerCustom *listener_custom_ = nullptr; //自定义事件分发器
 	Menu *go_button_menu_ = nullptr;				 //go_button
 	StockScene* stock_layer_=nullptr;                //储存股市场景

@@ -33,7 +33,8 @@ constexpr int walk_right = 3;
 constexpr int walk_up = 4;
 
 //人物行走的格数
-constexpr int total_position = 24;
+constexpr int total_position = 385;
+constexpr int start_position = 379;
 constexpr int walk_steps = 3;
 constexpr int drive_steps = 23;
 
@@ -50,6 +51,8 @@ constexpr int hotel_rent_value[5] = { 100,400,1200,3000,7000 };
 constexpr int business_land_value = 2000;
 constexpr int business_rent_value = 300;
 
+constexpr int insurance_value = 2000;
+constexpr int aviation_value = 800;
 //股市常数
 constexpr int buy_number_min = 10;
 //默认停止次数
@@ -68,9 +71,9 @@ constexpr int down_market = 3;
 constexpr int market_duration_time = 5;
 
 //税率 = 1/tax_rate
-constexpr int tax_rate = 20;
+constexpr float tax_rate = 20.0f;
 //房价、租价上涨或下降率
-constexpr int land_price_rate = 0.3;
+constexpr float land_price_rate = 0.3f;
 
 //政府奖励或补助的资金
 constexpr int reward_estate_money = 20000;
