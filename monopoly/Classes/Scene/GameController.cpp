@@ -56,43 +56,48 @@ void GameController::addEventListenerCustom()
 			startGo();													//人物开始走路
 			break;
 		case (msg_make_go_apper): //让go按钮出现
-			whose_turn_++;
-			if (whose_turn_ >= characters_.size())
-			{
-				whose_turn_ = 0;
-			}
+			auto func = [=]() {
 
-			auto character = characters_.at(whose_turn_);
+				whose_turn_++;
+				if (whose_turn_ >= characters_.size())
+				{
+					whose_turn_ = 0;
+				}
 
-			stock_layer_->stockUpdate();
-			stock_layer_->remakeLabel(character);
-			map_scene_->setInfoOnDisplay(character);
-			map_scene_->updateInformation(character);
+				auto character = characters_.at(whose_turn_);
 
-			//在这里处理本回合走之前应该处理的事情
-			returnToCharacter(character);
+				stock_layer_->stockUpdate();
+				stock_layer_->remakeLabel(character);
+				map_scene_->setInfoOnDisplay(character);
+				map_scene_->updateInformation(character);
 
-			//在后面添加回合开始前要做的事
+				//在这里处理本回合走之前应该处理的事情
+				returnToCharacter(character);
 
-			//1.先判断人物状态
-			switch (character->getCondition())
-			{
-			case normal:
-				go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
-				break;
-			case in_jail:
-				character->setStopTimes(character->getStopTimes() - 1);
-				PopUpJailDialog(character, map_scene_);
-				break;
-			case on_holiday:
-				character->setStopTimes(character->getStopTimes() - 1);
-				PopUpHolidayDialog(character, map_scene_);
-				break;
-			case in_hospital:
-				character->setStopTimes(character->getStopTimes() - 1);
-				PopUpHospitalDialog(character, map_scene_);
-				break;
-			}
+				//在后面添加回合开始前要做的事
+
+				//1.先判断人物状态
+				switch (character->getCondition())
+				{
+				case normal:
+					go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
+					break;
+				case in_jail:
+					character->setStopTimes(character->getStopTimes() - 1);
+					PopUpJailDialog(character, map_scene_);
+					break;
+				case on_holiday:
+					character->setStopTimes(character->getStopTimes() - 1);
+					PopUpHolidayDialog(character, map_scene_);
+					break;
+				case in_hospital:
+					character->setStopTimes(character->getStopTimes() - 1);
+					PopUpHospitalDialog(character, map_scene_);
+					break;
+				}
+			};
+			auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create(func), nullptr);
+			this->runAction(seq);
 			break;
 		}
 	});
