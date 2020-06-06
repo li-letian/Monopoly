@@ -94,7 +94,8 @@ constexpr int luck = 3;
 constexpr int rich = 4;
 constexpr int angel = 5;
 constexpr int devil = 6;
-constexpr int mine_position = 7;	//土地公
+constexpr int earth = 7;	//土地公
+constexpr int mine_position = 8;//地雷
 
 //交通罚款
 constexpr int traffic_fine = 5000;

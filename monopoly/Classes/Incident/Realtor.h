@@ -3,17 +3,18 @@
 
 class Character;
 
+int GetRandomHotel();
 //旅馆房价上涨
-void SellPriceRise();
+void SellPriceRise(int pos);
 
 //旅馆房价下降
-void SellPriceDown();
+void SellPriceDown(int pos);
 
 //旅馆租金上涨
-void RentPriceUp();
+void RentPriceUp(int pos);
 
 //旅馆租金下降
-void RentPriceDown();
+void RentPriceDown(int pos);
 
 //随机摧毁一栋房屋(不论所有者)
 //函数返回值代表所有者是否有房，若有房返回true，否则为false
