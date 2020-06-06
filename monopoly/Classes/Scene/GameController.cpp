@@ -120,6 +120,8 @@ void GameController::addEventListenerCustom()
 					character->removeFromParentAndCleanup(true);
 					this->runAction(seq);
 					});
+				pop->setPosition(Vec2::ZERO);
+				map_scene_->addChild(pop,50);
 			}
 			else
 			{
