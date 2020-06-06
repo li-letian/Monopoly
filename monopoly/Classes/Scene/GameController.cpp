@@ -106,7 +106,25 @@ void GameController::addEventListenerCustom()
 				}
 			};
 			auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create(func), nullptr);
-			this->runAction(seq);
+			if (characters_.at(whose_turn_)->getMoney() < 0)
+			{
+				auto character = characters_.at(whose_turn_);
+				auto pop = PopUpLayer::create();
+				pop->setTitle("ÆÆ²ú");
+				auto text = StringUtils::format("%s", character->getPlayerName())
+					+ std::string("ÒÑÆÆ²ú");
+				pop->setContent(text);
+				pop->setCallBack([=](Ref* render) {
+					characters_.erase(whose_turn_);
+					whose_turn_--;
+					character->removeFromParentAndCleanup(true);
+					this->runAction(seq);
+					});
+			}
+			else
+			{
+				this->runAction(seq);
+			}
 			break;
 		}
 	});
