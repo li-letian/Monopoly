@@ -36,7 +36,8 @@ constexpr int walk_up = 4;
 constexpr int total_position = 400;
 constexpr int start_position = 379;
 constexpr int walk_steps = 3;
-constexpr int drive_steps = 23;
+constexpr int motor_steps = 7;
+constexpr int car_steps = 11;
 
 constexpr int msg_hide_go = 1;
 constexpr int msg_make_go_apper = 2;
@@ -81,4 +82,16 @@ constexpr int reward_estate_money = 20000;
 constexpr int help_estate_money = 10000;
 constexpr int help_stock_money = 20000;
 
+//记录神灵附身状态
+constexpr int no_god = 0;
+constexpr int unluck = 1;
+constexpr int poor = 2;
+constexpr int luck = 3;
+constexpr int rich = 4;
+constexpr int angel = 5;
+constexpr int devil = 6;
+constexpr int mine_position = 7;	//土地公
+
+//交通罚款
+constexpr int traffic_fine = 5000;
 #endif

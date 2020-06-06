@@ -97,3 +97,8 @@ void RewardMostStock(Character* character)
 {
 	character->setMoney(character->getMoney() + help_stock_money);
 }
+
+void TraficFine(Character* character)
+{
+	character->setMoney(character->getMoney() - traffic_fine);
+}

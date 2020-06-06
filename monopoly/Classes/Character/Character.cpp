@@ -14,8 +14,9 @@ Character::Character()
 	cur_pos_(0),
 	steps_scope_(walk_steps),
 	stop_times_(0),
-	condition_(0),
-	estate_value_(0)
+	condition_(normal),
+	estate_value_(0),
+	god_possessed_(no_god)
 {
 	this->setTag(0);
 }

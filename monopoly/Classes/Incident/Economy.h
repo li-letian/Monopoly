@@ -27,4 +27,6 @@ void HelpLeastEstate(Character* character);
 //奖励股票拥有最多者
 void RewardMostStock(Character* character);
 
+//因交通原因罚款
+void TraficFine(Character* character);
 #endif

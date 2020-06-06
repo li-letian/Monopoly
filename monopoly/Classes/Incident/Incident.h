@@ -8,5 +8,6 @@
 #include "Incident/Medical.h"
 #include "Incident/Realtor.h"
 #include "Incident/Staff.h"
+#include "Incident/PopUpLayer.h"
 
 #endif
