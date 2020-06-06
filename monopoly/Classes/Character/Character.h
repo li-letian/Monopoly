@@ -45,17 +45,37 @@ public:
 private:
 	//角色属性
 	MapScene* map_scene_ = nullptr;
-	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字				
-	int money_;//金钱
+	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字
+protected:
+	int money_=0;//金钱
+	int deposit_=0;//存款
+	int loan_=0;//贷款
 public:
 	int getMoney()const
 	{
 		return money_;
 	}
-public:
+	int getDeposit()const
+	{
+		return deposit_;
+	}
+	int getLoan()
+	{
+		return loan_;
+	}
 	void setMoney(int money)
 	{
 		money_ = money;
+		map_scene_->updateInformation(this);
+	}
+	void setDeposit(int deposit)
+	{
+		deposit_ = deposit;
+		map_scene_->updateInformation(this);
+	}
+	void setLoan(int loan)
+	{
+		loan_ = loan;
 		map_scene_->updateInformation(this);
 	}
 	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置

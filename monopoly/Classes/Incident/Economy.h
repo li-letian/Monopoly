@@ -2,7 +2,7 @@
 #define _ECONOMY_H_
 
 #include "Character/Character.h"
-#include "Scene/StorkScene.h"
+#include "Scene/StockScene.h"
 //最好将所有人的税同时都收了
 //函数的返回值为征收的数目
 

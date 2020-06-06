@@ -2,8 +2,9 @@
 
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
+#include "Scene/ItemScene.h"
 #include "Common/CommonConstant.h"
-#include "StorkScene.h"
+#include "StockScene.h"
 #include "Land/Business.h"
 #include "Land/Hotel.h"
 #include "Land/Jail.h"
@@ -12,7 +13,7 @@
 #include "Land/Aviation.h"
 #include "Land/Oil.h"
 #include "Land/Technology.h"
-
+#include "Land/Bank.h"
 
 #include "Incident/Incident.h"
 
@@ -30,8 +31,7 @@ bool GameController::init()
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50,"game_controller");
 	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
-	
-	
+	item_layer_ = ItemScene::createScene(map_scene_);
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器
@@ -69,11 +69,13 @@ void GameController::addEventListenerCustom()
 				if (whose_turn_ >= characters_.size())
 				{
 					whose_turn_ = 0;
+					map_scene_->updateDay();
+					stock_layer_->stockUpdate();
 				}
 
 				auto character = characters_.at(whose_turn_);
 
-				stock_layer_->stockUpdate();
+				
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
 				map_scene_->updateInformation(character);
@@ -255,6 +257,8 @@ void GameController::moveOneStep(int direction)
 	character->runAction(spawn_action);
 }
 
+
+
 void GameController::endGo()
 {
 	steps_has_gone_++;
@@ -263,10 +267,18 @@ void GameController::endGo()
 	{
 
 		//这里可以处理一些过路的事情
-
-		//继续走下一步
-		auto direction = judgeDirection(character->getCurPos());
-		moveOneStep(direction);
+		auto pos = character->getCurPos();
+		auto& land = map_scene_->getLand(pos);
+		if (map_scene_->getType(pos) == land_bank)
+		{
+			if (!land) land = Bank::create(map_scene_, pos);
+			land->byLand(character);
+		}//继续走下一步
+		else
+		{
+			auto direction = judgeDirection(pos);
+			moveOneStep(direction);
+		}
 	}
 	else
 	{
@@ -314,6 +326,7 @@ void GameController::endGo()
 				land = Jail::create(map_scene_, pos);
 				break;
 			case land_bank:
+				land=Bank::create(map_scene_, pos);
 				break;
 			case land_lottery:
 				break;

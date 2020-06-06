@@ -2,10 +2,11 @@
 #include "Scene/MapScene.h"
 #include "Land/Land.h"
 #include "Scene/SettingScene.h"
-#include "Scene/StorkScene.h"
+#include "Scene/StockScene.h"
+#include "Scene/ItemScene.h"
 #include "Common/CommonMethod.h"
 #include "Character/Character.h"
-#include "StorkScene.h"
+#include "StockScene.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -223,6 +224,30 @@ void MapScene::updateInformation(Character* player)
 	label_cash->setAnchorPoint(Vec2(0, 0.5));
 	label_cash->setPosition(Vec2(810, visible_size.height - 370));
 	information_layer->addChild(label_cash, 25);                                                      //现金标签
+	
+	Value val_deposit, val_deposit_pre, val_deposit_label;
+	val_deposit_pre = Value(ZH("存款: "));
+	int deposit = player->getDeposit();
+	val_deposit = Value(deposit);
+	val_deposit_label = val_deposit_pre.asString() + val_deposit.asString().c_str();
+	auto label_deposit = Label::createWithSystemFont(val_deposit_label.asString().c_str(), "fonts/arial.ttf", 30);
+	label_deposit->setTextColor(Color4B::BLACK);
+	label_deposit->setAnchorPoint(Vec2(0, 0.5));
+	label_deposit->setPosition(Vec2(810, visible_size.height - 370-16*3));
+	information_layer->addChild(label_deposit, 25);
+
+
+	Value val_loan, val_loan_pre, val_loan_label;
+	val_loan_pre = Value(ZH("贷款: "));
+	int loan = player->getLoan();
+	val_loan = Value(loan);
+	val_loan_label = val_loan_pre.asString() + val_loan.asString().c_str();
+	auto label_loan = Label::createWithSystemFont(val_loan_label.asString().c_str(), "fonts/arial.ttf", 30);
+	label_loan->setTextColor(Color4B::BLACK);
+	label_loan->setAnchorPoint(Vec2(0, 0.5));
+	label_loan->setPosition(Vec2(810, visible_size.height - 370- 16 * 6));
+	information_layer->addChild(label_loan, 25);
+
 
 
 	auto sprite_head = Sprite::create(player->getPlayerName()+string("_avatar.png"));
@@ -250,6 +275,9 @@ void MapScene::updateInformation(Character* player)
 	label_date->setPosition(Vec2(800, visible_size.height - 200));
 	information_layer->addChild(label_date, 25);
 
+}
+void MapScene::updateDay() {
+	day_++;
 }
 
 bool MapScene::miniMapInit()
@@ -330,6 +358,8 @@ bool MapScene::perspectiveJump(float x, float y)
 	map_->setPosition(x, y);
 	return true;
 }
+
+
 
 //添加地图上道路中心位置相对于地图右下角锚点的GL方向以像素为单位的坐标位置
 bool MapScene::landInit()
