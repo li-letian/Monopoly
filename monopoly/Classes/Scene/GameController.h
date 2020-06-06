@@ -34,10 +34,12 @@ public:
 	{
 		return characters_;
 	}
+
 protected:
 	EventListenerCustom *listener_custom_ = nullptr; //自定义事件分发器
 	Menu *go_button_menu_ = nullptr;				 //go_button
 	StockScene* stock_layer_=nullptr;                //储存股市场景
+	ItemScene* item_layer_ = nullptr;                //储存道具场景
 	int whose_turn_=0;								 //记录轮到第几个角色行动
 	int steps_to_go_=0;								 //记录本轮要走几步
 	int steps_has_gone_=0;							 //记录本轮已走几步

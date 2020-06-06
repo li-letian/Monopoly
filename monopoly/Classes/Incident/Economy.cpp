@@ -1,7 +1,7 @@
 #include "Incident/Economy.h"
 #include "Common/CommonConstant.h"
 #include "Scene/StockScene.h"
-
+#include "Scene/ItemScene.h"
 int LevyIncomeTax(Character* character)
 {
 	int tax = character->getGainValue() / tax_rate;
