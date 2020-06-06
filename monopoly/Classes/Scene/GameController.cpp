@@ -120,7 +120,6 @@ void GameController::addEventListenerCustom()
 					character->removeFromParentAndCleanup(true);
 					this->runAction(seq);
 					});
-				pop->setOnScene();
 			}
 			else
 			{
