@@ -2,10 +2,10 @@
 #include "Scene/MapScene.h"
 #include "Land/Land.h"
 #include "Scene/SettingScene.h"
-#include "Scene/StorkScene.h"
+#include "Scene/StockScene.h"
 #include "Common/CommonMethod.h"
 #include "Character/Character.h"
-#include "StorkScene.h"
+#include "StockScene.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -250,6 +250,9 @@ void MapScene::updateInformation(Character* player)
 	label_date->setPosition(Vec2(800, visible_size.height - 200));
 	information_layer->addChild(label_date, 25);
 
+}
+void MapScene::updateDay() {
+	day_++;
 }
 
 bool MapScene::miniMapInit()

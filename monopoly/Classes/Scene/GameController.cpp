@@ -3,7 +3,7 @@
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
 #include "Common/CommonConstant.h"
-#include "StorkScene.h"
+#include "StockScene.h"
 #include "Land/Business.h"
 #include "Land/Hotel.h"
 #include "Land/Jail.h"
@@ -69,11 +69,13 @@ void GameController::addEventListenerCustom()
 				if (whose_turn_ >= characters_.size())
 				{
 					whose_turn_ = 0;
+					map_scene_->updateDay();
+					stock_layer_->stockUpdate();
 				}
 
 				auto character = characters_.at(whose_turn_);
 
-				stock_layer_->stockUpdate();
+				
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
 				map_scene_->updateInformation(character);

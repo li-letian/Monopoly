@@ -129,10 +129,10 @@ list(APPEND GAME_SOURCE
      Classes/Land/Technology.cpp
 
      Classes/Scene/BankScene.cpp
-     Classes/Scene/IncidentScene.cpp
+     Classes/Scene/ItemScene.cpp
      Classes/Scene/MapScene.cpp
      Classes/Scene/SettingScene.cpp
-     Classes/Scene/StorkScene.cpp
+     Classes/Scene/StockScene.cpp
      Classes/Scene/ExchangeScene.cpp
      Classes/Scene/LotteryScene.cpp
      Classes/Scene/SelectScene.cpp
@@ -216,10 +216,10 @@ list(APPEND GAME_HEADER
      Classes/Land/Technology.h
 
      Classes/Scene/BankScene.h
-     Classes/Scene/IncidentScene.h
+     Classes/Scene/ItemScene.h
      Classes/Scene/MapScene.h
      Classes/Scene/SettingScene.h
-     Classes/Scene/StorkScene.h
+     Classes/Scene/StockScene.h
      Classes/Scene/ExchangeScene.h
      Classes/Scene/LotteryScene.h
      Classes/Scene/SelectScene.h

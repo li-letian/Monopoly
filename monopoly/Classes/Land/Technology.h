@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "Land.h"
 #include "Common/CommonMethod.h"
-#include "Scene/StorkScene.h"
+#include "Scene/StockScene.h"
 
 #include<string>
 

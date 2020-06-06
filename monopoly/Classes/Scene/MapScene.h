@@ -40,13 +40,14 @@ public:
 	virtual bool init();
 	CREATE_FUNC(MapScene);
 
+
 	//这个函数可以将地图和小地图跳转到以相对于地图左下角锚点GL坐标方向的点为中心的视角
 	bool perspectiveJump(float x, float y);
 	bool perspectiveJump(cocos2d::Vec2 p);
 	void setInfoOnDisplay(Character* player);
 
 	void updateInformation(Character* player);
-
+	void updateDay();
 	//返回地图上第(index%总位置数)个位置相对于地图左下角锚点的GL方向坐标
 	cocos2d::Vec2 pos(int index)
 	{
