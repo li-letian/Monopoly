@@ -1,6 +1,6 @@
 #include "Incident/Economy.h"
 #include "Common/CommonConstant.h"
-#include "Scene/StorkScene.h"
+#include "Scene/StockScene.h"
 
 int LevyIncomeTax(Character* character)
 {

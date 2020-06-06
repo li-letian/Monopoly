@@ -1,5 +1,5 @@
-#ifndef _STORK_SCENE_H_
-#define _STORK_SCENE_H_
+#ifndef _STOCK_SCENE_H_
+#define _STOCK_SCENE_H_
 #include "cocos2d.h"
 #include <vector>
 using namespace std;

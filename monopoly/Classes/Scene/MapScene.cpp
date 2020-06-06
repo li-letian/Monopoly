@@ -2,10 +2,10 @@
 #include "Scene/MapScene.h"
 #include "Land/Land.h"
 #include "Scene/SettingScene.h"
-#include "Scene/StorkScene.h"
+#include "Scene/StockScene.h"
 #include "Common/CommonMethod.h"
 #include "Character/Character.h"
-#include "StorkScene.h"
+#include "StockScene.h"
 #include <algorithm>
 
 USING_NS_CC;

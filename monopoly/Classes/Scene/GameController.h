@@ -2,7 +2,7 @@
 #define _GAME_CONTROLLER_H_
 
 #include "cocos2d.h"
-#include "StorkScene.h"
+#include "StockScene.h"
 #include "Character/Character.h"
 #include "Scene/MapScene.h"
 #include "Character/Dice.h"
