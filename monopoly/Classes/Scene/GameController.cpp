@@ -14,7 +14,8 @@
 #include "Land/Oil.h"
 #include "Land/Technology.h"
 #include "Land/Bank.h"
-
+#include "Land/Life.h"
+#include "Land/Chance.h"
 #include "Incident/Incident.h"
 
 #include "Common/CommonConstant.h"
@@ -297,8 +298,10 @@ void GameController::endGo()
 			switch (map_scene_->getType(pos))
 			{
 			case land_chance:
+				land = Chance::create(map_scene_, pos);
 				break;
 			case land_life:
+				land = Life::create(map_scene_, pos);
 				break;
 			case land_hotel:
 				land = Hotel::create(map_scene_, pos);

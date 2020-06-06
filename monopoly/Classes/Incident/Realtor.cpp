@@ -7,62 +7,99 @@
 #include "Scene/GameController.h"
 #include "Land/Land.h"
 
-void SetSellPrice(float rise_rate)
+int GetRandomHotel()
+{
+	srand(static_cast<unsigned int>(time(nullptr)));
+	auto map_scene = GetMapScene();
+	auto total = map_scene->totalPosition();
+	auto ans = rand() % total;
+	while (map_scene->getType(ans) != land_hotel)
+		ans = rand() % total;
+	auto& land = map_scene->getLand(ans);
+	if (!land) land = Hotel::create(map_scene, static_cast<int>(ans));
+	return ans;
+}
+
+void SetSellPrice(float rise_rate,int pos)
 {
 	auto map_scene = GetMapScene();
 	auto game_controller = GetGameController();
 	auto characters = game_controller->getCharacters();
-	for (int i = 0; i < map_scene->totalPosition(); i++)
+
+	if (map_scene->getType(pos) != land_hotel) return;
+
+	for (int index = pos + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
-		if (map_scene->getType(i) == land_hotel)
-		{
-			auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(i));
-			hotel->setSellRise(rise_rate);
-		}
+		if (map_scene->getType(index) == land_business) continue;
+		auto& land = map_scene->getLand(index);
+		if (!land) land=::Hotel::create(map_scene,index);
+		auto hotel = static_cast<Hotel*>(land);
+		hotel->setSellRise(rise_rate);
 	}
+	for (int index = pos - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
+	{
+		if (map_scene->getType(index) == land_business) continue;
+		auto& land = map_scene->getLand(index);
+		if (!land) land = ::Hotel::create(map_scene, index);
+		auto hotel = static_cast<Hotel*>(land);
+		hotel->setSellRise(rise_rate);
+	}
+
 	for (int i = 0; i < characters.size(); i++)
 	{
 		characters.at(i)->setEstateValue(static_cast<int>(characters.at(i)->getEstateValue() * (1 + land_price_rate)));
 	}
 }
 
-void SellPriceRise()
+void SellPriceRise(int pos)
 {
-	SetSellPrice(land_price_rate);
+	SetSellPrice(land_price_rate,pos);
 }
 
-void SellPriceDown()
+void SellPriceDown(int pos)
 {
-	SetSellPrice(-land_price_rate);
+	SetSellPrice(-land_price_rate,pos);
 }
 
-void SetRentPrice(float rise_rate)
+void SetRentPrice(float rise_rate,int pos)
 {
 	auto map_scene = GetMapScene();
 	auto game_controller = GetGameController();
 	auto characters = game_controller->getCharacters();
-	for (int i = 0; i < map_scene->totalPosition(); i++)
+
+	if (map_scene->getType(pos) != land_hotel) return;
+
+	for (int index = pos + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
-		if (map_scene->getType(i) == land_hotel)
-		{
-			auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(i));
-			hotel->setRentRise(rise_rate);
-		}
+		if (map_scene->getType(index) == land_business) continue;
+		auto& land = map_scene->getLand(index);
+		if (!land) land = ::Hotel::create(map_scene, index);
+		auto hotel = static_cast<Hotel*>(land);
+		hotel->setRentRise(rise_rate);
 	}
+	for (int index = pos - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
+	{
+		if (map_scene->getType(index) == land_business) continue;
+		auto& land = map_scene->getLand(index);
+		if (!land) land = ::Hotel::create(map_scene, index);
+		auto hotel = static_cast<Hotel*>(land);
+		hotel->setRentRise(rise_rate);
+	}
+
 	for (int i = 0; i < characters.size(); i++)
 	{
 		characters.at(i)->setEstateValue(static_cast<int>(characters.at(i)->getEstateValue() * (1 + land_price_rate)));
 	}
 }
 
-void RentPriceUp()
+void RentPriceUp(int pos)
 {
-	SetRentPrice(land_price_rate);
+	SetRentPrice(land_price_rate,pos);
 }
 
-void RentPriceDown()
+void RentPriceDown(int pos)
 {
-	SetRentPrice(-land_price_rate);
+	SetRentPrice(-land_price_rate,pos);
 }
 
 void FindAllHouses(Vector<Hotel*>& hotels)
@@ -126,59 +163,34 @@ void DestroyHouse(Hotel* hotel)
 
 bool DestroyOneRandomHouse()
 {
-	Vector<Hotel*>hotels;
-	FindAllHouses(hotels);
-	if (hotels.empty())
-	{
-		return false;
-	}
-	else
-	{
-		int index = Dice::getARandomNumber(hotels.size() - 1);
-		DestroyHouse(hotels.at(index));
-		return true;
-	}
+	auto map_scene = GetMapScene();
+	auto pos = GetRandomHotel();
+	auto land = map_scene->getLand(pos);
+	DestroyHouse(dynamic_cast<Hotel*>(land));
+	return true;
 }
 
 bool DestroyOneRandomStreetHouse()
 {
 	auto map_scene = GetMapScene();
-	Vector<Hotel*>hotels;
-	FindAllHouses(hotels);
-	if (hotels.empty())
+	auto start_index = GetRandomHotel();
+	for (int index = start_index + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
-		return false;
+		if (map_scene->getType(index) == land_business) continue;
+		auto land = map_scene->getLand(index);
+		if (!land) continue;
+		auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
+		DestroyHouse(hotel);
 	}
-	else
+	for (int index = start_index - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
 	{
-		auto hotel_start = hotels.at(Dice::getARandomNumber(hotels.size() - 1));
-		int start_index = 0;
-		for (int i = 0; i < map_scene->totalPosition(); i++)
-		{
-			if (hotel_start == map_scene->getLand(i))
-			{
-				start_index = i;
-				break;
-			}
-		}
-		for (int index = start_index + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
-		{
-			if (map_scene->getType(index) == land_business) continue;
-			auto land = map_scene->getLand(index);
-			if (!land) continue;
-			auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
-			DestroyHouse(hotel);
-		}
-		for (int index = start_index - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
-		{
-			if (map_scene->getType(index) == land_business) continue;
-			auto land = map_scene->getLand(index);
-			if (!land) continue;
-			auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
-			DestroyHouse(hotel);
-		}
-		return true;
+		if (map_scene->getType(index) == land_business) continue;
+		auto land = map_scene->getLand(index);
+		if (!land) continue;
+		auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
+		DestroyHouse(hotel);
 	}
+	return true;
 }
 
 bool DestroyOneCertainHouse(Character* character)

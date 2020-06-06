@@ -3,7 +3,7 @@
 
 bool Dice::init()
 {
-	srand(static_cast<int>(time(0)));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	return true;
 }
 

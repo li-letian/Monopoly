@@ -254,7 +254,7 @@ void StockScene::initFirstLabel() {
 }
 
 void StockScene::stockUpdate() {
-	srand(static_cast<unsigned int>(time(static_cast<time_t>(0))));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	for (int i = 0; i < 8; i++) {
 		float per_ = rand() / (10*RAND_MAX+static_cast<float>(0.001));
 		switch (condition_)
