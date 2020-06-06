@@ -233,12 +233,24 @@ Character* Hotel::getOwner()const
 
 bool Hotel::setOwner(Character* character)
 {
-	owner_->setEstateValue(owner_->getEstateValue() - sell_value_ * sell_rise_);
-	character->setEstateValue(character->getEstateValue() + sell_value_*sell_rise_);
-	owner_ = character;
-	color_ = Sprite::create(StringUtils::format("character%d.png", character->getTag()));
-	color_->setPosition(map_scene_->pos(index_));
-	color_->setAnchorPoint(Vec2(0.5f, 0.5f));
-	map_scene_->getMap()->addChild(color_, 1);
-	return true;
+	if (!owner_)
+	{
+		character->setEstateValue(character->getEstateValue() + sell_value_ * sell_rise_);
+		owner_ = character;
+		color_ = Sprite::create(StringUtils::format("character%d.png", character->getTag()));
+		color_->setPosition(map_scene_->pos(index_));
+		color_->setAnchorPoint(Vec2(0.5f, 0.5f));
+		map_scene_->getMap()->addChild(color_, 1);
+		return true;
+	}
+	else
+	{
+		owner_->setEstateValue(owner_->getEstateValue() - sell_value_ * sell_rise_);
+		character->setEstateValue(character->getEstateValue() + sell_value_ * sell_rise_);
+		owner_ = character;
+		color_->initWithFile(StringUtils::format("character%d.png", character->getTag()));
+		color_->setPosition(map_scene_->pos(index_));
+		color_->setAnchorPoint(Vec2(0.5f, 0.5f));
+		return true;
+	}
 }
