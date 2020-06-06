@@ -124,7 +124,8 @@ list(APPEND GAME_SOURCE
      Classes/Land/Chance.cpp
      Classes/Land/Hospital.cpp
      Classes/Land/Jail.cpp
-     Classes/Land/Life.cpp
+	 Classes/Land/Life.cpp
+     Classes/Land/Oil.cpp
      Classes/Land/Technology.cpp
 
      Classes/Scene/BankScene.cpp

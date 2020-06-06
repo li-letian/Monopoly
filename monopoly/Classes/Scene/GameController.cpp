@@ -11,6 +11,7 @@
 #include "Land/Insurance.h"
 #include "Land/Aviation.h"
 #include "Land/Oil.h"
+#include "Land/Technology.h"
 
 
 #include "Incident/Incident.h"
@@ -259,9 +260,7 @@ void GameController::endGo()
 			case land_chance:
 				break;
 			case land_life:
-			{
 				break;
-			}
 			case land_hotel:
 				land = Hotel::create(map_scene_, pos);
 				break;
@@ -272,8 +271,10 @@ void GameController::endGo()
 				land= Insurance::create(map_scene_, pos);
 				break;
 			case land_oil:
+				land = Oil::create(map_scene_, pos);
 				break;
 			case land_technology:
+				land= Technology::create(map_scene_, pos);
 				break;
 			case land_aviation:
 				land = Aviation::create(map_scene_, pos);
