@@ -69,6 +69,7 @@ void GameController::addEventListenerCustom()
 				if (whose_turn_ >= characters_.size())
 				{
 					whose_turn_ = 0;
+					map_scene_->updateDay();
 				}
 
 				auto character = characters_.at(whose_turn_);

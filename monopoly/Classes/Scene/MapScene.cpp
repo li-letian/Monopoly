@@ -251,6 +251,9 @@ void MapScene::updateInformation(Character* player)
 	information_layer->addChild(label_date, 25);
 
 }
+void MapScene::updateDay() {
+	day_++;
+}
 
 bool MapScene::miniMapInit()
 {
