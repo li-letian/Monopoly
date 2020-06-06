@@ -2,6 +2,8 @@
 #include "Common/CommonConstant.h"
 #include "Scene/StockScene.h"
 #include "Scene/ItemScene.h"
+#include "Scene/GameController.h"
+#include "Character/Character.h"
 int LevyIncomeTax(Character* character)
 {
 	int tax = character->getGainValue() / tax_rate;
@@ -15,8 +17,9 @@ int LevyEstateTax(Character* character)
 	return tax;
 }
 
-int LevyStockTax(Character* character, StockScene* stock_scene)
+int LevyStockTax(Character* character)
 {
+	auto stock_scene = GetStockScene();
 	int own_sum = 0, tax = 0;
 	int tag = character->getTag();
 	for (int i = 0; i < stock_scene->getStock().size(); i++)
@@ -29,8 +32,10 @@ int LevyStockTax(Character* character, StockScene* stock_scene)
 	return tax;
 }
 
-Character* GetMostEstate(const Vector<Character*>& characters)
+Character* GetMostEstate()
 {
+	auto game_controller = GetGameController();
+	auto characters = game_controller->getCharacters();
 	Character* character_most = nullptr;
 	int most_value = -1;
 	for (int i = 0; i < characters.size(); i++)
@@ -44,8 +49,10 @@ Character* GetMostEstate(const Vector<Character*>& characters)
 	return character_most;
 }
 
-Character* GetLeastEstate(const Vector<Character*>& characters)
+Character* GetLeastEstate()
 {
+	auto game_controller = GetGameController();
+	auto characters = game_controller->getCharacters();
 	Character* character_least = nullptr;
 	int least_value = 2000000000;
 	for (int i = 0; i < characters.size(); i++)
@@ -59,8 +66,11 @@ Character* GetLeastEstate(const Vector<Character*>& characters)
 	return character_least;
 }
 
-Character* GetMostStock(const Vector<Character*>& characters, StockScene* stock_scene)
+Character* GetMostStock()
 {
+	auto game_controller = GetGameController();
+	auto characters = game_controller->getCharacters();
+	auto stock_scene = GetStockScene();
 	Character* character_most = nullptr;
 	int most_value = -1;
 	for (int i = 0; i < characters.size(); i++)

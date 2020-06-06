@@ -53,7 +53,7 @@ bool Hospital::onLand(Character* standing)
 			pic.push_back(character->getPlayerName() + string("_avatar.png"));
 			callback.push_back([=](Ref* ref) {
 				character->setStopTimes(0);
-				PopUpHospitalDialog(character, map_scene_);
+				PopUpHospitalDialog(character);
 				SendMsg(msg_make_go_apper);
 			});
 		}

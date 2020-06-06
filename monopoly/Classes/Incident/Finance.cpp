@@ -1,21 +1,22 @@
 #include "Incident/Finance.h"
-#include "Common/CommonConstant.h"
-#include "Scene/MapScene.h"
 #include "Incident/PopUpLayer.h"
-
-void StockMarketUp(StockScene* stock_scene)
+#include "Common/CommonConstant.h"
+#include "Scene/StockScene.h"
+void StockMarketUp()
 {
+	auto stock_scene = GetStockScene();
 	stock_scene->setCondition(up_market);
 	stock_scene->setDurationTime(market_duration_time);
 }
 
-void StockMarketDown(StockScene* stock_scene)
+void StockMarketDown()
 {
+	auto stock_scene = GetStockScene();
 	stock_scene->setCondition(down_market);
 	stock_scene->setDurationTime(market_duration_time);
 }
 
-void PopUpMarketCalm(MapScene* map_scene)
+void PopUpMarketCalm()
 {
 	auto pop = PopUpLayer::create();
 	pop->setTitle("股市新闻");
@@ -23,11 +24,10 @@ void PopUpMarketCalm(MapScene* map_scene)
 	pop->setCallBack([=](Ref* sender) {
 		
 		});
-	pop->setPosition(0, 0);
-	map_scene->addChild(pop, 50);
+	pop->setOnScene();
 }
 
-void PopUpMarketRecover(MapScene* map_scene)
+void PopUpMarketRecover()
 {
 	auto pop = PopUpLayer::create();
 	pop->setTitle("股市新闻");
@@ -35,7 +35,6 @@ void PopUpMarketRecover(MapScene* map_scene)
 	pop->setCallBack([=](Ref* sender) {
 
 		});
-	pop->setPosition(0, 0);
-	map_scene->addChild(pop, 50);
+	pop->setOnScene();
 }
 

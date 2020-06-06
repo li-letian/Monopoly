@@ -95,15 +95,15 @@ void GameController::addEventListenerCustom()
 					break;
 				case in_jail:
 					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpJailDialog(character, map_scene_);
+					PopUpJailDialog(character);
 					break;
 				case on_holiday:
 					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpHolidayDialog(character, map_scene_);
+					PopUpHolidayDialog(character);
 					break;
 				case in_hospital:
 					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpHospitalDialog(character, map_scene_);
+					PopUpHospitalDialog(character);
 					break;
 				}
 			};

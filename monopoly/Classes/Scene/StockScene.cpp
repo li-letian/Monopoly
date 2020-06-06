@@ -267,7 +267,7 @@ void StockScene::stockUpdate() {
 			if (duration_time_ == 0)
 			{
 				condition_ = normal_market;
-				PopUpMarketCalm(map_scene_);
+				PopUpMarketCalm();
 			}
 			break;
 		case down_market:
@@ -275,7 +275,7 @@ void StockScene::stockUpdate() {
 			if (duration_time_ == 0)
 			{
 				condition_ = normal_market;
-				PopUpMarketRecover(map_scene_);
+				PopUpMarketRecover();
 			}
 			per_ *= (-1.0);
 			break;

@@ -1,7 +1,7 @@
 #ifndef  STAFF_H_
 #define  STAFF_H_
 
-#include "Character/Character.h"
+class Character;
 
 //给指定角色配上加速鞋
 //若角色已有加速鞋，返回false

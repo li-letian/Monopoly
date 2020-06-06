@@ -2,9 +2,16 @@
 #include "Common/CommonConstant.h"
 #include "Land/Hotel.h"
 #include "Character/Dice.h"
+#include "Character/Character.h"
+#include "Scene/MapScene.h"
+#include "Scene/GameController.h"
+#include "Land/Land.h"
 
-void SetSellPrice(Vector<Character*>& characters, MapScene* map_scene, float rise_rate)
+void SetSellPrice(float rise_rate)
 {
+	auto map_scene = GetMapScene();
+	auto game_controller = GetGameController();
+	auto characters = game_controller->getCharacters();
 	for (int i = 0; i < map_scene->totalPosition(); i++)
 	{
 		if (map_scene->getType(i) == land_hotel)
@@ -19,18 +26,21 @@ void SetSellPrice(Vector<Character*>& characters, MapScene* map_scene, float ris
 	}
 }
 
-void SellPriceRise(Vector<Character*>& characters, MapScene* map_scene)
+void SellPriceRise()
 {
-	SetSellPrice(characters, map_scene, land_price_rate);
+	SetSellPrice(land_price_rate);
 }
 
-void SellPriceDown(Vector<Character*>& characters, MapScene* map_scene)
+void SellPriceDown()
 {
-	SetSellPrice(characters, map_scene, -land_price_rate);
+	SetSellPrice(-land_price_rate);
 }
 
-void SetRentPrice(Vector<Character*>& characters, MapScene* map_scene, float rise_rate)
+void SetRentPrice(float rise_rate)
 {
+	auto map_scene = GetMapScene();
+	auto game_controller = GetGameController();
+	auto characters = game_controller->getCharacters();
 	for (int i = 0; i < map_scene->totalPosition(); i++)
 	{
 		if (map_scene->getType(i) == land_hotel)
@@ -45,18 +55,19 @@ void SetRentPrice(Vector<Character*>& characters, MapScene* map_scene, float ris
 	}
 }
 
-void RentPriceUp(Vector<Character*>& characters, MapScene* map_scene)
+void RentPriceUp()
 {
-	SetRentPrice(characters, map_scene, land_price_rate);
+	SetRentPrice(land_price_rate);
 }
 
-void RentPriceDown(Vector<Character*>& characters, MapScene* map_scene)
+void RentPriceDown()
 {
-	SetRentPrice(characters, map_scene, -land_price_rate);
+	SetRentPrice(-land_price_rate);
 }
 
-void FindAllHouses(MapScene* map_scene, Vector<Hotel*>& hotels)
+void FindAllHouses(Vector<Hotel*>& hotels)
 {
+	auto map_scene = GetMapScene();
 	for (int i = 0; i < map_scene->totalPosition(); i++)
 	{
 		auto land = map_scene->getLand(i);
@@ -71,8 +82,9 @@ void FindAllHouses(MapScene* map_scene, Vector<Hotel*>& hotels)
 	}
 }
 
-void FindAllHousesWithOwner(Character* character, MapScene* map_scene, Vector<Hotel*>& hotels)
+void FindAllHousesWithOwner(Character* character, Vector<Hotel*>& hotels)
 {
+	auto map_scene = GetMapScene();
 	for (int i = 0; i < map_scene->totalPosition(); i++)
 	{
 		auto land = map_scene->getLand(i);
@@ -87,8 +99,9 @@ void FindAllHousesWithOwner(Character* character, MapScene* map_scene, Vector<Ho
 	}
 }
 
-void FindAllHotelsWithOwner(Character* character, MapScene* map_scene, Vector<Hotel*>& hotels)
+void FindAllHotelsWithOwner(Character* character, Vector<Hotel*>& hotels)
 {
+	auto map_scene = GetMapScene();
 	for (int i = 0; i < map_scene->totalPosition(); i++)
 	{
 		auto land = map_scene->getLand(i);
@@ -111,10 +124,10 @@ void DestroyHouse(Hotel* hotel)
 	}
 }
 
-bool DestroyOneRandomHouse(MapScene*map_scene)
+bool DestroyOneRandomHouse()
 {
 	Vector<Hotel*>hotels;
-	FindAllHouses(map_scene, hotels);
+	FindAllHouses(hotels);
 	if (hotels.empty())
 	{
 		return false;
@@ -127,10 +140,11 @@ bool DestroyOneRandomHouse(MapScene*map_scene)
 	}
 }
 
-bool DestroyOneRandomStreetHouse(MapScene* map_scene)
+bool DestroyOneRandomStreetHouse()
 {
+	auto map_scene = GetMapScene();
 	Vector<Hotel*>hotels;
-	FindAllHouses(map_scene, hotels);
+	FindAllHouses(hotels);
 	if (hotels.empty())
 	{
 		return false;
@@ -167,10 +181,10 @@ bool DestroyOneRandomStreetHouse(MapScene* map_scene)
 	}
 }
 
-bool DestroyOneCertainHouse(Character* character, MapScene* map_scene)
+bool DestroyOneCertainHouse(Character* character)
 {
 	Vector<Hotel*>hotels;
-	FindAllHousesWithOwner(character, map_scene, hotels);
+	FindAllHousesWithOwner(character, hotels);
 	if (hotels.empty())
 	{
 		return false;
@@ -183,10 +197,10 @@ bool DestroyOneCertainHouse(Character* character, MapScene* map_scene)
 	}
 }
 
-bool DestroyOneCertainHotel(Character* character, MapScene* map_scene)
+bool DestroyOneCertainHotel(Character* character)
 {
 	Vector<Hotel*>hotels;
-	FindAllHousesWithOwner(character, map_scene, hotels);
+	FindAllHousesWithOwner(character, hotels);
 	if (hotels.empty())
 	{
 		return false;

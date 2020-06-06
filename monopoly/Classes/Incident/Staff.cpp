@@ -1,5 +1,6 @@
 #include "Incident/Staff.h"
 #include "Common/CommonConstant.h"
+#include "Character/Character.h"
 
 bool SetSpeedShoes(Character* character)
 {

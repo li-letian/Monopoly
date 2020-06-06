@@ -53,7 +53,7 @@ bool Jail::onLand(Character* standing)
 			pic.push_back(character->getPlayerName() + string("_avatar.png"));
 			callback.push_back([=](Ref* ref) {
 				character->setStopTimes(0);
-				PopUpJailDialog(character, map_scene_);
+				PopUpJailDialog(character);
 				SendMsg(msg_make_go_apper);
 			});
 		}

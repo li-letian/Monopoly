@@ -2,6 +2,7 @@
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
 #include "Common/CommonMethod.h"
+#include "Character/Character.h"
 
 bool SendToHospital(Character* character)
 {
@@ -37,7 +38,7 @@ bool SendToHospital(Character* character)
 	}
 }
 
-void PopUpHospitalDialog(Character* character, MapScene* map_scene)
+void PopUpHospitalDialog(Character* character)
 {
 	int stop_times = character->getStopTimes();
 	auto pop = PopUpLayer::create();
@@ -59,6 +60,5 @@ void PopUpHospitalDialog(Character* character, MapScene* map_scene)
 	pop->setCallBack([=](Ref* sender) {
 		SendMsg(msg_make_go_apper);
 		});
-	pop->setPosition(Vec2(0, 0));
-	map_scene->addChild(pop, 50);
+	pop->setOnScene();
 }

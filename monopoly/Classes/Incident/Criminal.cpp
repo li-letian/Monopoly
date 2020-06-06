@@ -2,6 +2,7 @@
 #include "PopUpLayer.h"
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
+#include "Character/Character.h"
 
 bool SendToJail(Character* character)
 {
@@ -19,7 +20,7 @@ bool SendToJail(Character* character)
 	}
 }
 
-void PopUpJailDialog(Character* character,MapScene* map_scene)
+void PopUpJailDialog(Character* character)
 {
 	int stop_times = character->getStopTimes();
 	auto pop = PopUpLayer::create();
@@ -41,6 +42,5 @@ void PopUpJailDialog(Character* character,MapScene* map_scene)
 	pop->setCallBack([=](Ref* sender) {
 		SendMsg(msg_make_go_apper);
 		});
-	pop->setPosition(Vec2(0, 0));
-	map_scene->addChild(pop, 50);
+	pop->setOnScene();
 }
