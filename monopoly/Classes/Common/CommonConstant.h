@@ -35,9 +35,11 @@ constexpr int walk_up = 4;
 //人物行走的格数
 constexpr int total_position = 400;
 constexpr int start_position = 379;
+constexpr int turtle_steps = 0;
+constexpr int init_turtle_times = 3;
 constexpr int walk_steps = 3;
-constexpr int motor_steps = 7;
-constexpr int car_steps = 11;
+constexpr int speed_steps = 2 * (walk_steps + 1) - 1;
+constexpr int flying_steps = 3 * (walk_steps + 1) - 1;
 
 constexpr int msg_hide_go = 1;
 constexpr int msg_make_go_apper = 2;

@@ -3,15 +3,20 @@
 
 #include "Character/Character.h"
 
-//给指定角色配上摩托
-//若角色已有摩托，返回false
-bool SetMotor(Character* character);
+//给指定角色配上加速鞋
+//若角色已有加速鞋，返回false
+bool SetSpeedShoes(Character* character);
 
-//给指定角色配上车
-//若角色已有车，返回false
-bool SetCar(Character* character);
+//给指定角色配上飞鞋
+//若角色已有飞鞋，返回false
+bool SetFlyingShoes(Character* character);
 
-//摧毁交通工具
-//若角色无任何交通工具，返回false
-bool DestroyTrafficTool(Character* character);
+//给指定角色加上乌龟卡的效果
+//此举将摧毁角色的原有特殊鞋子
+//若角色已在乌龟卡状态，返回false
+bool SetTurtle(Character* character);
+
+//摧毁特殊鞋子
+//若角色无任何特殊鞋子，返回false
+bool DestroySpecialShoes(Character* character);
 #endif // ! STAFF_H_

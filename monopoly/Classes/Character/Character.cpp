@@ -16,7 +16,8 @@ Character::Character()
 	stop_times_(0),
 	condition_(normal),
 	estate_value_(0),
-	god_possessed_(no_god)
+	god_possessed_(no_god),
+	turtle_times_(0)
 {
 	this->setTag(0);
 }

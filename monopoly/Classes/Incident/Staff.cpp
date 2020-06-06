@@ -1,33 +1,47 @@
 #include "Incident/Staff.h"
 #include "Common/CommonConstant.h"
 
-bool SetMotor(Character* character)
+bool SetSpeedShoes(Character* character)
 {
-	if (character->getStepsScope() == motor_steps)
+	if (character->getStepsScope() == speed_steps)
 	{
 		return false;
 	}
 	else
 	{
-		character->setStepsScope(motor_steps);
+		character->setStepsScope(speed_steps);
 		return true;
 	}
 }
 
-bool SetCar(Character* character)
+bool SetFlyingShoes(Character* character)
 {
-	if (character->getStepsScope() == car_steps)
+	if (character->getStepsScope() == flying_steps)
 	{
 		return false;
 	}
 	else
 	{
-		character->setStepsScope(car_steps);
+		character->setStepsScope(flying_steps);
 		return true;
 	}
 }
 
-bool DestroyTrafficTool(Character* character)
+bool SetTurtle(Character* character)
+{
+	if (character->getStepsScope() == turtle_steps)
+	{
+		return false;
+	}
+	else
+	{
+		character->setStepsScope(turtle_steps);
+		character->setTurtleTimes(init_turtle_times);
+		return true;
+	}
+}
+
+bool DestroySpecialShoes(Character* character)
 {
 	if (character->getStepsScope() == walk_steps)
 	{

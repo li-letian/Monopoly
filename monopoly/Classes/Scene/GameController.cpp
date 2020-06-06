@@ -175,6 +175,14 @@ void GameController::startGo()
 
 	//掷骰子得到要走的步数
 	steps_to_go_ = dice_->RollTheDice(character->getStepsScope());
+	if (character->getStepsScope() == turtle_steps)
+	{
+		character->setTurtleTimes(character->getTurtleTimes() - 1);
+	}
+	if (character->getTurtleTimes() == 0)
+	{
+		character->setStepsScope(walk_steps);
+	}
 	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = judgeDirection(character->getCurPos());
