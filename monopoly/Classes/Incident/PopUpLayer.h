@@ -15,8 +15,6 @@ USING_NS_CC;
 	pop->setCallBack([=](Ref* sender) {
 		log("confirm button ok");
 		});
-
-
 	pop->setPosition(Vec2(0, 0));
 	map_scene_->addChild(pop,50);
 	*/
@@ -33,7 +31,7 @@ public:
 	//设置回调函数，可只设置确认按钮也可设置确认按钮与取消按钮
 	void setCallBack(std::function<void(Ref * render)> confirm_call_back, std::string text = "确认");
 	void setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back);
-	//第一个是文件图片数组，第二个是回调函数数组
+	//第一个是文件图片数组，第二个是回调函数数组，一一对应，这个函数会给每个图片创造一个按钮，按下以后执行对应的回调函数
 	void setMenu(const std::vector< std::string>image, const std::vector<std::function<void(Ref* ref)>>callback);
 private:
 	Sprite* back_ground_ = nullptr;

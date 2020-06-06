@@ -11,6 +11,7 @@ bool GoOnHoliday(Character* character)
 	}
 	else
 	{
+		character->setVisible(false);
 		character->setStopTimes(default_stop_times);
 		character->setCondition(on_holiday);
 		return true;
@@ -32,6 +33,7 @@ void PopUpHolidayDialog(Character* character, MapScene* map_scene)
 		text = StringUtils::format("%s", character->getPlayerName().c_str())
 			+ std::string("已度假归来");
 		character->setCondition(normal);
+		character->setVisible(true);
 	}
 	pop->setTitle("度假消息");
 	pop->setContent(text);

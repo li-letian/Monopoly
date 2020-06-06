@@ -11,8 +11,28 @@ bool SendToHospital(Character* character)
 	}
 	else
 	{
-		character->setStopTimes(default_stop_times);
-		character->setCondition(in_hospital);
+		if (character->getInsurance() > 0)
+		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle("保险生效");
+			pop->setContent(StringUtils::format("你会得到%d的补偿", insurance_value * 2));
+			pop->setCallBack([=](Ref* ref) {
+				character->setMoney(character->getMoney() + insurance_value * 2);
+				character->setVisible(false);
+				character->setCurPos(78);
+				character->setStopTimes(default_stop_times);
+				character->setCondition(in_hospital);
+			});
+			pop->setPosition(Vec2::ZERO);
+			Director::getInstance()->getRunningScene()->addChild(pop, 52);
+		}
+		else
+		{
+			character->setVisible(false);
+			character->setCurPos(78);
+			character->setStopTimes(default_stop_times);
+			character->setCondition(in_hospital);
+		}
 		return true;
 	}
 }
@@ -32,6 +52,7 @@ void PopUpHospitalDialog(Character* character, MapScene* map_scene)
 		text = StringUtils::format("%s", character->getPlayerName().c_str())
 			+ std::string("已出院");
 		character->setCondition(normal);
+		character->setVisible(true);
 	}
 	pop->setTitle("出院消息");
 	pop->setContent(text);

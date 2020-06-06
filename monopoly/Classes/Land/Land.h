@@ -13,6 +13,10 @@ public:
 	{
 		return true;
 	}
+	virtual bool byLand(Character* standing)
+	{
+		return true;
+	}
 	void setMapScene(MapScene* map_scene)
 	{
 		map_scene_ = map_scene;

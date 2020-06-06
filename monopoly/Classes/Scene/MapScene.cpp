@@ -4,6 +4,8 @@
 #include "Scene/SettingScene.h"
 #include "Scene/StorkScene.h"
 #include "Common/CommonMethod.h"
+#include "Character/Character.h"
+#include "StorkScene.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -29,6 +31,10 @@ bool MapScene::init()
 		return false;
 	}
 	if (!MapScene::panelInit())
+	{
+		return false;
+	}
+	if (!MapScene::informationInit())
 	{
 		return false;
 	}
@@ -184,6 +190,68 @@ bool MapScene::panelInit()
 	return true;
 }
 
+bool MapScene::informationInit()
+{
+	auto information_layer = Layer::create();
+	panel_->addChild(information_layer, 30,"information_layer");
+	return true;
+}
+
+void MapScene::setInfoOnDisplay(Character* player)
+{
+	info_on_display_ = player->getTag();
+}
+
+void MapScene::updateInformation(Character* player) 
+{
+	int tag = player->getTag();
+	if (info_on_display_ != tag) return;
+	auto information_layer = panel_->getChildByName("information_layer");
+	information_layer->removeAllChildren();
+
+	
+	Size visible_size = Director::getInstance()->getVisibleSize();
+
+
+	Value val_cash, val_cash_pre, val_cash_label;
+	val_cash_pre = Value(ZH("现金: "));
+	int money = player->getMoney();
+	val_cash = Value(money);
+	val_cash_label = val_cash_pre.asString() + val_cash.asString().c_str();
+	auto label_cash = Label::createWithSystemFont(val_cash_label.asString().c_str(), "fonts/arial.ttf", 30);
+	label_cash->setTextColor(Color4B::BLACK);
+	label_cash->setAnchorPoint(Vec2(0, 0.5));
+	label_cash->setPosition(Vec2(810, visible_size.height - 370));
+	information_layer->addChild(label_cash, 25);                                                      //现金标签
+
+
+	auto sprite_head = Sprite::create(player->getPlayerName()+string("_avatar.png"));
+	sprite_head->setPosition(Vec2(847, visible_size.height - 290));
+	information_layer->addChild(sprite_head, 25);
+	auto sprite_color = Sprite::create(StringUtils::format("character_avatar%d.png",tag));
+	sprite_color->setPosition(Vec2(940, visible_size.height - 290));
+	information_layer->addChild(sprite_color, 25);
+
+
+	Value val_year(ZH("年")), val_mon(ZH("月")), val_day(ZH("日")), val_date;
+	if (day_ >= 31) {
+		day_ = 1;
+		month_++;
+	}
+	if (month_ >= 12) {
+		month_ = 1;
+		year_++;
+	}
+	val_date = Value(year_).asString().c_str() + val_year.asString() + Value(month_).asString().c_str() +
+		val_mon.asString() + Value(day_).asString().c_str() + val_day.asString();
+	auto label_date = Label::createWithSystemFont(val_date.asString().c_str(), "fonts/arial.ttf", 30);
+	label_date->setTextColor(Color4B::BLACK);
+	label_date->setAnchorPoint(Vec2(0, 0.5));
+	label_date->setPosition(Vec2(800, visible_size.height - 200));
+	information_layer->addChild(label_date, 25);
+
+}
+
 bool MapScene::miniMapInit()
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
@@ -245,6 +313,8 @@ bool MapScene::perspectiveJump(float x, float y)
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto map_size = map_->getMapSize();
 	auto tile_size = map_->getTileSize();
+
+	y = y + 4 * tile_size.height;
 
 	x = visible_size.width / 2.f - 4 * tile_size.width - x;
 	y = visible_size.height / 2.f - y;

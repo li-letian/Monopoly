@@ -44,3 +44,4 @@ void sendMsg(int msg)
 	dispatcher->dispatchEvent(&event);
 	CC_SAFE_DELETE_ARRAY(buf);
 }
+

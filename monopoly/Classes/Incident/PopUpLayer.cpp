@@ -25,7 +25,7 @@ bool PopUpLayer::init()
 	back_ground_width_ = back_ground_->getContentSize().width;
 	back_ground_height_ = back_ground_->getContentSize().height;
 	back_ground_->setPosition(Vec2((visible_size.width - grid_distance * 16) / 2,
-		visible_size.height / 2));
+		visible_size.height *0.75f));
 	this->addChild(back_ground_);
 
 	return true;

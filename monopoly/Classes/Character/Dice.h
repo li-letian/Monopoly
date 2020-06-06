@@ -10,6 +10,7 @@ public:
 	virtual bool init();
 
 	int RollTheDice(int steps_scope);		//ÖÀÒ»´Î÷»×Ó
+	static int getARandomNumber(int scope);
 };
 
 #endif

@@ -11,3 +11,8 @@ int Dice::RollTheDice(int steps_scope)
 {
 	return 1 + random(steps_scope);
 }
+
+int Dice::getARandomNumber(int scope)
+{
+	return random(scope);
+}

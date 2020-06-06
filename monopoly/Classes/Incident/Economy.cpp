@@ -1,5 +1,6 @@
 #include "Incident/Economy.h"
 #include "Common/CommonConstant.h"
+#include "Scene/StorkScene.h"
 
 int LevyIncomeTax(Character* character)
 {
@@ -11,6 +12,20 @@ int LevyIncomeTax(Character* character)
 int LevyEstateTax(Character* character)
 {
 	int tax = character->getEstateValue() / tax_rate;
+	return tax;
+}
+
+int LevyStockTax(Character* character, StockScene* stock_scene)
+{
+	int own_sum = 0, tax = 0;
+	int tag = character->getTag();
+	for (int i = 0; i < stock_scene->getStock().size(); i++)
+	{
+		int own_num = stock_scene->getStock().at(i)->store_number_.at(tag);
+		int price = stock_scene->getStock().at(i)->now_price_;
+		own_sum += own_num * price;
+	}
+	tax = own_sum / tax_rate;
 	return tax;
 }
 
@@ -44,6 +59,30 @@ Character* GetLeastEstate(const Vector<Character*>& characters)
 	return character_least;
 }
 
+Character* GetMostStock(const Vector<Character*>& characters, StockScene* stock_scene)
+{
+	Character* character_most = nullptr;
+	int most_value = -1;
+	for (int i = 0; i < characters.size(); i++)
+	{
+		auto character = characters.at(i);
+		int own_sum = -2;
+		int tag = character->getTag();
+		for (int j = 0; i < stock_scene->getStock().size(); i++)
+		{
+			int own_num = stock_scene->getStock().at(i)->store_number_.at(tag);
+			int price = stock_scene->getStock().at(i)->now_price_;
+			own_sum += own_num * price;
+		}
+		if (own_sum > most_value)
+		{
+			most_value = own_sum;
+			character_most = character;
+		}
+	}
+	return character_most;
+}
+
 void RewardMostEstate(Character* character)
 {
 	character->setMoney(character->getMoney() + reward_estate_money);
@@ -52,4 +91,9 @@ void RewardMostEstate(Character* character)
 void HelpLeastEstate(Character* character)
 {
 	character->setMoney(character->getMoney() + help_estate_money);
+}
+
+void RewardMostStock(Character* character)
+{
+	character->setMoney(character->getMoney() + help_stock_money);
 }

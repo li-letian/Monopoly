@@ -6,6 +6,13 @@
 #include "StorkScene.h"
 #include "Land/Business.h"
 #include "Land/Hotel.h"
+#include "Land/Jail.h"
+#include "Land/Hospital.h"
+#include "Land/Insurance.h"
+#include "Land/Aviation.h"
+#include "Land/Oil.h"
+#include "Land/Technology.h"
+
 
 #include "Incident/Incident.h"
 
@@ -21,9 +28,8 @@ bool GameController::init()
 	//创造map_scene场景并切换
 	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
-	map_scene_->addChild(this, -50);
-    information_scene_ = Information::createScene(map_scene_);             //初始化信息栏
-	stock_layer_ = StockScene::createScene(map_scene_,information_scene_); //初始化stock
+	map_scene_->addChild(this, -50,"game_controller");
+	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
 	
 	
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
@@ -32,14 +38,15 @@ bool GameController::init()
 	addEventListenerCustom();
 
 	//添加角色，暂时固定添加2个:初音未来与南小鸟
-	addCharacter("miku", miku, 15000, 0);
-	addCharacter("nanxiaoniao", nanxiaoniao, 15000, 1);
+	addCharacter("miku", miku, 15000, start_position);
+	addCharacter("nanxiaoniao", nanxiaoniao, 15000, start_position+1);
 
 	whose_turn_ = 0;
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
-	information_scene_->updateInformation(characters_.at(whose_turn_));
+	map_scene_->setInfoOnDisplay(characters_.at(whose_turn_));
+	map_scene_->updateInformation(characters_.at(whose_turn_));
 	return true;
 }
 
@@ -56,42 +63,50 @@ void GameController::addEventListenerCustom()
 			startGo();													//人物开始走路
 			break;
 		case (msg_make_go_apper): //让go按钮出现
-			whose_turn_++;
-			if (whose_turn_ >= characters_.size())
-			{
-				whose_turn_ = 0;
-			}
+			auto func = [=]() {
 
-			auto character = characters_.at(whose_turn_);
+				whose_turn_++;
+				if (whose_turn_ >= characters_.size())
+				{
+					whose_turn_ = 0;
+				}
 
-			stock_layer_->stockUpdate();
-			stock_layer_->remakeLabel(character);
-			information_scene_->updateInformation(character);
+				auto character = characters_.at(whose_turn_);
 
-			//在这里处理本回合走之前应该处理的事情
-			returnToCharacter(character);
+				stock_layer_->stockUpdate();
+				stock_layer_->remakeLabel(character);
+				map_scene_->setInfoOnDisplay(character);
+				map_scene_->updateInformation(character);
 
-			//在后面添加回合开始前要做的事
+				//在这里处理本回合走之前应该处理的事情
+				returnToCharacter(character);
 
-			//1.先判断人物状态
-			switch (character->getCondition())
-			{
-			case normal:
-				go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
-				break;
-			case in_jail:
-				character->setStopTimes(character->getStopTimes() - 1);
-				PopUpJailDialog(character, map_scene_);
-				break;
-			case on_holiday:
-				character->setStopTimes(character->getStopTimes() - 1);
-				PopUpHolidayDialog(character, map_scene_);
-				break;
-			case in_hospital:
-				character->setStopTimes(character->getStopTimes() - 1);
-				PopUpHospitalDialog(character, map_scene_);
-				break;
-			}
+				//在后面添加回合开始前要做的事
+
+				//1.先判断人物状态
+				switch (character->getCondition())
+				{
+				case normal:
+					if (character->getInsurance() > 0)
+						character->setInsurance(character->getInsurance() - 1);
+					go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
+					break;
+				case in_jail:
+					character->setStopTimes(character->getStopTimes() - 1);
+					PopUpJailDialog(character, map_scene_);
+					break;
+				case on_holiday:
+					character->setStopTimes(character->getStopTimes() - 1);
+					PopUpHolidayDialog(character, map_scene_);
+					break;
+				case in_hospital:
+					character->setStopTimes(character->getStopTimes() - 1);
+					PopUpHospitalDialog(character, map_scene_);
+					break;
+				}
+			};
+			auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create(func), nullptr);
+			this->runAction(seq);
 			break;
 		}
 	});
@@ -101,10 +116,10 @@ void GameController::addEventListenerCustom()
 
 void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos)
 {
-	auto character = Character::create(name, tag, money, start_pos);
+	auto character = Character::create(name, tag, money, start_pos,map_scene_);
 	characters_.pushBack(character);
 	character->setPosition(map_scene_->pos(start_pos));
-	map_scene_->getMap()->addChild(character, 10);
+	map_scene_->getMap()->addChild(character, 10,tag);
 	log("position: %f %f", character->getPosition().x, character->getPosition().y);
 }
 
@@ -153,7 +168,7 @@ int GameController::judgeDirection(int cur_pos)
 	int next_pos = cur_pos + 1;
 	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	{
-		next_pos = 0;
+		next_pos = start_position;
 	}
 	auto cur_x = map_scene_->pos(cur_pos).x;
 	auto cur_y = map_scene_->pos(cur_pos).y;
@@ -182,15 +197,10 @@ void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + 1;
-	/*if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
+	//if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
+	if (next_pos >= total_position)
 	{
-		next_pos = 0;
-	}*/
-
-	//测试
-	if (next_pos >= 40)
-	{
-		next_pos = 0;
+		next_pos = start_position;
 	}
 	MoveTo *move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
 	Repeat *repeat = nullptr;
@@ -250,9 +260,7 @@ void GameController::endGo()
 			case land_chance:
 				break;
 			case land_life:
-			{
 				break;
-			}
 			case land_hotel:
 				land = Hotel::create(map_scene_, pos);
 				break;
@@ -260,16 +268,22 @@ void GameController::endGo()
 				land = Business::create(map_scene_, pos);
 				break;
 			case land_insurance:
+				land= Insurance::create(map_scene_, pos);
 				break;
 			case land_oil:
+				land = Oil::create(map_scene_, pos);
 				break;
 			case land_technology:
+				land= Technology::create(map_scene_, pos);
 				break;
 			case land_aviation:
+				land = Aviation::create(map_scene_, pos);
 				break;
 			case land_hospital:
+				land = Hospital::create(map_scene_, pos);
 				break;
 			case land_jail:
+				land = Jail::create(map_scene_, pos);
 				break;
 			case land_bank:
 				break;

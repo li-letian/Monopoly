@@ -5,7 +5,7 @@
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
-
+#include "Incident/Holiday.h"
 
 USING_NS_CC;
 
@@ -65,6 +65,7 @@ bool Business::promote()
 		initWithFile("park.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
+		sendMsg(msg_make_go_apper);
 	});
 	pic.push_back("resort.png");
 	callback.push_back([=](Ref* ref) {
@@ -72,6 +73,7 @@ bool Business::promote()
 		initWithFile("resort.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
+		sendMsg(msg_make_go_apper);
 	});
 	pic.push_back("mall.png");
 	callback.push_back([=](Ref* ref) {
@@ -79,6 +81,7 @@ bool Business::promote()
 		initWithFile("mall.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
+		sendMsg(msg_make_go_apper);
 	});
 	pic.push_back("institute.png");
 	callback.push_back([=](Ref* ref) {
@@ -109,35 +112,44 @@ bool Business::demote()
 
 bool Business::onBusinessLand(Character* standing)
 {
-	if (type_== land_institute&&standing->getTag() == owner_->getTag())
+	if (standing->getTag() == owner_->getTag())
 	{
-		auto pop = PopUpLayer::create();
-		pop->setTitle("请选择要研发的道具");
-		std::vector<std::string>pic;
-		std::vector<ccMenuCallback>callback;
-		pic.push_back("mall.png");
-		callback.push_back([=](Ref* ref) {
+		if (type_ == land_institute)
+		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle("请选择要研发的道具");
+			std::vector<std::string>pic;
+			std::vector<ccMenuCallback>callback;
+			pic.push_back("mall.png");
+			callback.push_back([=](Ref* ref) {
+				sendMsg(msg_make_go_apper);
+			});
+			pop->setMenu(pic, callback);
+			pop->setPosition(Vec2(0, 0));
+			map_scene_->addChild(pop, 51);
+		}
+		else
+		{
 			sendMsg(msg_make_go_apper);
-		});
-		pop->setMenu(pic, callback);
-		pop->setPosition(Vec2(0, 0));
-		map_scene_->addChild(pop, 51);
+		}
 	}
 	if(standing->getTag() != owner_->getTag())
 	{
 		if (type_ == land_resort)
 		{
+			auto rent_value=rent_value_ * 2;
 			auto pop = PopUpLayer::create();
 			pop->setTitle(name_);
-			pop->setContent(std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的旅店地产，你需要缴纳独家费 ") + StringUtils::format("%d", rent_value_) + std::string("，感谢您的光临"));
+			pop->setContent(std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的度假村，你需要支付 ") + StringUtils::format("%d", rent_value) + std::string(" 的 ")+StringUtils::format("%d", default_stop_times)+std::string(" 天豪华度假套餐，感谢您的光临"));
 			auto yes = [=](Ref* ref)
 			{
 				auto money = standing->getMoney();
-				if (money > rent_value_)
+				if (money > rent_value)
 				{
-					standing->setMoney(money - rent_value_);
-					owner_->setGainValue(owner_->getGainValue() + rent_value_);
-					owner_->setMoney(owner_->getMoney() + rent_value_);
+					standing->setMoney(money - rent_value);
+					owner_->setGainValue(owner_->getGainValue() + rent_value);
+					owner_->setMoney(owner_->getMoney() + rent_value);
+					GoOnHoliday(standing);
 					sendMsg(msg_make_go_apper);
 				}
 				else
@@ -152,17 +164,18 @@ bool Business::onBusinessLand(Character* standing)
 		}
 		else if (type_ == land_mall)
 		{
+			auto rent_value=rent_value_ * 5;
 			auto pop = PopUpLayer::create();
 			pop->setTitle(name_);
-			pop->setContent(std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的旅店地产，你需要缴纳购物费 ") + StringUtils::format("%d", rent_value_) + std::string("，感谢您的光临"));
+			pop->setContent(std::string("这里是 ") + owner_->getPlayerName() + std::string(" 的购物商场，你需要支付购物费费用 ") + StringUtils::format("%d", rent_value) + std::string("，感谢您的光临"));
 			auto yes = [=](Ref* ref)
 			{
 				auto money = standing->getMoney();
-				if (money > rent_value_)
+				if (money > rent_value)
 				{
-					standing->setMoney(money - rent_value_);
-					owner_->setGainValue(owner_->getGainValue() + rent_value_);
-					owner_->setMoney(owner_->getMoney() + rent_value_);
+					standing->setMoney(money - rent_value);
+					owner_->setGainValue(owner_->getGainValue() + rent_value);
+					owner_->setMoney(owner_->getMoney() + rent_value);
 					sendMsg(msg_make_go_apper);
 				}
 				else
@@ -175,7 +188,10 @@ bool Business::onBusinessLand(Character* standing)
 			pop->setPosition(Vec2(0, 0));
 			map_scene_->addChild(pop, 50);
 		}
-		else sendMsg(msg_make_go_apper);
+		else
+		{
+			sendMsg(msg_make_go_apper);
+		}
 	}
 	return true;
 }
@@ -233,7 +249,6 @@ bool Business::onLand(Character* standing)
 			auto yes = [=](Ref* ref)
 			{
 				promote();
-				sendMsg(msg_make_go_apper);
 			};
 			auto no = [=](Ref* ref) {sendMsg(msg_make_go_apper); };
 			pop->setCallBack(yes, no);

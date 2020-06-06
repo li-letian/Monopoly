@@ -7,17 +7,26 @@
 #include <functional>
 
 class Land;
+class Character;
+class Stock;
 class MapScene : public cocos2d::Scene
 {
 protected:
 	cocos2d::Layer* panel_=nullptr;
 	cocos2d::TMXTiledMap* map_=nullptr;
 	cocos2d::TMXTiledMap* mini_map_=nullptr;
+	
 
 	cocos2d::Map<std::string, cocos2d::MenuItem*>menu_item_;
 	std::vector<cocos2d::Vec2>pos_;
 	std::vector<int>type_;
 	std::vector<Land*>lands_;
+
+	int year_ = 1;
+	int month_ = 1;
+	int day_ = 1;
+
+	int info_on_display_ = 0;
 
 public:
 
@@ -27,12 +36,16 @@ public:
 	bool rollMap();
 	bool panelInit();
 	bool miniMapInit();
+	bool informationInit();
 	virtual bool init();
 	CREATE_FUNC(MapScene);
 
 	//这个函数可以将地图和小地图跳转到以相对于地图左下角锚点GL坐标方向的点为中心的视角
 	bool perspectiveJump(float x, float y);
 	bool perspectiveJump(cocos2d::Vec2 p);
+	void setInfoOnDisplay(Character* player);
+
+	void updateInformation(Character* player);
 
 	//返回地图上第(index%总位置数)个位置相对于地图左下角锚点的GL方向坐标
 	cocos2d::Vec2 pos(int index)
