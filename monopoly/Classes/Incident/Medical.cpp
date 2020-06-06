@@ -57,7 +57,7 @@ void PopUpHospitalDialog(Character* character, MapScene* map_scene)
 	pop->setTitle("出院消息");
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* sender) {
-		sendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_apper);
 		});
 	pop->setPosition(Vec2(0, 0));
 	map_scene->addChild(pop, 50);

@@ -83,7 +83,7 @@ bool Hotel::onLand(Character* standing)
 				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
 				map_scene_->getMap()->addChild(color_, 1);
 				promote();
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 				//画点东西表示已经买完了
 			}
 			else
@@ -92,12 +92,12 @@ bool Hotel::onLand(Character* standing)
 				fail->setTitle("购买失败");
 				fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
 				fail->setCallBack([=](Ref* ref) {
-					sendMsg(msg_make_go_apper); });
+					SendMsg(msg_make_go_apper); });
 				fail->setPosition(Vec2(0, 0));
 				map_scene_->addChild(fail, 51);
 			}
 		};
-		auto no = [=](Ref* ref) { sendMsg(msg_make_go_apper); };
+		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
 		map_scene_->addChild(pop, 50);
@@ -121,7 +121,7 @@ bool Hotel::onLand(Character* standing)
 						standing->setMoney(money - sell_value);
 						standing->setEstateValue(standing->getEstateValue() + sell_value);
 						promote();
-						sendMsg(msg_make_go_apper);
+						SendMsg(msg_make_go_apper);
 						//画点东西表示已经买完了
 					}
 					else
@@ -129,19 +129,19 @@ bool Hotel::onLand(Character* standing)
 						auto fail = PopUpLayer::create();
 						fail->setTitle("购买失败");
 						fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
-						fail->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); });
+						fail->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); });
 						fail->setPosition(Vec2(0, 0));
 						map_scene_->addChild(fail, 51);
 					}
 				};
-				auto no = [=](Ref* ref) {sendMsg(msg_make_go_apper); };
+				auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
 				pop->setCallBack(yes, no);
 				pop->setPosition(Vec2(0, 0));
 				map_scene_->addChild(pop, 50);
 			}
 			else
 			{
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			}
 		}
 		else
@@ -184,12 +184,12 @@ bool Hotel::onLand(Character* standing)
 						standing->setMoney(money - rent_value);
 						owner_->setGainValue(owner_->getGainValue() + rent_value);
 						owner_->setMoney(owner_->getMoney() + rent_value);
-						sendMsg(msg_make_go_apper);
+						SendMsg(msg_make_go_apper);
 					}
 					else
 					{
 						//这里弄破产
-						sendMsg(msg_make_go_apper);
+						SendMsg(msg_make_go_apper);
 					}
 				};
 				pop->setCallBack(yes);
@@ -200,7 +200,7 @@ bool Hotel::onLand(Character* standing)
 			{
 				auto text = std::string("此处房产的所有者当前没空收取费用，本次过路免费");
 				pop->setContent(text);
-				pop->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); });
+				pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); });
 				pop->setPosition(Vec2(0, 0));
 				map_scene_->addChild(pop, 50);
 			}

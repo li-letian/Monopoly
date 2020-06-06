@@ -1,7 +1,7 @@
 #include "Bank.h"
 #include "cocos2d.h"
 #include "Land.h"
-#include "Common/CommonMethod.h"
+#include "Common/CommonConstant.h"
 #include "Scene/GameController.h"
 #include "Incident/PopUpLayer.h"
 
@@ -72,7 +72,7 @@ bool Bank::onLand(Character* standing)
 				standing->setMoney(standing->getMoney() + loan_value);
 				standing->setLoan(loan_value);
 				pop1->removeFromParentAndCleanup(true);
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			});
 		}
 		else
@@ -83,11 +83,11 @@ bool Bank::onLand(Character* standing)
 				standing->setMoney(standing->getMoney() - loan_value);
 				standing->setLoan(0);
 				pop1->removeFromParentAndCleanup(true);
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			});
 		}
 		pop1->setMenu(fun1, txt1);
-		pop1->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); }, "取消");
+		pop1->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 		pop1->setPosition(Vec2::ZERO);
 		map_scene_->addChild(pop1, 51);
 	});

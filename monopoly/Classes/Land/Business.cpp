@@ -65,7 +65,7 @@ bool Business::promote()
 		initWithFile("park.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
-		sendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_apper);
 	});
 	pic.push_back("resort.png");
 	callback.push_back([=](Ref* ref) {
@@ -73,7 +73,7 @@ bool Business::promote()
 		initWithFile("resort.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
-		sendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_apper);
 	});
 	pic.push_back("mall.png");
 	callback.push_back([=](Ref* ref) {
@@ -81,7 +81,7 @@ bool Business::promote()
 		initWithFile("mall.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
-		sendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_apper);
 	});
 	pic.push_back("institute.png");
 	callback.push_back([=](Ref* ref) {
@@ -92,7 +92,7 @@ bool Business::promote()
 		onBusinessLand(owner_);
 	});
 	pop->setMenu(pic, callback);
-	pop->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); }, "取消");
+	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 	pop->setPosition(Vec2(0, 0));
 	map_scene_->addChild(pop, 51);
 	return true;
@@ -122,7 +122,7 @@ bool Business::onBusinessLand(Character* standing)
 			std::vector<ccMenuCallback>callback;
 			pic.push_back("mall.png");
 			callback.push_back([=](Ref* ref) {
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			});
 			pop->setMenu(pic, callback);
 			pop->setPosition(Vec2(0, 0));
@@ -130,7 +130,7 @@ bool Business::onBusinessLand(Character* standing)
 		}
 		else
 		{
-			sendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_apper);
 		}
 	}
 	if(standing->getTag() != owner_->getTag())
@@ -150,12 +150,12 @@ bool Business::onBusinessLand(Character* standing)
 					owner_->setGainValue(owner_->getGainValue() + rent_value);
 					owner_->setMoney(owner_->getMoney() + rent_value);
 					GoOnHoliday(standing);
-					sendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_apper);
 				}
 				else
 				{
 					//这里弄破产
-					sendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_apper);
 				}
 			};
 			pop->setCallBack(yes);
@@ -176,12 +176,12 @@ bool Business::onBusinessLand(Character* standing)
 					standing->setMoney(money - rent_value);
 					owner_->setGainValue(owner_->getGainValue() + rent_value);
 					owner_->setMoney(owner_->getMoney() + rent_value);
-					sendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_apper);
 				}
 				else
 				{
 					//这里弄破产
-					sendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_apper);
 				}
 			};
 			pop->setCallBack(yes);
@@ -190,7 +190,7 @@ bool Business::onBusinessLand(Character* standing)
 		}
 		else
 		{
-			sendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_apper);
 		}
 	}
 	return true;
@@ -219,7 +219,7 @@ bool Business::onLand(Character* standing)
 				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
 				map_scene_->getMap()->addChild(color_, 1);
 				map_scene_->getMap()->addChild(color_larger_, 1);
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 				//画点东西表示已经买完了
 			}
 			else
@@ -228,12 +228,12 @@ bool Business::onLand(Character* standing)
 				fail->setTitle("购买失败");
 				fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
 				fail->setCallBack([=](Ref* ref) {
-					sendMsg(msg_make_go_apper); });
+					SendMsg(msg_make_go_apper); });
 				fail->setPosition(Vec2(0, 0));
 				map_scene_->addChild(fail, 51);
 			}
 		};
-		auto no = [=](Ref* ref) { sendMsg(msg_make_go_apper); };
+		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
 		map_scene_->addChild(pop, 50);
@@ -250,7 +250,7 @@ bool Business::onLand(Character* standing)
 			{
 				promote();
 			};
-			auto no = [=](Ref* ref) {sendMsg(msg_make_go_apper); };
+			auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
 			pop->setCallBack(yes, no);
 			pop->setPosition(Vec2(0, 0));
 			map_scene_->addChild(pop, 50);

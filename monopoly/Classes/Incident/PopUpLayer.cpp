@@ -1,4 +1,4 @@
-#include "PopUpLayer.h"
+#include "Incident/PopUpLayer.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Scene/MapScene.h"
@@ -135,3 +135,9 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	back_ground_->addChild(menu);
 }
 
+void PopUpLayer::setOnScene(int z_order)
+{
+	auto map_scene = GetMapScene();
+	this->setPosition(Vec2::ZERO);
+	map_scene->addChild(this, z_order);
+}

@@ -61,7 +61,7 @@ bool Oil::onLand(Character* standing)
 		auto pop = PopUpLayer::create();
 		pop->setTitle(name_);
 		pop->setContent("想要当董事长吗？快快购买本公司的股票哦，当前持仓数最多的人会成为本公司的董事长，享有公司所有权");
-		pop->setCallBack([=](Ref* ref) { sendMsg(msg_make_go_apper); });
+		pop->setCallBack([=](Ref* ref) { SendMsg(msg_make_go_apper); });
 		pop->setPosition(Vec2(0, 0));
 		map_scene_->addChild(pop, 51);
 	}
@@ -76,12 +76,12 @@ bool Oil::onLand(Character* standing)
 			{
 				GoOnHoliday(standing);
 				standing->setMoney(standing->getMoney() - oil_value);
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			});
 			pop->setPosition(Vec2(0, 0));
 			map_scene_->addChild(pop, 51);
 		}
-		else sendMsg(msg_make_go_apper);
+		else SendMsg(msg_make_go_apper);
 
 	}
 	return true;

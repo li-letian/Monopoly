@@ -3,9 +3,7 @@
 
 #include <functional>
 #include "cocos2d.h"
-#include "ui/CocosGUI.h"
-#include "Common/CommonConstant.h"
-#include "Character/Character.h"
+
 USING_NS_CC;
 
 //PopUpLayer使用示例
@@ -36,6 +34,7 @@ public:
 	void setMenu(const std::vector< std::string>image, const std::vector<std::function<void(Ref* ref)>>callback);
 	//第一个是回调函数数组，第二个是按钮文字数组，一一对应，这个函数会给每个图片创造一个按钮，按下以后执行对应的回调函数，但是不会退出弹框
 	void setMenu(const std::vector<std::function<void(Ref* ref)>>callback, const std::vector<std::string>text);
+	void setOnScene(int z_order = 50);
 private:
 	Sprite* back_ground_ = nullptr;
 	float back_ground_width_ = 0;

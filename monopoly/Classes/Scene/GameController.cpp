@@ -122,8 +122,7 @@ void GameController::addEventListenerCustom()
 					character->removeFromParentAndCleanup(true);
 					this->runAction(seq);
 					});
-				pop->setPosition(Vec2::ZERO);
-				map_scene_->addChild(pop,50);
+				pop->setOnScene();
 			}
 			else
 			{
@@ -158,7 +157,7 @@ void GameController::addGoButton()
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		sendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
+		SendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
@@ -335,7 +334,7 @@ void GameController::endGo()
 		if (land)
 			land->onLand(character);
 		else
-			sendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_apper);
 
 		return;
 	}

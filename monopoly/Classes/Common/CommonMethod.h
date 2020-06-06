@@ -6,7 +6,13 @@
 
 #define random(x) (rand()%x)
 
+class MapScene;
+class GameController;
+class StockScene;
 std::string ZH(const std::string& str);
 
-void sendMsg(int msg);
+void SendMsg(int msg);
+MapScene* GetMapScene();
+GameController* GetGameController();
+StockScene* GetStockScene();
 #endif // !_COMMON_METHOD_H_

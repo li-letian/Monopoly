@@ -54,12 +54,12 @@ bool Hospital::onLand(Character* standing)
 			callback.push_back([=](Ref* ref) {
 				character->setStopTimes(0);
 				PopUpHospitalDialog(character, map_scene_);
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			});
 		}
 	}
 	pop->setMenu(pic, callback);
-	pop->setCallBack([=](Ref* ref) {sendMsg(msg_make_go_apper); }, "取消");
+	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 	pop->setPosition(Vec2(0, 0));
 	map_scene_->addChild(pop, 51);
 	return true;
