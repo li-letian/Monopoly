@@ -44,7 +44,7 @@ bool Chance::onLand(Character* standing)
 	std::function<void(Ref*)>fun;
 	srand(static_cast<unsigned int>(time(nullptr)));
 	auto pos = 0;
-	switch (rand() % 6)
+	switch (rand() % 7)
 	{
 	case 0:
 		pos = GetRandomHotel();
@@ -61,17 +61,26 @@ bool Chance::onLand(Character* standing)
 		fun = [=](Ref* ref) {StockMarketUp(); };
 		break;
 	case 3:
-		txt = StringUtils::format("奖励地产最多的人:%s %d", GetMostEstate()->getPlayerName().c_str(), reward_estate_money);
-		fun = [=](Ref* ref) {RewardMostEstate(GetMostEstate()); };
+	{
+		auto target = GetMostEstate();
+		txt = StringUtils::format("奖励地产最多的人:%s %d", target->getPlayerName().c_str(), reward_estate_money);
+		fun = [=](Ref* ref) {RewardMostEstate(target); };
 		break;
+	}
 	case 4:
-		txt = StringUtils::format("补助地产最少的人:%s %d", GetLeastEstate()->getPlayerName().c_str(), help_estate_money);
-		fun = [=](Ref* ref) {HelpLeastEstate(GetLeastEstate()); };
+	{
+		auto target = GetLeastEstate();
+		txt = StringUtils::format("补助地产最少的人:%s %d", target->getPlayerName().c_str(), help_estate_money);
+		fun = [=](Ref* ref) {HelpLeastEstate(target); };
 		break;
+	}
 	case 5:
-		txt = StringUtils::format("奖励持有股票最多的人:%s %d", GetMostStock()->getPlayerName().c_str(), help_stock_money);
-		fun = [=](Ref* ref) {RewardMostStock(GetMostStock()); };
+	{
+		auto target = GetMostStock();
+		txt = StringUtils::format("奖励持有股票最多的人:%s %d", target->getPlayerName().c_str(), reward_stock_money);
+		fun = [=](Ref* ref) {RewardMostStock(target); };
 		break;
+	}
 	default:
 		txt = "平静的一天，什么都没有发生";
 		fun = [=](Ref* ref) {};

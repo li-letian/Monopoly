@@ -203,7 +203,7 @@ bool DestroyOneCertainHouse(Character* character)
 	}
 	else
 	{
-		int index = Dice::getARandomNumber(hotels.size() - 1);
+		int index = Dice::getARandomNumber(hotels.size());
 		DestroyHouse(hotels.at(index));
 		return true;
 	}
@@ -219,7 +219,7 @@ bool DestroyOneCertainHotel(Character* character)
 	}
 	else
 	{
-		int index = Dice::getARandomNumber(hotels.size() - 1);
+		int index = Dice::getARandomNumber(hotels.size());
 		DestroyHouse(hotels.at(index));
 		hotels.at(index)->setOwner(nullptr);
 		return true;

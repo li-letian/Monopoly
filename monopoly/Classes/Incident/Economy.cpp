@@ -37,7 +37,7 @@ Character* GetMostEstate()
 	auto game_controller = GetGameController();
 	auto characters = game_controller->getCharacters();
 	Character* character_most = nullptr;
-	int most_value = -1;
+	int most_value = 0;
 	for (int i = 0; i < characters.size(); i++)
 	{
 		if (characters.at(i)->getEstateValue() > most_value)
@@ -45,6 +45,10 @@ Character* GetMostEstate()
 			most_value = characters.at(i)->getEstateValue();
 			character_most = characters.at(i);
 		}
+	}
+	if (character_most == nullptr)
+	{
+		character_most = characters.at(Dice::getARandomNumber(characters.size()));
 	}
 	return character_most;
 }
@@ -63,6 +67,10 @@ Character* GetLeastEstate()
 			character_least = characters.at(i);
 		}
 	}
+	if (least_value == 0 && characters.at(0) == character_least)
+	{
+		character_least = characters.at(Dice::getARandomNumber(characters.size()));
+	}
 	return character_least;
 }
 
@@ -72,11 +80,11 @@ Character* GetMostStock()
 	auto characters = game_controller->getCharacters();
 	auto stock_scene = GetStockScene();
 	Character* character_most = nullptr;
-	int most_value = -1;
+	int most_value = 0;
 	for (int i = 0; i < characters.size(); i++)
 	{
 		auto character = characters.at(i);
-		int own_sum = -2;
+		int own_sum = 0;
 		int tag = character->getTag();
 		for (int j = 0; i < stock_scene->getStock().size(); i++)
 		{
@@ -89,6 +97,10 @@ Character* GetMostStock()
 			most_value = own_sum;
 			character_most = character;
 		}
+	}
+	if (character_most == nullptr)
+	{
+		character_most = characters.at(Dice::getARandomNumber(characters.size()));
 	}
 	return character_most;
 }
@@ -105,7 +117,7 @@ void HelpLeastEstate(Character* character)
 
 void RewardMostStock(Character* character)
 {
-	character->setMoney(character->getMoney() + help_stock_money);
+	character->setMoney(character->getMoney() + reward_stock_money);
 }
 
 void TraficFine(Character* character)

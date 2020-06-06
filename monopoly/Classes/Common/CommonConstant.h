@@ -35,11 +35,11 @@ constexpr int walk_up = 4;
 //人物行走的格数
 constexpr int total_position = 405;
 constexpr int start_position = 379;
-constexpr int turtle_steps = 0;
+constexpr int turtle_steps = 1;
 constexpr int init_turtle_times = 3;
 constexpr int walk_steps = 3;
-constexpr int speed_steps = 2 * (walk_steps + 1) - 1;
-constexpr int flying_steps = 3 * (walk_steps + 1) - 1;
+constexpr int speed_steps = 2 * walk_steps;
+constexpr int flying_steps = 3 * walk_steps;
 
 constexpr int msg_hide_go = 1;
 constexpr int msg_make_go_apper = 2;
@@ -84,7 +84,7 @@ constexpr float land_price_rate = 0.3f;
 //政府奖励或补助的资金
 constexpr int reward_estate_money = 20000;
 constexpr int help_estate_money = 10000;
-constexpr int help_stock_money = 20000;
+constexpr int reward_stock_money = 20000;
 
 //记录神灵附身状态
 constexpr int no_god = 0;
