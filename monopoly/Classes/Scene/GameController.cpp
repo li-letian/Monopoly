@@ -2,6 +2,7 @@
 
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
+#include "Scene/ItemScene.h"
 #include "Common/CommonConstant.h"
 #include "StockScene.h"
 #include "Land/Business.h"
@@ -30,8 +31,7 @@ bool GameController::init()
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, -50,"game_controller");
 	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
-	
-	
+	item_layer_ = ItemScene::createScene(map_scene_);
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器

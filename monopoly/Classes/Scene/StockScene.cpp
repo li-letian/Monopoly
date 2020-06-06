@@ -51,7 +51,6 @@ StockScene* StockScene::createScene(MapScene *map_scene)
 	stock_layer->map_scene_ = map_scene;
 	stock_layer->setPosition(Vec2(6000, 6000));
 	stock_layer->map_scene_->addChild(stock_layer, 23,"stock_scene");
-	auto label_stock = Label::createWithSystemFont(ZH("¹ÉÊĞ1"), "fonts/arial.ttf", 40);
 	stock_layer->map_scene_->setMenuCallback("stock", [=](Ref* ref) {stock_layer->open(ref); });
 	return stock_layer;
 }

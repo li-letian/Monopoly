@@ -5,16 +5,16 @@
 #include <string>
 #include <vector>
 #include <functional>
-
 class Land;
 class Character;
 class Stock;
+class ItemScene;
 class MapScene : public cocos2d::Scene
 {
 protected:
 	cocos2d::Layer* panel_=nullptr;
 	cocos2d::TMXTiledMap* map_=nullptr;
-	cocos2d::TMXTiledMap* mini_map_=nullptr;
+	cocos2d::TMXTiledMap* mini_map_ = nullptr ;
 	
 
 	cocos2d::Map<std::string, cocos2d::MenuItem*>menu_item_;
@@ -28,6 +28,9 @@ protected:
 
 	int info_on_display_ = 0;
 
+    
+
+
 public:
 
 	static MapScene* createScene();
@@ -38,6 +41,7 @@ public:
 	bool miniMapInit();
 	bool informationInit();
 	virtual bool init();
+
 	CREATE_FUNC(MapScene);
 
 
