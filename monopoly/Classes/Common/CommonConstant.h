@@ -77,7 +77,7 @@ constexpr int down_market = 3;
 constexpr int market_duration_time = 5;
 
 //税率 = 1/tax_rate
-constexpr float tax_rate = 20.0f;
+constexpr int tax_rate = 20.0;
 //房价、租价上涨或下降率
 constexpr float land_price_rate = 0.3f;
 
