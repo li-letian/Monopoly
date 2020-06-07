@@ -50,7 +50,7 @@ bool Hotel::promote()
 
 bool Hotel::demote()
 {
-	if (!rank_) return false;
+	if (rank_ <= 0) return false;
 	rank_--;
 	sell_value_ = hotel_sell_value[rank_];
 	rent_value_ = hotel_rent_value[rank_];
