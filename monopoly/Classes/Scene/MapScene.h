@@ -66,6 +66,11 @@ public:
 		auto size = pos_.size();
 		return lands_.at(index % size);
 	}
+	God*& getGod(int index)
+	{
+		auto size = pos_.size();
+		return gods_.at(index % size);
+	}
 
 	int getType(int index)
 	{

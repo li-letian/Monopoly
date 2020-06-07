@@ -6,7 +6,8 @@ USING_NS_CC;
 
 class MapScene;
 class Character;
-class God : public: Sprite{
+
+class God : public Sprite{
 public:
 	virtual bool onLand(Character* standing)
 	{

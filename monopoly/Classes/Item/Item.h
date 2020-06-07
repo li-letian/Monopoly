@@ -4,8 +4,17 @@
 
 USING_NS_CC;
 
+class Character;
 class Item : public: Sprite{
-
+public:
+	virtual bool work()
+	{
+		return true;
+	}
+	
+protected:
+	Character* owner;
+	int index_ = 0;
 }
 
 

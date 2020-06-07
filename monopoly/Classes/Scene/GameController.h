@@ -23,6 +23,8 @@ public:
 	int judgeDirection(int cur_pos);											   //判断要走的方向
 	void moveOneStep(int direction);											   //指定当前角色按某方向走一格
 	void endGo();																   //MoveOneStep结束前调用的函数
+	void dealWithGod();
+	void dealWithLand();
 	void backToStand();															   //回到站立状态，在endGo中调用
 protected:
 	Dice *dice_ = nullptr;							 //储存本局游戏的随机数

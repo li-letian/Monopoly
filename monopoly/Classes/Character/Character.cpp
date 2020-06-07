@@ -10,7 +10,7 @@ Character::Character()
 	character_anim_up_(nullptr),
 	character_frame_cache_(nullptr),
 	name_(),
-	money_(150000),
+	money_(initial_money),
 	cur_pos_(0),
 	steps_scope_(walk_steps),
 	stop_times_(0),

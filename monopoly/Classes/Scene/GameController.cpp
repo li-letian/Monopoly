@@ -285,62 +285,75 @@ void GameController::endGo()
 		//让人物恢复到站立状态，面朝下一格
 		backToStand();
 		returnToCharacter(character);
-		auto pos = character->getCurPos();
-
+		dealWithGod();
 		//这里处理一些着陆后的事情
-
-		//首先得处理一下神灵
-
-		//然后这里处理着陆到位置触发的事件
-		auto &land = map_scene_->getLand(pos);
-		if (!land)
-		{
-			switch (map_scene_->getType(pos))
-			{
-			case land_chance:
-				land = Chance::create(pos);
-				break;
-			case land_life:
-				land = Life::create(pos);
-				break;
-			case land_hotel:
-				land = Hotel::create(pos);
-				break;
-			case land_business:
-				land = Business::create(pos);
-				break;
-			case land_insurance:
-				land = Insurance::create(pos);
-				break;
-			case land_oil:
-				land = Oil::create(pos);
-				break;
-			case land_technology:
-				land = Technology::create(pos);
-				break;
-			case land_aviation:
-				land = Aviation::create(pos);
-				break;
-			case land_hospital:
-				land = Hospital::create(pos);
-				break;
-			case land_jail:
-				land = Jail::create(pos);
-				break;
-			case land_bank:
-				land = Bank::create(pos);
-				break;
-			case land_lottery:
-				break;
-			}
-		}
-		if (land)
-			land->onLand(character);
-		else
-			SendMsg(msg_make_go_apper);
-
+		
 		return;
 	}
+}
+
+void GameController::dealWithGod()
+{
+	auto character = characters_.at(whose_turn_);
+	auto pos = character->getCurPos();
+	auto& god = map_scene_->getLand(pos);
+	if (god)
+		god->onLand(character);
+	else
+		dealWithLand();
+}
+
+void GameController::dealWithLand()
+{
+	auto character = characters_.at(whose_turn_);
+	auto pos = character->getCurPos();
+	auto& land = map_scene_->getLand(pos);
+	if (!land)
+	{
+		switch (map_scene_->getType(pos))
+		{
+		case land_chance:
+			land = Chance::create(pos);
+			break;
+		case land_life:
+			land = Life::create(pos);
+			break;
+		case land_hotel:
+			land = Hotel::create(pos);
+			break;
+		case land_business:
+			land = Business::create(pos);
+			break;
+		case land_insurance:
+			land = Insurance::create(pos);
+			break;
+		case land_oil:
+			land = Oil::create(pos);
+			break;
+		case land_technology:
+			land = Technology::create(pos);
+			break;
+		case land_aviation:
+			land = Aviation::create(pos);
+			break;
+		case land_hospital:
+			land = Hospital::create(pos);
+			break;
+		case land_jail:
+			land = Jail::create(pos);
+			break;
+		case land_bank:
+			land = Bank::create(pos);
+			break;
+		case land_lottery:
+			break;
+		}
+	}
+	if (land)
+		land->onLand(character);
+	else
+		SendMsg(msg_make_go_apper);
+
 }
 
 void GameController::backToStand()

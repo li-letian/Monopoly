@@ -4,6 +4,7 @@
 constexpr int miku = 1;		   //初音未来
 constexpr int nanxiaoniao = 2; //南小鸟
 
+constexpr int initial_money = 150000;
 //各种类型位置的代号
 constexpr int land_chance = 1;
 constexpr int land_life = 2;
