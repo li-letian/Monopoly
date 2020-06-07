@@ -9,6 +9,7 @@ class Land;
 class Character;
 class Stock;
 class ItemScene;
+class God;
 class MapScene : public cocos2d::Scene
 {
 protected:
@@ -21,6 +22,7 @@ protected:
 	std::vector<cocos2d::Vec2>pos_;
 	std::vector<int>type_;
 	std::vector<Land*>lands_;
+	std::vector<God*>gods_;
 
 	int year_ = 1;
 	int month_ = 1;
@@ -72,9 +74,9 @@ public:
 	}
 
 	//返回地图上位置总数
-	std::size_t totalPosition()
+	int totalPosition()
 	{
-		return pos_.size();
+		return static_cast<int>(pos_.size());
 	}
 
 	//为面板上功能为name的按钮设置回调函数

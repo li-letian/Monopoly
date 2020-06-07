@@ -16,7 +16,7 @@ protected:
 
 public:
 	virtual bool onLand(Character* standing) override;
-	static Aviation* create(MapScene* map_scene, int index);
+	static Aviation* create(int index);
 
 };
 

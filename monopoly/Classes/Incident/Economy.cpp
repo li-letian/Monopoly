@@ -6,29 +6,29 @@
 #include "Character/Character.h"
 int LevyIncomeTax(Character* character)
 {
-	int tax = character->getGainValue() / tax_rate;
+	auto tax =static_cast<int>(character->getGainValue() / tax_rate);
 	character->setGainValue(0);
 	return tax;
 }
 
 int LevyEstateTax(Character* character)
 {
-	int tax = character->getEstateValue() / tax_rate;
+	auto tax = static_cast<int>(character->getEstateValue() / tax_rate);
 	return tax;
 }
 
 int LevyStockTax(Character* character)
 {
 	auto stock_scene = GetStockScene();
-	int own_sum = 0, tax = 0;
-	int tag = character->getTag();
+	auto own_sum = 0, tax = 0;
+	auto tag = character->getTag();
 	for (int i = 0; i < stock_scene->getStock().size(); i++)
 	{
 		int own_num = stock_scene->getStock().at(i)->store_number_.at(tag);
 		int price = stock_scene->getStock().at(i)->now_price_;
 		own_sum += own_num * price;
 	}
-	tax = own_sum / tax_rate;
+	tax = static_cast<int>(own_sum / tax_rate);
 	return tax;
 }
 

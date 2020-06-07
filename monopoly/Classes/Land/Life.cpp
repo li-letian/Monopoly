@@ -11,13 +11,13 @@
 
 USING_NS_CC;
 
-Life* Life::create(MapScene* map_scene, int index)
+Life* Life::create( int index)
 {
 	auto pRet = new(std::nothrow) Life();
 	if (pRet && pRet->init())
 	{
+		auto map_scene = GetMapScene();
 		auto tile_size = map_scene->getMap()->getTileSize();
-		pRet->setMapScene(map_scene);
 		pRet->index_ = index;
 		pRet->name_ = std::string("รüิห");
 		pRet->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -38,6 +38,7 @@ Life* Life::create(MapScene* map_scene, int index)
 
 bool Life::onLand(Character* standing)
 {
+	auto map_scene = GetMapScene();
 	auto pop= PopUpLayer::create();
 	pop->setTitle(name_);
 	std::string txt;
@@ -145,6 +146,6 @@ bool Life::onLand(Character* standing)
 	pop->setContent(txt);
 	pop->setCallBack([=](Ref* ref) {fun(ref); SendMsg(msg_make_go_apper); });
 	pop->setPosition(Vec2(0, 0));
-	map_scene_->addChild(pop, 51);
+	map_scene->addChild(pop, 51);
 	return true;
 }

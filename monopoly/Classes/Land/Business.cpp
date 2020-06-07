@@ -9,13 +9,13 @@
 
 USING_NS_CC;
 
-Business* Business::create(MapScene* map_scene, int index)
+Business* Business::create(int index)
 {
 	auto pRet = new(std::nothrow) Business();
 	if (pRet && pRet->init())
 	{
+		auto map_scene = GetMapScene();
 		auto tile_size = map_scene->getMap()->getTileSize();
-		pRet->setMapScene(map_scene);
 		pRet->name_ = std::string("商业用地") + StringUtils::format("%d", index);
 		pRet->setAnchorPoint(Vec2(0.5f, 0.0f));
 		auto back = 0;
@@ -52,9 +52,10 @@ Business* Business::create(MapScene* map_scene, int index)
 
 bool Business::promote()
 {
-	auto tile_size = map_scene_->getMap()->getTileSize();
-	auto x = 0.5f * (map_scene_->pos(index_).x + map_scene_->pos(index_larger_).x);
-	auto y = map_scene_->pos(index_).y + tile_size.height;
+	auto map_scene = GetMapScene();
+	auto tile_size = map_scene->getMap()->getTileSize();
+	auto x = 0.5f * (map_scene->pos(index_).x + map_scene->pos(index_larger_).x);
+	auto y = map_scene->pos(index_).y + tile_size.height;
 	auto pop = PopUpLayer::create();
 	pop->setTitle("请选择要投资的地产");
 	std::vector<std::string>pic;
@@ -94,7 +95,7 @@ bool Business::promote()
 	pop->setMenu(pic, callback);
 	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 	pop->setPosition(Vec2(0, 0));
-	map_scene_->addChild(pop, 51);
+	map_scene->addChild(pop, 51);
 	return true;
 }
 
@@ -103,15 +104,17 @@ bool Business::demote()
 	if (type_!=4) type_=4;
 	init();
 	setAnchorPoint(Vec2(0.5f, 0.0f));
-	auto tile_size = map_scene_->getMap()->getTileSize();
-	auto x = 0.5f * (map_scene_->pos(index_).x + map_scene_->pos(index_larger_).x);
-	auto y = map_scene_->pos(index_).y + tile_size.height;
+	auto map_scene = GetMapScene();
+	auto tile_size = map_scene->getMap()->getTileSize();
+	auto x = 0.5f * (map_scene->pos(index_).x + map_scene->pos(index_larger_).x);
+	auto y = map_scene->pos(index_).y + tile_size.height;
 	setPosition(x, y);
 	return true;
 }
 
 bool Business::onBusinessLand(Character* standing)
 {
+	auto map_scene = GetMapScene();
 	if (standing->getTag() == owner_->getTag())
 	{
 		if (type_ == land_institute)
@@ -126,7 +129,7 @@ bool Business::onBusinessLand(Character* standing)
 			});
 			pop->setMenu(pic, callback);
 			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 51);
+			map_scene->addChild(pop, 51);
 		}
 		else
 		{
@@ -160,7 +163,7 @@ bool Business::onBusinessLand(Character* standing)
 			};
 			pop->setCallBack(yes);
 			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 50);
+			map_scene->addChild(pop, 50);
 		}
 		else if (type_ == land_mall)
 		{
@@ -186,7 +189,7 @@ bool Business::onBusinessLand(Character* standing)
 			};
 			pop->setCallBack(yes);
 			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 50);
+			map_scene->addChild(pop, 50);
 		}
 		else
 		{
@@ -198,6 +201,7 @@ bool Business::onBusinessLand(Character* standing)
 
 bool Business::onLand(Character* standing)
 {
+	auto map_scene = GetMapScene();
 	if (!owner_)
 	{
 		auto pop = PopUpLayer::create();
@@ -213,12 +217,12 @@ bool Business::onLand(Character* standing)
 				owner_ = standing;
 				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
 				color_larger_=Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
-				color_larger_->setPosition(map_scene_->pos(index_larger_));
+				color_larger_->setPosition(map_scene->pos(index_larger_));
 				color_larger_->setAnchorPoint(Vec2(0.5f, 0.5f));
-				color_->setPosition(map_scene_->pos(index_));
+				color_->setPosition(map_scene->pos(index_));
 				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
-				map_scene_->getMap()->addChild(color_, 1);
-				map_scene_->getMap()->addChild(color_larger_, 1);
+				map_scene->getMap()->addChild(color_, 1);
+				map_scene->getMap()->addChild(color_larger_, 1);
 				SendMsg(msg_make_go_apper);
 				//画点东西表示已经买完了
 			}
@@ -230,13 +234,13 @@ bool Business::onLand(Character* standing)
 				fail->setCallBack([=](Ref* ref) {
 					SendMsg(msg_make_go_apper); });
 				fail->setPosition(Vec2(0, 0));
-				map_scene_->addChild(fail, 51);
+				map_scene->addChild(fail, 51);
 			}
 		};
 		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
-		map_scene_->addChild(pop, 50);
+		map_scene->addChild(pop, 50);
 	}
 	else
 	{
@@ -253,7 +257,7 @@ bool Business::onLand(Character* standing)
 			auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
 			pop->setCallBack(yes, no);
 			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 50);
+			map_scene->addChild(pop, 50);
 		}
 		else
 		{

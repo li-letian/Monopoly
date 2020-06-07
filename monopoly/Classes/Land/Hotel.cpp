@@ -9,13 +9,13 @@
 
 USING_NS_CC;
 
-Hotel* Hotel::create(MapScene* map_scene, int index)
+Hotel* Hotel::create(int index)
 {
 	auto pRet = new(std::nothrow) Hotel();
 	if (pRet && pRet->init())
 	{
+		auto map_scene = GetMapScene();
 		auto tile_size = map_scene->getMap()->getTileSize();
-		pRet->setMapScene(map_scene);
 		pRet->index_ = index;
 		pRet->rank_ = -1;
 		pRet->name_ = std::string("家庭旅馆") + StringUtils::format("%d", index);
@@ -38,13 +38,14 @@ Hotel* Hotel::create(MapScene* map_scene, int index)
 bool Hotel::promote()
 {
 	if (rank_ >= 4) return false;
+	auto map_scene = GetMapScene();
 	rank_++;
 	sell_value_ = hotel_sell_value[rank_];
 	rent_value_ = hotel_rent_value[rank_];
 	if (!rank_) return true;
 	this->initWithFile(StringUtils::format("hotel%d.png", rank_));
 	setAnchorPoint(Vec2(0.5f, 0));
-	setPosition(map_scene_->pos(index_) + Vec2(0, map_scene_->getMap()->getTileSize().height));
+	setPosition(map_scene->pos(index_) + Vec2(0, map_scene->getMap()->getTileSize().height));
 	return true;
 }
 
@@ -52,17 +53,19 @@ bool Hotel::demote()
 {
 	if (rank_ <= 0) return false;
 	rank_--;
+	auto map_scene = GetMapScene();
 	sell_value_ = hotel_sell_value[rank_];
 	rent_value_ = hotel_rent_value[rank_];
 	if (!rank_) init();
 	else initWithFile(StringUtils::format("hotel%d.png", rank_));
 	setAnchorPoint(Vec2(0.5f, 0));
-	setPosition(map_scene_->pos(index_) + Vec2(0, map_scene_->getMap()->getTileSize().height));
+	setPosition(map_scene->pos(index_) + Vec2(0, map_scene->getMap()->getTileSize().height));
 	return true;
 }
 
 bool Hotel::onLand(Character* standing)
 {
+	auto map_scene = GetMapScene();
 	if (!owner_)
 	{
 		auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
@@ -79,9 +82,9 @@ bool Hotel::onLand(Character* standing)
 				standing->setEstateValue(standing->getEstateValue() + sell_value);
 				owner_ = standing;
 				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
-				color_->setPosition(map_scene_->pos(index_));
+				color_->setPosition(map_scene->pos(index_));
 				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
-				map_scene_->getMap()->addChild(color_, 1);
+				map_scene->getMap()->addChild(color_, 1);
 				promote();
 				SendMsg(msg_make_go_apper);
 				//画点东西表示已经买完了
@@ -94,13 +97,13 @@ bool Hotel::onLand(Character* standing)
 				fail->setCallBack([=](Ref* ref) {
 					SendMsg(msg_make_go_apper); });
 				fail->setPosition(Vec2(0, 0));
-				map_scene_->addChild(fail, 51);
+				map_scene->addChild(fail, 51);
 			}
 		};
 		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
-		map_scene_->addChild(pop, 50);
+		map_scene->addChild(pop, 50);
 	}
 	else
 	{
@@ -131,13 +134,13 @@ bool Hotel::onLand(Character* standing)
 						fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
 						fail->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); });
 						fail->setPosition(Vec2(0, 0));
-						map_scene_->addChild(fail, 51);
+						map_scene->addChild(fail, 51);
 					}
 				};
 				auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
 				pop->setCallBack(yes, no);
 				pop->setPosition(Vec2(0, 0));
-				map_scene_->addChild(pop, 50);
+				map_scene->addChild(pop, 50);
 			}
 			else
 			{
@@ -149,23 +152,23 @@ bool Hotel::onLand(Character* standing)
 			auto pop = PopUpLayer::create();
 			pop->setTitle(name_);
 			auto rent = rent_value_;
-			for (int index = index_ + 1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index++)
+			for (int index = index_ + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 			{
-				if (map_scene_->getType(index) == land_business) continue;
-				auto land = map_scene_->getLand(index);
+				if (map_scene->getType(index) == land_business) continue;
+				auto land = map_scene->getLand(index);
 				if (!land) continue;
-				auto hotel = static_cast<Hotel*>(map_scene_->getLand(index));
+				auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
 				if (hotel->owner_->getTag() == owner_->getTag())
 				{
 					rent += hotel->rent_value_;
 				}
 			}
-			for (int index = index_ - 1; map_scene_->getType(index) == land_hotel || map_scene_->getType(index) == land_business; index--)
+			for (int index = index_ - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
 			{
-				if (map_scene_->getType(index) == land_business) continue;
-				auto land = map_scene_->getLand(index);
+				if (map_scene->getType(index) == land_business) continue;
+				auto land = map_scene->getLand(index);
 				if (!land) continue;
-				auto hotel = dynamic_cast<Hotel*>(map_scene_->getLand(index));
+				auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
 				if (hotel->owner_->getTag() == owner_->getTag())
 				{
 					rent += hotel->rent_value_;
@@ -194,7 +197,7 @@ bool Hotel::onLand(Character* standing)
 				};
 				pop->setCallBack(yes);
 				pop->setPosition(Vec2(0, 0));
-				map_scene_->addChild(pop, 50);
+				map_scene->addChild(pop, 50);
 			}
 			else
 			{
@@ -202,7 +205,7 @@ bool Hotel::onLand(Character* standing)
 				pop->setContent(text);
 				pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); });
 				pop->setPosition(Vec2(0, 0));
-				map_scene_->addChild(pop, 50);
+				map_scene->addChild(pop, 50);
 			}
 		}
 	}
@@ -233,23 +236,24 @@ Character* Hotel::getOwner()const
 
 bool Hotel::setOwner(Character* character)
 {
+	auto map_scene = GetMapScene();
 	if (!owner_)
 	{
-		character->setEstateValue(character->getEstateValue() + sell_value_ * sell_rise_);
+		character->setEstateValue(character->getEstateValue() + static_cast<int>(sell_value_ * sell_rise_));
 		owner_ = character;
 		color_ = Sprite::create(StringUtils::format("character%d.png", character->getTag()));
-		color_->setPosition(map_scene_->pos(index_));
+		color_->setPosition(map_scene->pos(index_));
 		color_->setAnchorPoint(Vec2(0.5f, 0.5f));
-		map_scene_->getMap()->addChild(color_, 1);
+		map_scene->getMap()->addChild(color_, 1);
 		return true;
 	}
 	else
 	{
-		owner_->setEstateValue(owner_->getEstateValue() - sell_value_ * sell_rise_);
-		character->setEstateValue(character->getEstateValue() + sell_value_ * sell_rise_);
+		owner_->setEstateValue(owner_->getEstateValue() - static_cast<int>(sell_value_ * sell_rise_));
+		character->setEstateValue(character->getEstateValue() + static_cast<int>(sell_value_ * sell_rise_));
 		owner_ = character;
 		color_->initWithFile(StringUtils::format("character%d.png", character->getTag()));
-		color_->setPosition(map_scene_->pos(index_));
+		color_->setPosition(map_scene->pos(index_));
 		color_->setAnchorPoint(Vec2(0.5f, 0.5f));
 		return true;
 	}

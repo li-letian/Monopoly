@@ -78,7 +78,7 @@ void PopUpLayer::setMenu(const std::vector<std::function<void(Ref* ref)>>callbac
 		if (!menu->getChildrenCount()) break;
 		menu->alignItemsHorizontally();
 		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
-		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - (7 + i*0.6) * grid_distance));
+		menu->setPosition(Vec2(back_ground_width_ / 2.0f, back_ground_height_ - (7.0f + i*0.6f) * grid_distance));
 		back_ground_->addChild(menu);
 	}
 }

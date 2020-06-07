@@ -17,17 +17,8 @@ public:
 	{
 		return true;
 	}
-	void setMapScene(MapScene* map_scene)
-	{
-		map_scene_ = map_scene;
-	}
-	MapScene* getMapScene()const
-	{
-		return map_scene_;
-	}
 
 protected:
-	MapScene* map_scene_=nullptr;
 	int index_ = 0;
 };
 

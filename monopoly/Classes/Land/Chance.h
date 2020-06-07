@@ -16,7 +16,7 @@ protected:
 
 public:
 	virtual bool onLand(Character* standing) override;
-	static Chance* create(MapScene* map_scene, int index);
+	static Chance* create(int index);
 
 };
 

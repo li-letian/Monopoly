@@ -271,7 +271,7 @@ void GameController::endGo()
 		auto& land = map_scene_->getLand(pos);
 		if (map_scene_->getType(pos) == land_bank)
 		{
-			if (!land) land = Bank::create(map_scene_, pos);
+			if (!land) land = Bank::create(pos);
 			land->byLand(character);
 		}//继续走下一步
 		else
@@ -298,37 +298,37 @@ void GameController::endGo()
 			switch (map_scene_->getType(pos))
 			{
 			case land_chance:
-				land = Chance::create(map_scene_, pos);
+				land = Chance::create(pos);
 				break;
 			case land_life:
-				land = Life::create(map_scene_, pos);
+				land = Life::create(pos);
 				break;
 			case land_hotel:
-				land = Hotel::create(map_scene_, pos);
+				land = Hotel::create(pos);
 				break;
 			case land_business:
-				land = Business::create(map_scene_, pos);
+				land = Business::create(pos);
 				break;
 			case land_insurance:
-				land= Insurance::create(map_scene_, pos);
+				land = Insurance::create(pos);
 				break;
 			case land_oil:
-				land = Oil::create(map_scene_, pos);
+				land = Oil::create(pos);
 				break;
 			case land_technology:
-				land= Technology::create(map_scene_, pos);
+				land = Technology::create(pos);
 				break;
 			case land_aviation:
-				land = Aviation::create(map_scene_, pos);
+				land = Aviation::create(pos);
 				break;
 			case land_hospital:
-				land = Hospital::create(map_scene_, pos);
+				land = Hospital::create(pos);
 				break;
 			case land_jail:
-				land = Jail::create(map_scene_, pos);
+				land = Jail::create(pos);
 				break;
 			case land_bank:
-				land=Bank::create(map_scene_, pos);
+				land = Bank::create(pos);
 				break;
 			case land_lottery:
 				break;

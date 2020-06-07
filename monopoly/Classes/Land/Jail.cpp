@@ -10,13 +10,13 @@
 
 USING_NS_CC;
 
-Jail* Jail::create(MapScene* map_scene, int index)
+Jail* Jail::create(int index)
 {
 	auto pRet = new(std::nothrow) Jail();
 	if (pRet && pRet->init())
 	{
+		auto map_scene = GetMapScene();
 		auto tile_size = map_scene->getMap()->getTileSize();
-		pRet->setMapScene(map_scene);
 		pRet->index_ = index;
 		pRet->name_ = std::string("监狱");
 		pRet->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -39,7 +39,8 @@ bool Jail::onLand(Character* standing)
 {
 	//要是没有保释证明就直接退出
 	if (false) return false;
-	auto tile_size = map_scene_->getMap()->getTileSize();
+	auto map_scene = GetMapScene();
+	auto tile_size = map_scene->getMap()->getTileSize();
 	auto& characters = dynamic_cast<GameController*>(Director::getInstance()->getRunningScene()->getChildByName("game_controller"))->getCharacters();
 	auto pop = PopUpLayer::create();
 	pop->setTitle("请选择要保释的人");
@@ -61,6 +62,6 @@ bool Jail::onLand(Character* standing)
 	pop->setMenu(pic, callback);
 	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 	pop->setPosition(Vec2(0, 0));
-	map_scene_->addChild(pop, 51);
+	map_scene->addChild(pop, 51);
 	return true;
 }

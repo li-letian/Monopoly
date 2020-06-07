@@ -21,6 +21,7 @@ bool SendToHospital(Character* character)
 				character->setMoney(character->getMoney() + insurance_value * 2);
 				character->setVisible(false);
 				character->setCurPos(78);
+				character->setPosition(GetMapScene()->pos(78));
 				character->setStopTimes(default_stop_times);
 				character->setCondition(in_hospital);
 			});
@@ -31,6 +32,7 @@ bool SendToHospital(Character* character)
 		{
 			character->setVisible(false);
 			character->setCurPos(78);
+			character->setPosition(GetMapScene()->pos(78));
 			character->setStopTimes(default_stop_times);
 			character->setCondition(in_hospital);
 		}
@@ -53,6 +55,8 @@ void PopUpHospitalDialog(Character* character)
 		text = StringUtils::format("%s", character->getPlayerName().c_str())
 			+ std::string("已出院");
 		character->setCondition(normal);
+		character->setCurPos(78);
+		character->setPosition(GetMapScene()->pos(78));
 		character->setVisible(true);
 	}
 	pop->setTitle("出院消息");

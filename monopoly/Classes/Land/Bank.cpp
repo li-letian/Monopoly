@@ -9,12 +9,12 @@
 
 USING_NS_CC;
 
-Bank* Bank::create(MapScene* map_scene, int index)
+Bank* Bank::create(int index)
 {
 	auto pRet = new(std::nothrow) Bank();
 	if (pRet && pRet->init())
 	{
-		pRet->setMapScene(map_scene);
+		auto map_scene = GetMapScene();
 		pRet->index_ = index;
 		pRet->name_ = std::string("中央银行");
 		pRet->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -34,6 +34,7 @@ Bank* Bank::create(MapScene* map_scene, int index)
 bool Bank::onLand(Character* standing)
 {
 	auto pop = PopUpLayer::create();
+	auto map_scene = GetMapScene();
 	pop->setTitle(name_);
 	std::vector<std::string>txt;
 	std::vector<std::function<void(Ref*)>>fun;
@@ -89,16 +90,17 @@ bool Bank::onLand(Character* standing)
 		pop1->setMenu(fun1, txt1);
 		pop1->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 		pop1->setPosition(Vec2::ZERO);
-		map_scene_->addChild(pop1, 51);
+		map_scene->addChild(pop1, 51);
 	});
 	pop->setPosition(Vec2::ZERO);
-	map_scene_->addChild(pop, 50);
+	map_scene->addChild(pop, 50);
 	return true;
 }
 
 bool Bank::byLand(Character* standing)
 {
-	auto game_controller = dynamic_cast<GameController*>(Director::getInstance()->getRunningScene()->getChildByName("game_controller"));
+	auto game_controller = GetGameController();
+	auto map_scene = GetMapScene();
 	auto pop = PopUpLayer::create();
 	pop->setTitle(name_);
 	std::vector<std::string>txt;
@@ -126,7 +128,7 @@ bool Bank::byLand(Character* standing)
 	pop->setMenu(fun, txt);
 	pop->setCallBack([=](Ref* ref) {game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos())); });
 	pop->setPosition(Vec2::ZERO);
-	map_scene_->addChild(pop,50);
+	map_scene->addChild(pop,50);
 	return true;
 }
 

@@ -16,7 +16,7 @@ int GetRandomHotel()
 	while (map_scene->getType(ans) != land_hotel)
 		ans = rand() % total;
 	auto& land = map_scene->getLand(ans);
-	if (!land) land = Hotel::create(map_scene, static_cast<int>(ans));
+	if (!land) land = Hotel::create(static_cast<int>(ans));
 	return ans;
 }
 
@@ -32,7 +32,7 @@ void SetSellPrice(float rise_rate,int pos)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto& land = map_scene->getLand(index);
-		if (!land) land=::Hotel::create(map_scene,index);
+		if (!land) land=::Hotel::create(index);
 		auto hotel = static_cast<Hotel*>(land);
 		hotel->setSellRise(rise_rate);
 	}
@@ -40,7 +40,7 @@ void SetSellPrice(float rise_rate,int pos)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto& land = map_scene->getLand(index);
-		if (!land) land = ::Hotel::create(map_scene, index);
+		if (!land) land = ::Hotel::create(index);
 		auto hotel = static_cast<Hotel*>(land);
 		hotel->setSellRise(rise_rate);
 	}
@@ -73,7 +73,7 @@ void SetRentPrice(float rise_rate,int pos)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto& land = map_scene->getLand(index);
-		if (!land) land = ::Hotel::create(map_scene, index);
+		if (!land) land = ::Hotel::create( index);
 		auto hotel = static_cast<Hotel*>(land);
 		hotel->setRentRise(rise_rate);
 	}
@@ -81,7 +81,7 @@ void SetRentPrice(float rise_rate,int pos)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto& land = map_scene->getLand(index);
-		if (!land) land = ::Hotel::create(map_scene, index);
+		if (!land) land = ::Hotel::create(index);
 		auto hotel = static_cast<Hotel*>(land);
 		hotel->setRentRise(rise_rate);
 	}
