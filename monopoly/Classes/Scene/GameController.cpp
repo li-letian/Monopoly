@@ -177,8 +177,14 @@ void GameController::startGo()
 	//视角回到该角色的所在位置
 	returnToCharacter(character);
 
-	//掷骰子得到要走的步数
-	steps_to_go_ = dice_->RollTheDice(character->getStepsScope());
+	//掷骰子开始走
+	dice_->RollTheDice(character->getStepsScope());
+}
+
+void GameController::startRealGo(int steps_to_go)
+{
+	steps_to_go_ = steps_to_go;
+	auto character = characters_.at(whose_turn_);
 	if (character->getStepsScope() == turtle_steps)
 	{
 		character->setTurtleTimes(character->getTurtleTimes() - 1);
@@ -250,6 +256,7 @@ void GameController::moveOneStep(int direction)
 		break;
 	}
 	auto endGoCallBack = CallFunc::create([=]() {
+		dice_->decreaseNumber();
 		this->endGo();
 	});
 	character->setCurPos(next_pos);

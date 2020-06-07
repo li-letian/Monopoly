@@ -100,4 +100,6 @@ constexpr int mine_position = 8;//地雷
 
 //交通罚款
 constexpr int traffic_fine = 5000;
+
+constexpr float dice_stay_time = 0.5f;
 #endif

@@ -20,6 +20,7 @@ public:
 	void returnToCharacter(Character *);										   //回到角色视角
 	void addGoButton();															   //添加go按钮
 	void startGo();																   //指定当前角色开始走
+	void startRealGo(int steps_to_go);
 	int judgeDirection(int cur_pos);											   //判断要走的方向
 	void moveOneStep(int direction);											   //指定当前角色按某方向走一格
 	void endGo();																   //MoveOneStep结束前调用的函数
