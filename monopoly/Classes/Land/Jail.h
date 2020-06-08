@@ -16,7 +16,7 @@ protected:
 
 public:
 	virtual bool onLand(Character* standing) override;
-	static Jail* create(MapScene* map_scene, int index);
+	static Jail* create(int index);
 	
 };
 

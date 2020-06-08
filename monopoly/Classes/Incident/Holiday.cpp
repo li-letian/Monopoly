@@ -2,6 +2,7 @@
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
 #include "Common/CommonMethod.h"
+#include "Character/Character.h"
 
 bool GoOnHoliday(Character* character)
 {
@@ -18,7 +19,7 @@ bool GoOnHoliday(Character* character)
 	}
 }
 
-void PopUpHolidayDialog(Character* character, MapScene* map_scene)
+void PopUpHolidayDialog(Character* character)
 {
 	int stop_times = character->getStopTimes();
 	auto pop = PopUpLayer::create();
@@ -38,8 +39,7 @@ void PopUpHolidayDialog(Character* character, MapScene* map_scene)
 	pop->setTitle("¶È¼ÙÏûÏ¢");
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* sender) {
-		sendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_apper);
 		});
-	pop->setPosition(Vec2(0, 0));
-	map_scene->addChild(pop, 50);
+	pop->setOnScene();
 }

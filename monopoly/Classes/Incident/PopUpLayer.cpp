@@ -1,7 +1,8 @@
-#include "PopUpLayer.h"
+#include "Incident/PopUpLayer.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Scene/MapScene.h"
+
 
 bool PopUpLayer::init()
 {
@@ -42,10 +43,10 @@ void PopUpLayer::setTitle(const std::string& title)
 
 void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<std::function<void(Ref* ref)>>callback)
 {
-	for (decltype(pic.size()) i = 0; i < pic.size(); i+=6)
+	for (decltype(pic.size()) i = 0; i < pic.size(); i+=4)
 	{
 		auto menu = Menu::create();
-		for (decltype(i) j = i; j < i + 6; j++)
+		for (decltype(i) j = i; j < i + 4; j++)
 		{
 			if (j >= pic.size()) break;
 			auto menu_item = MenuItemImage::create(pic.at(j), pic.at(j), [=](Ref* ref) { callback.at(j)(ref); this->removeFromParentAndCleanup(true); });
@@ -55,6 +56,29 @@ void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<
 		menu->alignItemsHorizontally();
 		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
 		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - (7+i) * grid_distance));
+		back_ground_->addChild(menu);
+	}
+}
+
+
+void PopUpLayer::setMenu(const std::vector<std::function<void(Ref* ref)>>callback, const std::vector<std::string>txt)
+{
+	MenuItemFont::setFontName("»ªÎÄçúçê");
+	MenuItemFont::setFontSize(30);
+	for (decltype(txt.size()) i = 0; i < txt.size(); i += 4)
+	{
+		auto menu = Menu::create();
+		for (decltype(i) j = i; j < i + 4; j++)
+		{
+			if (j >= txt.size()) break;
+			auto menu_item = MenuItemFont::create(ZH(txt.at(j)), [=](Ref* ref) { callback.at(j)(ref); });
+			menu->setColor(Color3B(0, 0, 0));
+			menu->addChild(menu_item);
+		}
+		if (!menu->getChildrenCount()) break;
+		menu->alignItemsHorizontally();
+		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
+		menu->setPosition(Vec2(back_ground_width_ / 2.0f, back_ground_height_ - (7.0f + i*0.6f) * grid_distance));
 		back_ground_->addChild(menu);
 	}
 }
@@ -111,3 +135,9 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	back_ground_->addChild(menu);
 }
 
+void PopUpLayer::setOnScene(int z_order)
+{
+	auto map_scene = GetMapScene();
+	this->setPosition(Vec2::ZERO);
+	map_scene->addChild(this, z_order);
+}

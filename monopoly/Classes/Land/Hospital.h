@@ -16,7 +16,7 @@ protected:
 
 public:
 	virtual bool onLand(Character* standing) override;
-	static Hospital* create(MapScene* map_scene, int index);
+	static Hospital* create(int index);
 
 };
 

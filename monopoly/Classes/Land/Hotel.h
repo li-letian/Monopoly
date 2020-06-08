@@ -26,7 +26,7 @@ public:
 	virtual bool onLand(Character* standing) override;
 	bool promote();
 	bool demote();
-	static Hotel* create(MapScene* map_scene, int index);
+	static Hotel* create(int index);
 	bool setRentRise(float rise_rate);
 	bool setSellRise(float rise_rate);
 	int getRank()const;

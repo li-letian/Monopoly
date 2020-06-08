@@ -10,12 +10,15 @@ Character::Character()
 	character_anim_up_(nullptr),
 	character_frame_cache_(nullptr),
 	name_(),
-	money_(150000),
+	money_(initial_money),
 	cur_pos_(0),
 	steps_scope_(walk_steps),
 	stop_times_(0),
-	condition_(0),
-	estate_value_(0)
+	condition_(normal),
+	estate_value_(0),
+	gain_value_(0),
+	god_possessed_(no_god),
+	turtle_times_(0)
 {
 	this->setTag(0);
 }

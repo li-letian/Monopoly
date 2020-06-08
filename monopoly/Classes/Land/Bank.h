@@ -16,7 +16,7 @@ protected:
 public:
 	virtual bool onLand(Character* standing) override;
 	virtual bool byLand(Character* standing) override;
-	static Bank* create(MapScene* map_scene, int index);
+	static Bank* create(int index);
 
 };
 

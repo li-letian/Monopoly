@@ -27,7 +27,7 @@ public:
 	bool onBusinessLand(Character* standing);
 	bool promote();
 	bool demote();
-	static Business* create(MapScene* map_scene, int index);
+	static Business* create( int index);
 };
 
 #endif // !_BUSINESS_H_

@@ -2,6 +2,9 @@
 #include "cocos2d.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
+#include "Scene/MapScene.h"
+#include "Scene/GameController.h"
+#include "Scene/StockScene.h"
 USING_NS_CC;
 
 std::string ZH(const std::string& str)
@@ -31,7 +34,7 @@ std::string ZH(const std::string& str)
 	return retStr;
 }
 
-void sendMsg(int msg)
+void SendMsg(int msg)
 {
 	auto dispatcher = Director::getInstance()->getEventDispatcher();
 	char* buf = new char[10];
@@ -45,3 +48,19 @@ void sendMsg(int msg)
 	CC_SAFE_DELETE_ARRAY(buf);
 }
 
+MapScene* GetMapScene()
+{
+	return dynamic_cast<MapScene*>(Director::getInstance()->getRunningScene());
+}
+
+GameController* GetGameController()
+{
+	auto map_scene = GetMapScene();
+	return dynamic_cast<GameController*>(map_scene->getChildByName("game_controller"));
+}
+
+StockScene* GetStockScene()
+{
+	auto map_scene = GetMapScene();
+	return dynamic_cast<StockScene*>(map_scene->getChildByName("stock_scene"));
+}

@@ -10,12 +10,12 @@
 
 USING_NS_CC;
 
-Aviation* Aviation::create(MapScene* map_scene, int index)
+Aviation* Aviation::create(int index)
 {
 	auto pRet = new(std::nothrow) Aviation();
 	if (pRet && pRet->init())
 	{
-		pRet->setMapScene(map_scene);
+		auto map_scene = GetMapScene();
 		pRet->index_ = index;
 		pRet->name_ = std::string("航空公司");
 		pRet->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -37,7 +37,8 @@ Aviation* Aviation::create(MapScene* map_scene, int index)
 bool Aviation::onLand(Character* standing)
 {
 	Character* owner = nullptr;
-	auto store = (dynamic_cast<StockScene*>(map_scene_->getChildByName("stock_scene"))->getStock()).at(7)->getStore();
+	auto map_scene = GetMapScene();
+	auto store = GetStockScene()->getStock().at(7)->getStore();
 	int total = 0;
 	auto size = store.size();
 	for (decltype(size) i = 0; i < size; i++)
@@ -46,7 +47,7 @@ bool Aviation::onLand(Character* standing)
 		if (store[i] > total)
 		{
 			total = store[i];
-			auto  vec= dynamic_cast<GameController*>(map_scene_->getChildByName("game_controller"))->getCharacters();
+			auto  vec= GetGameController()->getCharacters();
 			for (auto c : vec)
 			{
 				if (c->getTag() == i)
@@ -61,9 +62,8 @@ bool Aviation::onLand(Character* standing)
 		auto pop = PopUpLayer::create();
 		pop->setTitle(name_);
 		pop->setContent("想要当董事长吗？快快购买本公司的股票哦，当前持仓数最多的人会成为本公司的董事长，享有公司所有权");
-		pop->setCallBack([=](Ref* ref) { sendMsg(msg_make_go_apper); });
-		pop->setPosition(Vec2(0, 0));
-		map_scene_->addChild(pop, 51);
+		pop->setCallBack([=](Ref* ref) { SendMsg(msg_make_go_apper); });
+		pop->setOnScene(51);
 	}
 	else
 	{
@@ -76,12 +76,12 @@ bool Aviation::onLand(Character* standing)
 			{
 				GoOnHoliday(standing);
 				standing->setMoney(standing->getMoney() - aviation_value);
-				sendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_apper);
 			});
 			pop->setPosition(Vec2(0, 0));
-			map_scene_->addChild(pop, 51);
+			map_scene->addChild(pop, 51);
 		}
-		else sendMsg(msg_make_go_apper);
+		else SendMsg(msg_make_go_apper);
 
 	}
 	return true;

@@ -13,8 +13,9 @@
 #include "Land/Aviation.h"
 #include "Land/Oil.h"
 #include "Land/Technology.h"
-
-
+#include "Land/Bank.h"
+#include "Land/Life.h"
+#include "Land/Chance.h"
 #include "Incident/Incident.h"
 
 #include "Common/CommonConstant.h"
@@ -96,20 +97,39 @@ void GameController::addEventListenerCustom()
 					break;
 				case in_jail:
 					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpJailDialog(character, map_scene_);
+					PopUpJailDialog(character);
 					break;
 				case on_holiday:
 					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpHolidayDialog(character, map_scene_);
+					PopUpHolidayDialog(character);
 					break;
 				case in_hospital:
 					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpHospitalDialog(character, map_scene_);
+					PopUpHospitalDialog(character);
 					break;
 				}
 			};
 			auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create(func), nullptr);
-			this->runAction(seq);
+			if (characters_.at(whose_turn_)->getMoney() < 0)
+			{
+				auto character = characters_.at(whose_turn_);
+				auto pop = PopUpLayer::create();
+				pop->setTitle("破产");
+				auto text = StringUtils::format("%s", character->getPlayerName())
+					+ std::string("已破产");
+				pop->setContent(text);
+				pop->setCallBack([=](Ref* render) {
+					characters_.erase(whose_turn_);
+					whose_turn_--;
+					character->removeFromParentAndCleanup(true);
+					this->runAction(seq);
+					});
+				pop->setOnScene();
+			}
+			else
+			{
+				this->runAction(seq);
+			}
 			break;
 		}
 	});
@@ -139,7 +159,7 @@ void GameController::addGoButton()
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		sendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
+		SendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
@@ -158,8 +178,22 @@ void GameController::startGo()
 	//视角回到该角色的所在位置
 	returnToCharacter(character);
 
-	//掷骰子得到要走的步数
-	steps_to_go_ = dice_->RollTheDice(character->getStepsScope());
+	//掷骰子开始走
+	dice_->RollTheDice(character->getStepsScope());
+}
+
+void GameController::startRealGo(int steps_to_go)
+{
+	steps_to_go_ = steps_to_go;
+	auto character = characters_.at(whose_turn_);
+	if (character->getStepsScope() == turtle_steps)
+	{
+		character->setTurtleTimes(character->getTurtleTimes() - 1);
+	}
+	if (character->getTurtleTimes() == 0)
+	{
+		character->setStepsScope(walk_steps);
+	}
 	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = judgeDirection(character->getCurPos());
@@ -223,12 +257,15 @@ void GameController::moveOneStep(int direction)
 		break;
 	}
 	auto endGoCallBack = CallFunc::create([=]() {
+		dice_->decreaseNumber();
 		this->endGo();
 	});
 	character->setCurPos(next_pos);
 	auto spawn_action = Sequence::create(Spawn::create(move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
 }
+
+
 
 void GameController::endGo()
 {
@@ -238,69 +275,93 @@ void GameController::endGo()
 	{
 
 		//这里可以处理一些过路的事情
-
-		//继续走下一步
-		auto direction = judgeDirection(character->getCurPos());
-		moveOneStep(direction);
+		auto pos = character->getCurPos();
+		auto& land = map_scene_->getLand(pos);
+		if (map_scene_->getType(pos) == land_bank)
+		{
+			if (!land) land = Bank::create(pos);
+			land->byLand(character);
+		}//继续走下一步
+		else
+		{
+			auto direction = judgeDirection(pos);
+			moveOneStep(direction);
+		}
 	}
 	else
 	{
 		//让人物恢复到站立状态，面朝下一格
 		backToStand();
 		returnToCharacter(character);
-		auto pos = character->getCurPos();
-
+		dealWithGod();
 		//这里处理一些着陆后的事情
-
-		//首先得处理一下神灵
-
-		//然后这里处理着陆到位置触发的事件
-		auto &land = map_scene_->getLand(pos);
-		if (!land)
-		{
-			switch (map_scene_->getType(pos))
-			{
-			case land_chance:
-				break;
-			case land_life:
-				break;
-			case land_hotel:
-				land = Hotel::create(map_scene_, pos);
-				break;
-			case land_business:
-				land = Business::create(map_scene_, pos);
-				break;
-			case land_insurance:
-				land= Insurance::create(map_scene_, pos);
-				break;
-			case land_oil:
-				land = Oil::create(map_scene_, pos);
-				break;
-			case land_technology:
-				land= Technology::create(map_scene_, pos);
-				break;
-			case land_aviation:
-				land = Aviation::create(map_scene_, pos);
-				break;
-			case land_hospital:
-				land = Hospital::create(map_scene_, pos);
-				break;
-			case land_jail:
-				land = Jail::create(map_scene_, pos);
-				break;
-			case land_bank:
-				break;
-			case land_lottery:
-				break;
-			}
-		}
-		if (land)
-			land->onLand(character);
-		else
-			sendMsg(msg_make_go_apper);
-
+		
 		return;
 	}
+}
+
+void GameController::dealWithGod()
+{
+	auto character = characters_.at(whose_turn_);
+	auto pos = character->getCurPos();
+	auto& god = map_scene_->getLand(pos);
+	if (god)
+		god->onLand(character);
+	else
+		dealWithLand();
+}
+
+void GameController::dealWithLand()
+{
+	auto character = characters_.at(whose_turn_);
+	auto pos = character->getCurPos();
+	auto& land = map_scene_->getLand(pos);
+	if (!land)
+	{
+		switch (map_scene_->getType(pos))
+		{
+		case land_chance:
+			land = Chance::create(pos);
+			break;
+		case land_life:
+			land = Life::create(pos);
+			break;
+		case land_hotel:
+			land = Hotel::create(pos);
+			break;
+		case land_business:
+			land = Business::create(pos);
+			break;
+		case land_insurance:
+			land = Insurance::create(pos);
+			break;
+		case land_oil:
+			land = Oil::create(pos);
+			break;
+		case land_technology:
+			land = Technology::create(pos);
+			break;
+		case land_aviation:
+			land = Aviation::create(pos);
+			break;
+		case land_hospital:
+			land = Hospital::create(pos);
+			break;
+		case land_jail:
+			land = Jail::create(pos);
+			break;
+		case land_bank:
+			land = Bank::create(pos);
+			break;
+		case land_lottery:
+			break;
+		}
+	}
+	if (land)
+		land->onLand(character);
+	else
+		SendMsg(msg_make_go_apper);
+
 }
 
 void GameController::backToStand()

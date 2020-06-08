@@ -7,7 +7,7 @@ USING_NS_CC;
 class Character;
 class Item : public Sprite {
 private:
-	CC_SYNTHESIZE(std::string, name_, ItemName);	//Ãû×Ö
+	CC_SYNTHESIZE(std::string, name_, ItemName);	//ï¿½ï¿½ï¿½ï¿½
 public:
 	virtual void work(Character* player) = 0;
 

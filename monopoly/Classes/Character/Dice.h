@@ -2,15 +2,23 @@
 #define _DICE_H_
 
 #include "cocos2d.h"
-#include "Common/CommonMethod.h"
+
 USING_NS_CC;
 class Dice : public Ref {
 public:
 	CREATE_FUNC(Dice);
 	virtual bool init();
 
-	int RollTheDice(int steps_scope);		//掷一次骰子
+	void RollTheDice(int steps_scope);		//掷一次骰子
 	static int getARandomNumber(int scope);
+	void decreaseNumber();
+private:
+	void increaseNumber();
+	void endAppear();
+	void showCurNumber();
+	int cur_point_ = 0;
+	int steps_ = 0;
+	float dice_change_time_ = 0;
 };
 
 #endif

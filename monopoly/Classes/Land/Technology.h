@@ -16,7 +16,7 @@ protected:
 
 public:
 	virtual bool onLand(Character* standing) override;
-	static Technology* create(MapScene* map_scene, int index);
+	static Technology* create(int index);
 
 };
 

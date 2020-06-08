@@ -254,7 +254,7 @@ void StockScene::initFirstLabel() {
 }
 
 void StockScene::stockUpdate() {
-	srand(static_cast<unsigned int>(time(static_cast<time_t>(0))));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	for (int i = 0; i < 8; i++) {
 		float per_ = rand() / (10*RAND_MAX+static_cast<float>(0.001));
 		switch (condition_)
@@ -263,20 +263,8 @@ void StockScene::stockUpdate() {
 			if (rand() % 2) per_ *= (-1.0);
 			break;
 		case up_market:
-			duration_time_--;
-			if (duration_time_ == 0)
-			{
-				condition_ = normal_market;
-				PopUpMarketCalm(map_scene_);
-			}
 			break;
 		case down_market:
-			duration_time_--;
-			if (duration_time_ == 0)
-			{
-				condition_ = normal_market;
-				PopUpMarketRecover(map_scene_);
-			}
 			per_ *= (-1.0);
 			break;
 		}
@@ -284,6 +272,21 @@ void StockScene::stockUpdate() {
 		stock_vec_.at(i)->percent_ = per_;
 		stock_vec_.at(i)->now_price_ = static_cast<int>(1.0f+stock_vec_.at(i)->now_price_*(1.0+per_));
 
+	}
+	duration_time_--;
+	if (duration_time_ == 0)
+	{
+		switch(condition_)
+		{
+		case up_market:
+			condition_ = normal_market;
+			PopUpMarketCalm();
+			break;
+		case down_market:
+			condition_ = normal_market;
+			PopUpMarketRecover();
+			break;
+		}
 	}
 }
 

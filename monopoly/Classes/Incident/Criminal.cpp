@@ -2,6 +2,7 @@
 #include "PopUpLayer.h"
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
+#include "Character/Character.h"
 
 bool SendToJail(Character* character)
 {
@@ -13,13 +14,14 @@ bool SendToJail(Character* character)
 	{
 		character->setVisible(false);
 		character->setCurPos(283);
+		character->setPosition(GetMapScene()->pos(238));
 		character->setStopTimes(default_stop_times);
 		character->setCondition(in_jail);
 		return true;
 	}
 }
 
-void PopUpJailDialog(Character* character,MapScene* map_scene)
+void PopUpJailDialog(Character* character)
 {
 	int stop_times = character->getStopTimes();
 	auto pop = PopUpLayer::create();
@@ -34,13 +36,14 @@ void PopUpJailDialog(Character* character,MapScene* map_scene)
 		text = StringUtils::format("%s", character->getPlayerName().c_str())
 			+ std::string("已出狱");
 		character->setCondition(normal);
+		character->setCurPos(283);
+		character->setPosition(GetMapScene()->pos(238));
 		character->setVisible(true);
 	}
 	pop->setTitle("出狱预告");
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* sender) {
-		sendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_apper);
 		});
-	pop->setPosition(Vec2(0, 0));
-	map_scene->addChild(pop, 50);
+	pop->setOnScene();
 }
