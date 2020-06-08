@@ -274,3 +274,38 @@ bool UseHouseBuy(Character* user, int target_point)
 {
 	return true;
 }
+
+bool UseHouseBuy(Character* user)
+{
+	auto target_point = user->getCurPos();
+	auto map_scene = GetMapScene();
+	auto land = map_scene->getLand(target_point);
+	if (land && map_scene->getType(target_point) == land_hotel)
+	{
+		auto hotel = dynamic_cast<Hotel*>(land);
+		auto owner = hotel->getOwner();
+		if (owner != user)
+		{
+			if (user->getMoney() >= hotel->getValue())
+			{
+				user->setMoney(user->getMoney() - hotel->getValue());
+				owner->setEstateValue(owner->getEstateValue() - hotel->getValue());
+				user->setEstateValue(user->getEstateValue() + hotel->getValue());
+				hotel->setOwner(user);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
