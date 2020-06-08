@@ -238,3 +238,29 @@ bool UseHouseDestroy(int target_point)
 		return false;
 	}
 }
+
+bool UseHouseExchange(int house1_pos, int house2_pos)
+{
+	auto map_scene = GetMapScene();
+	auto land1 = map_scene->getLand(house1_pos);
+	auto land2 = map_scene->getLand(house2_pos);
+	if (land1 && land2 && map_scene->getType(house1_pos) == land_hotel && map_scene->getType(house2_pos))
+	{
+		auto hotel1 = dynamic_cast<Hotel*>(land1);
+		auto hotel2 = dynamic_cast<Hotel*>(land2);
+		int rank1 = hotel1->getRank();
+		int rank2 = hotel2->getRank();
+		auto high_rank_hotel = rank1 > rank2 ? hotel1 : hotel2;
+		auto low_rank_hotel = rank1 < rank2 ? hotel1 : hotel2;
+		for (int i = 0; i < abs(rank1 - rank2); i++)
+		{
+			high_rank_hotel->demote();
+			low_rank_hotel->promote();
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

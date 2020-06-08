@@ -2,7 +2,7 @@
 #define _REALTOR_H_
 
 class Character;
-
+class Hotel;
 int GetRandomHotel();
 //旅馆房价上涨
 void SellPriceRise(int pos);
@@ -43,5 +43,4 @@ bool DestroyOneCertainHouse(Character* character);
 //强制征收一块地（指定所有者）
 //函数执行后此土地无所有者
 bool DestroyOneCertainHotel(Character* character);
-
 #endif

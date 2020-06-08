@@ -1,6 +1,7 @@
 #ifndef  STAFF_H_
 #define  STAFF_H_
 
+#include "cocos2d.h"
 class Character;
 
 //给指定角色配上加速鞋
@@ -36,12 +37,16 @@ bool UseRobotWorker(Character* user, int target_point);
 //若不满足使用条件则返回false
 bool UseDevilCard(int target_point);
 
-//传送神
+//传送神到指定地点
 void TransmitGod();
 
-//传送角色
+//传送角色到指定地点
 void TransmitCharacter(Character* user, Character* target, int target_point);
 
 //摧毁一个指定房屋
 //若指定位置无房屋则返回false
 bool UseHouseDestroy(int target_point);
+
+//交换两地的房屋
+//若两地不可交换则返回false
+bool UseHouseExchange(int house1_pos, int house2_pos);
