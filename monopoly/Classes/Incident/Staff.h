@@ -25,4 +25,9 @@ bool DestroySpecialShoes(Character* character);
 //若角色本回合已使用遥控骰子，返回false
 bool SetControlDice(Character* character, int control_point);
 
+//指定地点发射导弹
 void LaunchMissile(int target_point);
+
+//对指定地点使用机器工人
+//若不满足使用条件则返回false
+bool UseRobotWorker(Character* user, int target_point);

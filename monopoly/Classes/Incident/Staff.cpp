@@ -82,12 +82,12 @@ void LaunchMissile(int target_point)
 	int demote_cnt = 0;
 	for (int i = target_point - 1; i <= target_point + 1; i++)
 	{
-		for (int j = 0; j < characters.size(); j++)
+		for (auto character : characters)
 		{
-			if (characters.at(i)->getCurPos() == i)
+			if (character->getCurPos() == i)
 			{
-				SendToHospital(characters.at(i));
-				characters_to_hospital.pushBack(characters.at(i));
+				SendToHospital(character);
+				characters_to_hospital.pushBack(character);
 			}
 		}
 		if (map_scene->getType(i) == land_hotel && map_scene->getLand(i))
@@ -102,13 +102,51 @@ void LaunchMissile(int target_point)
 	auto pop = PopUpLayer::create();
 	pop->setTitle("导弹着陆");
 	std::string text = "以下人被炸伤住院:\n";
-	for (int i = 0; i < characters_to_hospital.size(); i++)
+	for (auto character : characters_to_hospital)
 	{
-		text = text + characters_to_hospital.at(i)->getPlayerName() + '\n';
+		text = text + character->getPlayerName() + '\n';
 	}
 	text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
 	pop->setCallBack([=](Ref* render) {
 
 		});
 	pop->setOnScene();
+}
+
+bool UseRobotWorker(Character* user, int target_point)
+{
+	auto map_scene = GetMapScene();
+	auto game_controller = GetGameController();
+	auto characters = game_controller->getCharacters();
+	auto land = map_scene->getLand(target_point);
+	if (map_scene->getType(target_point) == land_hotel && land)
+	{
+		auto hotel = dynamic_cast<Hotel*>(land);
+		for (auto character:characters)
+		{
+			if (character == hotel->getOwner())
+			{
+				if (character == user)
+				{
+					hotel->promote();
+					return true;
+				}
+				else
+				{
+					if (hotel->demote())
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
 }

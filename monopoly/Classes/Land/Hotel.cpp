@@ -258,3 +258,8 @@ bool Hotel::setOwner(Character* character)
 		return true;
 	}
 }
+
+Character* Hotel::getOwner()
+{
+	return owner_;
+}
