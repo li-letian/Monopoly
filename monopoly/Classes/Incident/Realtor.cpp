@@ -169,11 +169,9 @@ bool DestroyOneRandomHouse()
 	DestroyHouse(dynamic_cast<Hotel*>(land));
 	return true;
 }
-
-bool DestroyOneRandomStreetHouse()
+void DestroyOneStreetHouse(int start_index)
 {
 	auto map_scene = GetMapScene();
-	auto start_index = GetRandomHotel();
 	for (int index = start_index + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
 		if (map_scene->getType(index) == land_business) continue;
@@ -190,6 +188,34 @@ bool DestroyOneRandomStreetHouse()
 		auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
 		DestroyHouse(hotel);
 	}
+}
+
+void PromoteOneStreetHouse(int start_index)
+{
+	auto map_scene = GetMapScene();
+	for (int index = start_index + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
+	{
+		if (map_scene->getType(index) == land_business) continue;
+		auto land = map_scene->getLand(index);
+		if (!land) continue;
+		auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
+		hotel->promote();
+	}
+	for (int index = start_index - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
+	{
+		if (map_scene->getType(index) == land_business) continue;
+		auto land = map_scene->getLand(index);
+		if (!land) continue;
+		auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
+		hotel->promote();
+	}
+}
+
+bool DestroyOneRandomStreetHouse()
+{
+	auto map_scene = GetMapScene();
+	auto start_index = GetRandomHotel();
+	DestroyOneStreetHouse(start_index);
 	return true;
 }
 

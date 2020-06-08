@@ -31,3 +31,7 @@ void LaunchMissile(int target_point);
 //对指定地点使用机器工人
 //若不满足使用条件则返回false
 bool UseRobotWorker(Character* user, int target_point);
+
+//对指定地点使用恶魔卡
+//若不满足使用条件则返回false
+bool UseDevilCard(int target_point);

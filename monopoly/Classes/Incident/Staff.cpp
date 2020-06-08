@@ -1,6 +1,7 @@
 #include "Incident/Staff.h"
 #include "Incident/Medical.h"
 #include "Incident/PopUpLayer.h"
+#include "Incident/Realtor.h"
 #include "Common/CommonConstant.h"
 #include "Character/Character.h"
 #include "Land/Hotel.h"
@@ -144,6 +145,34 @@ bool UseRobotWorker(Character* user, int target_point)
 				}
 			}
 		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UseDevilCard(int target_point)
+{
+	auto map_scene = GetMapScene();
+	if (map_scene->getType(target_point) == land_hotel && map_scene->getLand(target_point))
+	{
+		DestroyOneStreetHouse(target_point);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UseAngelCard(int target_point)
+{
+	auto map_scene = GetMapScene();
+	if (map_scene->getType(target_point) == land_hotel && map_scene->getLand(target_point))
+	{
+		PromoteOneStreetHouse(target_point);
+		return true;
 	}
 	else
 	{
