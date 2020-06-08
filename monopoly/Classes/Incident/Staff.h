@@ -39,4 +39,9 @@ bool UseDevilCard(int target_point);
 //传送神
 void TransmitGod();
 
+//传送角色
 void TransmitCharacter(Character* user, Character* target, int target_point);
+
+//摧毁一个指定房屋
+//若指定位置无房屋则返回false
+bool UseHouseDestroy(int target_point);

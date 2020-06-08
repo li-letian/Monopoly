@@ -215,3 +215,26 @@ void TransmitCharacter(Character* user, Character* target, int target_point)
 		map_scene->runAction(sequnce);
 	}
 }
+
+bool UseHouseDestroy(int target_point)
+{
+	auto map_scene = GetMapScene();
+	auto land = map_scene->getLand(target_point);
+	if (map_scene->getType(target_point) == land_hotel && land)
+	{
+		auto hotel = dynamic_cast<Hotel*>(land);
+		if (hotel->getRank() > 0)
+		{
+			DestroyHouse(hotel);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
