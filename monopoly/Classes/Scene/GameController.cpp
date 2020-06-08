@@ -177,14 +177,6 @@ void GameController::startGo()
 	//视角回到该角色的所在位置
 	returnToCharacter(character);
 
-	//掷骰子开始走
-	dice_->RollTheDice(character->getStepsScope());
-}
-
-void GameController::startRealGo(int steps_to_go)
-{
-	steps_to_go_ = steps_to_go;
-	auto character = characters_.at(whose_turn_);
 	if (character->getStepsScope() == turtle_steps)
 	{
 		character->setTurtleTimes(character->getTurtleTimes() - 1);
@@ -193,6 +185,14 @@ void GameController::startRealGo(int steps_to_go)
 	{
 		character->setStepsScope(walk_steps);
 	}
+	//掷骰子开始走
+	dice_->RollTheDice(character->getStepsScope(), character);
+}
+
+void GameController::startRealGo(int steps_to_go)
+{
+	steps_to_go_ = steps_to_go;
+	auto character = characters_.at(whose_turn_);
 	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = judgeDirection(character->getCurPos());

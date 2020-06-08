@@ -20,3 +20,9 @@ bool SetTurtle(Character* character);
 //若角色无任何特殊鞋子，返回false
 bool DestroySpecialShoes(Character* character);
 #endif // ! STAFF_H_
+
+//对指定角色使用遥控骰子
+//若角色本回合已使用遥控骰子，返回false
+bool SetControlDice(Character* character, int control_point);
+
+void LaunchMissile(int target_point);

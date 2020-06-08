@@ -1,5 +1,6 @@
 #include <ctime>
 #include "Character/Dice.h"
+#include "Character/Character.h"
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 #include "Scene/MapScene.h"
@@ -11,10 +12,18 @@ bool Dice::init()
 	return true;
 }
 
-void Dice::RollTheDice(int steps_scope)
+void Dice::RollTheDice(int steps_scope,Character*character)
 {
 	cur_point_ = 1;
-	steps_ = random(steps_scope) + 1;
+	if (character->getControlDicePoint() > 0)
+	{
+		steps_ = character->getControlDicePoint();
+		character->setControlDicePoint(0);
+	}
+	else
+	{
+		steps_ = random(steps_scope) + 1;
+	}
 	dice_change_time_ = 0.1f;
 	if (walk_steps < steps_ <= speed_steps)
 	{
