@@ -87,8 +87,10 @@ void LaunchMissile(int target_point)
 		{
 			if (character->getCurPos() == i)
 			{
-				SendToHospital(character);
-				characters_to_hospital.pushBack(character);
+				if (character->getStopTimes() == 0)
+				{
+					characters_to_hospital.pushBack(character);
+				}
 			}
 		}
 		if (map_scene->getType(i) == land_hotel && map_scene->getLand(i))
@@ -109,7 +111,7 @@ void LaunchMissile(int target_point)
 	}
 	text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
 	pop->setCallBack([=](Ref* render) {
-
+		SendToHospital(characters_to_hospital);
 		});
 	pop->setOnScene();
 }
@@ -177,5 +179,39 @@ bool UseAngelCard(int target_point)
 	else
 	{
 		return false;
+	}
+}
+
+void TransmitGod()
+{
+
+}
+
+void TransmitCharacter(Character* user, Character* target, int target_point)
+{
+	auto map_scene = GetMapScene();
+	auto game_controller = GetGameController();
+	if (user == target)
+	{
+		SendMsg(msg_hide_go_only);
+		user->setPosition(map_scene->pos(target_point));
+		user->setCurPos(target_point);
+		game_controller->backToStand();
+		auto endGoCallFunc = CallFunc::create([=]() {
+			game_controller->endGo();
+			});
+		auto sequnce = Sequence::create(DelayTime::create(0.5f), endGoCallFunc, nullptr);
+		map_scene->runAction(sequnce);
+	}
+	else
+	{
+		target->setPosition(map_scene->pos(target_point));
+		target->setCurPos(target_point);
+		game_controller->backToStand();
+		auto returnToCharacterCallFunc = CallFunc::create([=]() {
+			game_controller->returnToCharacter(user);
+			});
+		auto sequnce = Sequence::create(DelayTime::create(0.5f), returnToCharacterCallFunc, nullptr);
+		map_scene->runAction(sequnce);
 	}
 }

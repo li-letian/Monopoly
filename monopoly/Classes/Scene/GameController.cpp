@@ -59,11 +59,12 @@ void GameController::addEventListenerCustom()
 		int msg = std::atoi(buf); //解析收到的信息
 		switch (msg)
 		{
-		case (msg_hide_go):												//让go按钮消失
+		case (msg_start_go):												//让go按钮消失
 			go_button_menu_->setPosition(visible_size.width + 1000, 0); //将按钮移到屏幕外
 			startGo();													//人物开始走路
 			break;
 		case (msg_make_go_apper): //让go按钮出现
+		{
 			auto func = [=]() {
 
 				whose_turn_++;
@@ -76,7 +77,7 @@ void GameController::addEventListenerCustom()
 
 				auto character = characters_.at(whose_turn_);
 
-				
+
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
 				map_scene_->updateInformation(character);
@@ -131,6 +132,12 @@ void GameController::addEventListenerCustom()
 			}
 			break;
 		}
+		case msg_hide_go_only:
+			go_button_menu_->setPosition(visible_size.width + 1000, 0);
+			steps_to_go_ = 0;
+			steps_has_gone_ = 0;
+			break;
+		}
 	});
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->getMap());
@@ -158,7 +165,7 @@ void GameController::addGoButton()
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		SendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
+		SendMsg(msg_start_go); //点击后发送隐藏按钮的信息
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 

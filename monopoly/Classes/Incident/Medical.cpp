@@ -40,6 +40,37 @@ bool SendToHospital(Character* character)
 	}
 }
 
+bool SendToHospital(Vector<Character*>characters_to_hospital)
+{
+	Vector<Character*>characters_have_insurance;
+	for (auto character : characters_to_hospital)
+	{
+		if (character->getInsurance() > 0)
+		{
+			characters_have_insurance.pushBack(character);
+		}
+		character->setVisible(false);
+		character->setCurPos(78);
+		character->setPosition(GetMapScene()->pos(78));
+		character->setStopTimes(default_stop_times);
+		character->setCondition(in_hospital);
+	}
+	auto pop = PopUpLayer::create();
+	pop->setTitle("保险生效");
+	auto text = std::string("以下人得到补偿\n");
+	for (auto character : characters_have_insurance)
+	{
+		text = text + character->getPlayerName() + StringUtils::format(":%d\n", insurance_value * 2);
+		character->setMoney(character->getMoney() + insurance_value * 2);
+	}
+	pop->setContent(text);
+	pop->setCallBack([=](Ref* render) {
+		
+		});
+	pop->setOnScene();
+	return true;
+}
+
 void PopUpHospitalDialog(Character* character)
 {
 	int stop_times = character->getStopTimes();

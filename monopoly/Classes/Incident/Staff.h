@@ -35,3 +35,8 @@ bool UseRobotWorker(Character* user, int target_point);
 //对指定地点使用恶魔卡
 //若不满足使用条件则返回false
 bool UseDevilCard(int target_point);
+
+//传送神
+void TransmitGod();
+
+void TransmitCharacter(Character* user, Character* target, int target_point);
