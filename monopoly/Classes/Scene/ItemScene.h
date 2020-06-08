@@ -5,18 +5,20 @@
 #include "Character/Character.h"
 using namespace std;
 using namespace cocos2d;
-
+class Item;
 class ItemScene : public Layer {
 public:
 	static ItemScene* ItemScene::createScene(MapScene* map_scene);
 	virtual bool init();
-
+	void posInit();
 	void updateMenu(Character* player);
 	void open(Ref* ref);
 	void close(Ref* ref);
 	CREATE_FUNC(ItemScene);
 protected:
 	MapScene* map_scene_;
+	vector<vector<Item* >> item_vec_;
+	vector<cocos2d::Vec2>pos_vec_;
 };
 
 

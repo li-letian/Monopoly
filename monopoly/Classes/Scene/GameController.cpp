@@ -32,6 +32,7 @@ bool GameController::init()
 	map_scene_->addChild(this, -50,"game_controller");
 	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
 	item_layer_ = ItemScene::createScene(map_scene_);
+	map_scene_->addItemScene(item_layer_);
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器
