@@ -28,11 +28,13 @@ public:
 	bool demote();
 	static Hotel* create(int index);
 	bool setRentRise(float rise_rate);
+	float getRentRise()const;
 	bool setSellRise(float rise_rate);
+	float getSellRise()const;
 	int getRank()const;
 	Character* getOwner()const;
 	bool setOwner(Character* character);	//character可为空,代表旅馆再次无主
-	Character* getOwner();
+	int getValue()const;
 };
 
 #endif // !_HOTEL_H_

@@ -218,10 +218,20 @@ bool Hotel::setRentRise(float rise_rate)
 	return true;
 }
 
+float Hotel::getRentRise()const
+{
+	return rent_rise_;
+}
+
 bool Hotel::setSellRise(float rise_rate)
 {
 	sell_rise_ = static_cast<float>(sell_rise_ * (1 + rise_rate));
 	return true;
+}
+
+float Hotel::getSellRise()const
+{
+	return sell_rise_;
 }
 
 int Hotel::getRank()const
@@ -259,7 +269,13 @@ bool Hotel::setOwner(Character* character)
 	}
 }
 
-Character* Hotel::getOwner()
+int Hotel::getValue()const
 {
-	return owner_;
+	int value = 0;
+	for (int i = 0; i <= rank_; i++)
+	{
+		value += hotel_sell_value[i];
+	}
+	value = static_cast<int>(value * sell_rise_);
+	return value;
 }

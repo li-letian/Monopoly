@@ -50,3 +50,7 @@ bool UseHouseDestroy(int target_point);
 //交换两地的房屋
 //若两地不可交换则返回false
 bool UseHouseExchange(int house1_pos, int house2_pos);
+
+//使用购地证明
+//若此地不可购买则返回false
+bool UseHouseBuy(Character* user, int target_point);

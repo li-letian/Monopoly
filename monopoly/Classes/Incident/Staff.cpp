@@ -96,9 +96,12 @@ void LaunchMissile(int target_point)
 		if (map_scene->getType(i) == land_hotel && map_scene->getLand(i))
 		{
 			auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(i));
+			auto owner = hotel->getOwner();
+			auto pre_value = hotel->getValue();
 			if (hotel->demote())
 			{
 				demote_cnt++;
+				owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
 			}
 		}
 	}
@@ -119,32 +122,28 @@ void LaunchMissile(int target_point)
 bool UseRobotWorker(Character* user, int target_point)
 {
 	auto map_scene = GetMapScene();
-	auto game_controller = GetGameController();
-	auto characters = game_controller->getCharacters();
 	auto land = map_scene->getLand(target_point);
 	if (map_scene->getType(target_point) == land_hotel && land)
 	{
 		auto hotel = dynamic_cast<Hotel*>(land);
-		for (auto character:characters)
+		auto owner = hotel->getOwner();
+		auto pre_value = hotel->getValue();
+		if (user == owner)
 		{
-			if (character == hotel->getOwner())
+			hotel->promote();
+			user->setEstateValue(user->getEstateValue() + hotel->getValue() - pre_value);
+			return true;
+		}
+		else
+		{
+			if (hotel->demote())
 			{
-				if (character == user)
-				{
-					hotel->promote();
-					return true;
-				}
-				else
-				{
-					if (hotel->demote())
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
+				owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}
@@ -252,15 +251,26 @@ bool UseHouseExchange(int house1_pos, int house2_pos)
 		int rank2 = hotel2->getRank();
 		auto high_rank_hotel = rank1 > rank2 ? hotel1 : hotel2;
 		auto low_rank_hotel = rank1 < rank2 ? hotel1 : hotel2;
+		auto high_pre_value = high_rank_hotel->getValue();
+		auto low_pre_value = low_rank_hotel->getValue();
 		for (int i = 0; i < abs(rank1 - rank2); i++)
 		{
 			high_rank_hotel->demote();
 			low_rank_hotel->promote();
 		}
+		auto owner_high = high_rank_hotel->getOwner();
+		auto owner_low = low_rank_hotel->getOwner();
+		owner_high->setEstateValue(owner_high->getEstateValue() + high_rank_hotel->getValue() - high_pre_value);
+		owner_low->setEstateValue(owner_low->getEstateValue() + low_rank_hotel->getValue() - low_pre_value);
 		return true;
 	}
 	else
 	{
 		return false;
 	}
+}
+
+bool UseHouseBuy(Character* user, int target_point)
+{
+	return true;
 }

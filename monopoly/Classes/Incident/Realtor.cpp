@@ -34,6 +34,11 @@ void SetSellPrice(float rise_rate,int pos)
 		auto& land = map_scene->getLand(index);
 		if (!land) land=::Hotel::create(index);
 		auto hotel = static_cast<Hotel*>(land);
+		auto owner = hotel->getOwner();
+		if (owner != nullptr)
+		{
+			owner->setEstateValue(owner->getEstateValue() + static_cast<int>(hotel->getValue() * rise_rate));
+		}
 		hotel->setSellRise(rise_rate);
 	}
 	for (int index = pos - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
@@ -42,12 +47,12 @@ void SetSellPrice(float rise_rate,int pos)
 		auto& land = map_scene->getLand(index);
 		if (!land) land = ::Hotel::create(index);
 		auto hotel = static_cast<Hotel*>(land);
+		auto owner = hotel->getOwner();
+		if (owner != nullptr)
+		{
+			owner->setEstateValue(owner->getEstateValue() + static_cast<int>(hotel->getValue() * rise_rate));
+		}
 		hotel->setSellRise(rise_rate);
-	}
-
-	for (int i = 0; i < characters.size(); i++)
-	{
-		characters.at(i)->setEstateValue(static_cast<int>(characters.at(i)->getEstateValue() * (1 + land_price_rate)));
 	}
 }
 
@@ -84,11 +89,6 @@ void SetRentPrice(float rise_rate,int pos)
 		if (!land) land = ::Hotel::create(index);
 		auto hotel = static_cast<Hotel*>(land);
 		hotel->setRentRise(rise_rate);
-	}
-
-	for (int i = 0; i < characters.size(); i++)
-	{
-		characters.at(i)->setEstateValue(static_cast<int>(characters.at(i)->getEstateValue() * (1 + land_price_rate)));
 	}
 }
 
@@ -155,9 +155,15 @@ void FindAllHotelsWithOwner(Character* character, Vector<Hotel*>& hotels)
 
 void DestroyHouse(Hotel* hotel)
 {
+	auto pre_value = hotel->getValue();
 	while (hotel->demote())
 	{
 		;
+	}
+	auto owner = hotel->getOwner();
+	if (owner != nullptr)
+	{
+		owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
 	}
 }
 
@@ -199,7 +205,10 @@ void PromoteOneStreetHouse(int start_index)
 		auto land = map_scene->getLand(index);
 		if (!land) continue;
 		auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
+		auto owner = hotel->getOwner();
+		auto pre_value = hotel->getValue();
 		hotel->promote();
+		owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
 	}
 	for (int index = start_index - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
 	{
@@ -207,7 +216,10 @@ void PromoteOneStreetHouse(int start_index)
 		auto land = map_scene->getLand(index);
 		if (!land) continue;
 		auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
+		auto owner = hotel->getOwner();
+		auto pre_value = hotel->getValue();
 		hotel->promote();
+		owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
 	}
 }
 
