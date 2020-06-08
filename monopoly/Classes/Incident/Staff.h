@@ -54,3 +54,10 @@ bool UseHouseExchange(int house1_pos, int house2_pos);
 //使用购地证明,强制购买一块当前所处的他人的土地
 //若此地不可购买或钱不够买则返回false
 bool UseHouseBuy(Character* user);
+
+//使用改建证明
+//若此地不可改建则返回false
+bool UseHouseChange(int target_point);
+
+//使用涨价卡
+bool UseRisePriceCard(int target_point);

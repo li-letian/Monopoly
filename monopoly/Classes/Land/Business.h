@@ -25,7 +25,7 @@ protected:
 public:
 	virtual bool onLand(Character* standing) override;
 	bool onBusinessLand(Character* standing);
-	bool promote();
+	bool promote(bool house_change = false);
 	bool demote();
 	static Business* create( int index);
 };

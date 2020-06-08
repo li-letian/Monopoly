@@ -50,14 +50,21 @@ Business* Business::create(int index)
 	}
 }
 
-bool Business::promote()
+bool Business::promote(bool house_change = false)
 {
 	auto map_scene = GetMapScene();
 	auto tile_size = map_scene->getMap()->getTileSize();
 	auto x = 0.5f * (map_scene->pos(index_).x + map_scene->pos(index_larger_).x);
 	auto y = map_scene->pos(index_).y + tile_size.height;
 	auto pop = PopUpLayer::create();
-	pop->setTitle("请选择要投资的地产");
+	if (house_change == true)
+	{
+		pop->setTitle("请选择要改建的地产");
+	}
+	else
+	{
+		pop->setTitle("请选择要投资的地产");
+	}
 	std::vector<std::string>pic;
 	std::vector<ccMenuCallback>callback;
 	pic.push_back("park.png");
@@ -67,7 +74,7 @@ bool Business::promote()
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
 		SendMsg(msg_make_go_apper);
-	});
+		});
 	pic.push_back("resort.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_resort;
@@ -75,7 +82,7 @@ bool Business::promote()
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
 		SendMsg(msg_make_go_apper);
-	});
+		});
 	pic.push_back("mall.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_mall;
@@ -83,7 +90,7 @@ bool Business::promote()
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
 		SendMsg(msg_make_go_apper);
-	});
+		});
 	pic.push_back("institute.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_institute;
@@ -91,7 +98,7 @@ bool Business::promote()
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
 		onBusinessLand(owner_);
-	});
+		});
 	pop->setMenu(pic, callback);
 	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
 	pop->setPosition(Vec2(0, 0));

@@ -5,6 +5,7 @@
 #include "Common/CommonConstant.h"
 #include "Character/Character.h"
 #include "Land/Hotel.h"
+#include "Land/Business.h"
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
 
@@ -303,6 +304,23 @@ bool UseHouseBuy(Character* user)
 		{
 			return false;
 		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UseHouseChange(int target_point)
+{
+	auto map_scene = GetMapScene();
+	auto land = map_scene->getLand(target_point);
+	if (land && map_scene->getType(target_point) == land_business)
+	{
+		auto business = dynamic_cast<Business*>(land);
+		business->demote();
+		business->promote(true);
+		return true;
 	}
 	else
 	{
