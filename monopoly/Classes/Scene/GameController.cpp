@@ -18,6 +18,8 @@
 #include "Land/Chance.h"
 #include "Incident/Incident.h"
 
+#include "God/God.h"
+
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 
@@ -333,7 +335,7 @@ void GameController::dealWithGod()
 {
 	auto character = characters_.at(whose_turn_);
 	auto pos = character->getCurPos();
-	auto& god = map_scene_->getLand(pos);
+	auto god = map_scene_->getGod(pos);
 	if (god)
 		god->onLand(character);
 	else
