@@ -200,10 +200,10 @@ void GameController::startGo()
 		if (character->getStepsScope() == turtle_steps)
 		{
 			character->setTurtleTimes(character->getTurtleTimes() - 1);
-		}
-		if (character->getTurtleTimes() == 0)
-		{
-			character->setStepsScope(walk_steps);
+			if (character->getTurtleTimes() == 0)
+			{
+				character->setStepsScope(walk_steps);
+			}
 		}
 		//掷骰子开始走
 		dice_->RollTheDice(character->getStepsScope(), character);
