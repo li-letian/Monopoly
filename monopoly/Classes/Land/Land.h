@@ -17,8 +17,13 @@ public:
 	{
 		return true;
 	}
+	std::string getName()
+	{
+		return name_;
+	}
 
 protected:
+	std::string name_;
 	int index_ = 0;
 };
 

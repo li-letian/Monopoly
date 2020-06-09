@@ -12,7 +12,6 @@ USING_NS_CC;
 
 class Insurance : public Land {
 protected:
-	std::string name_;
 
 public:
 	virtual bool onLand(Character* standing) override;

@@ -11,7 +11,6 @@ USING_NS_CC;
 
 class Bank : public Land {
 protected:
-	std::string name_;
 
 public:
 	virtual bool onLand(Character* standing) override;

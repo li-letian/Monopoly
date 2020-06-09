@@ -13,7 +13,6 @@ USING_NS_CC;
 
 class Business : public Land {
 protected:
-	std::string name_;
 	Character* owner_ = nullptr;
 	Sprite* color_ = nullptr;
 	Sprite* color_larger_ = nullptr;
