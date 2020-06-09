@@ -1,11 +1,11 @@
 #include "ItemScene.h"
 #include "MapScene.h"
 #include "Character/Character.h"
+#include "Scene/GameController.h"
 #include "Common/CommonMethod.h"
 #include "Item/Item.h"
 #include "Incident/PopUpLayer.h"
 #include "Item/Frame.h"
-using namespace std;
 
 ItemScene* ItemScene::createScene(MapScene* map_scene) {
 	auto item_layer = ItemScene::create();
@@ -21,7 +21,6 @@ ItemScene* ItemScene::createScene(MapScene* map_scene) {
 bool ItemScene::init() {
 	if (!Layer::init()) {
 		return false;
-
 	}
 	posInit();
 	auto sprite = Sprite::create("Item.png");
@@ -30,11 +29,16 @@ bool ItemScene::init() {
 	for (int i = 0; i < 4; i++) {
 		item_vec_.push_back(vector<Item*>());
 	}
-	Frame* A = Frame::create_();
-	item_vec_[1].push_back(A);
-	item_vec_[1].push_back(A);
 	return true;
 }
+
+void ItemScene::addItem(Character* player, Item* item)
+{
+	auto tag = player->getTag();
+	GetGameController()->addChild(item, 600);
+	item_vec_.at(tag).push_back(item);
+}
+
 
 void ItemScene::updateMenu(Character* player) {
 	this->removeAllChildren();
@@ -55,6 +59,7 @@ void ItemScene::updateMenu(Character* player) {
 			pop->setCallBack([=](Ref* ref) {
 			   
                item_vec_[tag][i]->work(player);
+			   item_vec_[tag][i]->removeFromParentAndCleanup(true);
 			   item_vec_[tag].erase(item_vec_[tag].begin() + i);
 			   this->updateMenu(player);
 				});

@@ -131,7 +131,8 @@ bool UseRobotWorker(Character* user, int target_point)
 		auto hotel = dynamic_cast<Hotel*>(land);
 		auto owner = hotel->getOwner();
 		auto pre_value = hotel->getValue();
-		if (user == owner)
+		if (owner == nullptr) return false;
+		else if (user == owner)
 		{
 			hotel->promote();
 			user->setEstateValue(user->getEstateValue() + hotel->getValue() - pre_value);

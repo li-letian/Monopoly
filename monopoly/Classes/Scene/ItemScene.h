@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include <vector>
 #include "Character/Character.h"
+#include "MapScene.h"
 using namespace std;
 using namespace cocos2d;
 class Item;
@@ -15,6 +16,10 @@ public:
 	void open(Ref* ref);
 	void close(Ref* ref);
 	CREATE_FUNC(ItemScene);
+
+	void addItem(Character* player, Item* item);
+	
+
 protected:
 	MapScene* map_scene_=nullptr;
 	vector<vector<Item* >> item_vec_;

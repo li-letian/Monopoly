@@ -1,27 +1,35 @@
 #ifndef _ITEM_H_
 #define _ITEM_H_
-
-
 #include "cocos2d.h"
+#include "Character/Character.h"
+
 USING_NS_CC;
-class Character;
+
 class Item : public Sprite {
-private:
-	//CC_SYNTHESIZE(std::string, name_, ItemName);	//道具名称
+protected:
+	//道具名称
 	std::string name_;
 	std::string content_;
+
 public:
-	virtual void work(Character* player) = 0;
-	virtual std::string getItemName() = 0;
-	virtual std::string getContent() = 0;
+	virtual void work(Character* player)
+	{
+		return;
+	}
+	virtual std::string getItemName()
+	{
+		return name_;
+	}
+	virtual std::string getContent()
+	{
+		return content_;
+	}
+	virtual bool init()
+	{
+		if (!Sprite::init())
+			return false;
+		return true;
+	}
 };
-
-
-
-
-
-
-
-
 
 #endif

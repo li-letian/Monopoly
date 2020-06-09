@@ -180,9 +180,9 @@ bool MapScene::panelInit()
 	auto menu_up = Menu::create();
 	auto menu_down = Menu::create();
 	menu_up->addChild(item_item, 30);
-	menu_down->addChild(close_item, 30);
+	menu_down->addChild(stock_item, 30);
 	menu_down->addChild(setting_item, 30);
-	menu_up->addChild(stock_item, 30);
+	menu_up->addChild(close_item, 30);
 
 	menu_up->alignItemsHorizontally();
 	menu_down->alignItemsHorizontally();
@@ -371,10 +371,6 @@ bool MapScene::perspectiveJump(float x, float y)
 	map_->setPosition(x, y);
 	return true;
 }
-void MapScene::addItemScene(ItemScene *item_scene)
-{
-	item_scene_ = item_scene;
-}
 
 bool MapScene::touchInit()
 {
@@ -449,7 +445,7 @@ bool MapScene::touchInit()
 		});
 		auto seq = Sequence::create(DelayTime::create(0.3f), fun, nullptr);
 		this->runAction(seq);
-		return true;
+		return false;
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 	return true;
