@@ -375,7 +375,14 @@ void UseRedCard(Character* user)
 
 void UseBlackCard(Character* user)
 {
-	setUserStocks(user, down_market);
+	auto characters = GetGameController()->getCharacters();
+	for (auto character : characters)
+	{
+		if (character != user)
+		{
+			setUserStocks(user, down_market);
+		}
+	}
 }
 
 bool UseAverageCard(Character* user, Character* target)
