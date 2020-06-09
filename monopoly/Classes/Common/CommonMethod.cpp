@@ -5,6 +5,7 @@
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
 #include "Scene/StockScene.h"
+#include "Scene/ItemScene.h"
 USING_NS_CC;
 
 std::string ZH(const std::string& str)
@@ -64,3 +65,10 @@ StockScene* GetStockScene()
 	auto map_scene = GetMapScene();
 	return dynamic_cast<StockScene*>(map_scene->getChildByName("stock_scene"));
 }
+
+ItemScene* GetItemScene()
+{
+	auto map_scene = GetMapScene();
+	return dynamic_cast<ItemScene*>(map_scene->getChildByName("item_scene"));
+}
+
