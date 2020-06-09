@@ -183,37 +183,45 @@ bool UseAngelCard(int target_point)
 	}
 }
 
-void TransmitGod()
+bool TransmitGod()
 {
-
+	return true;
 }
 
-void TransmitCharacter(Character* user, Character* target, int target_point)
+bool TransmitCharacter(Character* user, Character* target, int target_point)
 {
 	auto map_scene = GetMapScene();
 	auto game_controller = GetGameController();
-	if (user == target)
+	if (target->getCondition() == normal)
 	{
-		SendMsg(msg_hide_go_only);
-		user->setPosition(map_scene->pos(target_point));
-		user->setCurPos(target_point);
-		game_controller->backToStand();
-		auto endGoCallFunc = CallFunc::create([=]() {
-			game_controller->endGo();
-			});
-		auto sequnce = Sequence::create(DelayTime::create(0.5f), endGoCallFunc, nullptr);
-		map_scene->runAction(sequnce);
+		if (user == target)
+		{
+			SendMsg(msg_hide_go_only);
+			user->setPosition(map_scene->pos(target_point));
+			user->setCurPos(target_point);
+			game_controller->backToStand();
+			auto endGoCallFunc = CallFunc::create([=]() {
+				game_controller->endGo();
+				});
+			auto sequnce = Sequence::create(DelayTime::create(0.5f), endGoCallFunc, nullptr);
+			map_scene->runAction(sequnce);
+		}
+		else
+		{
+			target->setPosition(map_scene->pos(target_point));
+			target->setCurPos(target_point);
+			game_controller->backToStand();
+			auto returnToCharacterCallFunc = CallFunc::create([=]() {
+				game_controller->returnToCharacter(user);
+				});
+			auto sequnce = Sequence::create(DelayTime::create(0.5f), returnToCharacterCallFunc, nullptr);
+			map_scene->runAction(sequnce);
+		}
+		return true;
 	}
 	else
 	{
-		target->setPosition(map_scene->pos(target_point));
-		target->setCurPos(target_point);
-		game_controller->backToStand();
-		auto returnToCharacterCallFunc = CallFunc::create([=]() {
-			game_controller->returnToCharacter(user);
-			});
-		auto sequnce = Sequence::create(DelayTime::create(0.5f), returnToCharacterCallFunc, nullptr);
-		map_scene->runAction(sequnce);
+		return false;
 	}
 }
 
@@ -381,6 +389,41 @@ bool UseAverageCard(Character* user, Character* target)
 		int average_money = (user->getMoney() + target->getMoney()) / 2;
 		user->setMoney(average_money);
 		target->setMoney(average_money);
+		return true;
+	}
+}
+
+bool UseStayCard(Character* target)
+{
+	if (target->getCondition() == normal)
+	{
+		target->setIsStay(true);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UseTurnAroundCard(Character* user)
+{
+	if (user->getCondition() != normal)
+	{
+		return false;
+	}
+	else
+	{
+		if (user->getTowardDirection() == forward_dir)
+		{
+			user->setTowardDirection(backward_dir);
+		}
+		else
+		{
+			user->setTowardDirection(forward_dir);
+		}
+		auto game_controller = GetGameController();
+		game_controller->backToStand();
 		return true;
 	}
 }

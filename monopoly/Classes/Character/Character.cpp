@@ -19,7 +19,9 @@ Character::Character()
 	gain_value_(0),
 	god_possessed_(no_god),
 	turtle_times_(0),
-	control_dice_point_(0)
+	control_dice_point_(0),
+	is_stay_(false),
+	toward_direction_(forward_dir)
 {
 	this->setTag(0);
 }

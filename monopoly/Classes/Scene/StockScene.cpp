@@ -14,7 +14,7 @@ Stock* Stock::create(int stock_code, std::string stock_name, int now_price, int 
 	stock->autorelease();
 	return stock;
 }
-Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number) {
+Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number){
 	this->stock_code_ = stock_code;
 	this->stock_name_ = stock_name;
 	this->now_price_ = now_price;
@@ -29,6 +29,8 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 		this->store_number_.pushBack(0);
 	}
 	*/
+	condition_ = normal;
+	duration_time_ = 0;
 
 }
 void StockScene::open(Ref* ref)

@@ -20,7 +20,6 @@ bool SetTurtle(Character* character);
 //摧毁特殊鞋子
 //若角色无任何特殊鞋子，返回false
 bool DestroySpecialShoes(Character* character);
-#endif // ! STAFF_H_
 
 //对指定角色使用遥控骰子
 //若角色本回合已使用遥控骰子，返回false
@@ -38,10 +37,10 @@ bool UseRobotWorker(Character* user, int target_point);
 bool UseDevilCard(int target_point);
 
 //传送神到指定地点
-void TransmitGod();
+bool TransmitGod();
 
-//传送角色到指定地点
-void TransmitCharacter(Character* user, Character* target, int target_point);
+//传送角色到指定地点,若角色状态不正常，返回false
+bool TransmitCharacter(Character* user, Character* target, int target_point);
 
 //摧毁一个指定房屋
 //若指定位置无房屋则返回false
@@ -71,3 +70,13 @@ void UseBlackCard(Character* user);
 //使用均富卡
 //若指定两人物不合理则返回false
 bool UseAverageCard(Character* user, Character* target);
+
+//使用停留卡
+//若指定人物状态不正常则返回false
+bool UseStayCard(Character* target);
+
+//使用转向卡
+//若指定人物状态不正常则返回false
+bool UseTurnAroundCard(Character* user);
+
+#endif // ! STAFF_H_
