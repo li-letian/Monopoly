@@ -8,7 +8,7 @@ class Frame:public Item{
 public:
 	virtual void work(Character* player);
 	
-	static Frame* Frame::create_();
+	static Frame* Frame::create();
 	virtual std::string getItemName();
 	virtual std::string getContent();
 private:
