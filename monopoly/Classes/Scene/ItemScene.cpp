@@ -3,6 +3,7 @@
 #include "Character/Character.h"
 #include "Common/CommonMethod.h"
 #include "Item/Item.h"
+#include "Incident/PopUpLayer.h"
 using namespace std;
 
 ItemScene* ItemScene::createScene(MapScene* map_scene) {
@@ -33,25 +34,35 @@ bool ItemScene::init() {
 }
 
 void ItemScene::updateMenu(Character* player) {
-	auto item_sprite = this->getChildByName("sprite");
-	item_sprite->retain();
 	this->removeAllChildren();
+	auto item_sprite = Sprite::create("Item.png");
 	this->addChild(item_sprite, 24, "sprite");
-	item_sprite->release();
 	int tag = player->getTag();
 
 	for (int i = 0; i < item_vec_[tag].size(); i++) {
 		auto item_label = Label::createWithSystemFont(item_vec_[tag][i]->getItemName(), "fonts/arial.ttf", 34);
 		auto item_label_menu_item = MenuItemLabel::create(item_label);
-		item_label_menu_item->setCallback([=](Ref* render) {
-			item_vec_[tag][i]->work(player);
-			item_vec_[tag].erase(item_vec_[tag].begin() + i);
-			});
 
+		item_label_menu_item->setCallback([=](Ref* render) {
+			auto pop = PopUpLayer::create();
+			pop->setTitle(ZH("道具"));
+			pop->setContent("使用"+ item_vec_[tag][i]->getItemName()+ZH("道具"));
+			pop->setCallBack([=](Ref* ref) {
+               item_vec_[tag][i]->work(player);
+			   this->updateMenu(player);
+				});
+			pop->setPosition(Vec2(0, 0));
+            this->setPosition(Vec2(6000, 6000));
+			item_vec_[tag].erase(item_vec_[tag].begin() + i);
+			map_scene_->addChild(pop, 52);
+            
+
+			});
+			
 		auto item_menu = Menu::create();
 		item_menu->addChild(item_label_menu_item, 30);
 		item_menu->setPosition(pos_vec_[i]);
-		this->map_scene_->addChild(item_menu);
+		this->map_scene_->addChild(item_menu,30);
 	}
 
 }
