@@ -368,3 +368,19 @@ void UseBlackCard(Character* user)
 {
 	setUserStocks(user, down_market);
 }
+
+bool UseAverageCard(Character* user, Character* target)
+{
+	if (user == target)
+	{
+
+		return false;
+	}
+	else
+	{
+		int average_money = (user->getMoney() + target->getMoney()) / 2;
+		user->setMoney(average_money);
+		target->setMoney(average_money);
+		return true;
+	}
+}

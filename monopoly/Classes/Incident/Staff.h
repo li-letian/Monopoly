@@ -67,3 +67,7 @@ void UseRedCard(Character* user);
 
 //使用黑卡
 void UseBlackCard(Character* user);
+
+//使用均富卡
+//若指定两人物不合理则返回false
+bool UseAverageCard(Character* user, Character* target);
