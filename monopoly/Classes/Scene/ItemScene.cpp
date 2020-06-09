@@ -32,6 +32,7 @@ bool ItemScene::init() {
 	}
 	Frame* A = Frame::create_();
 	item_vec_[1].push_back(A);
+	item_vec_[1].push_back(A);
 	return true;
 }
 
@@ -51,12 +52,13 @@ void ItemScene::updateMenu(Character* player) {
 			pop->setTitle(std::string("道具"));
 			pop->setContent("使用"+ item_vec_[tag][i]->getItemName()+"道具");
 			pop->setCallBack([=](Ref* ref) {
+			   
                item_vec_[tag][i]->work(player);
+			   item_vec_[tag].erase(item_vec_[tag].begin() + i);
 			   this->updateMenu(player);
 				});
 			pop->setPosition(Vec2(0, 0));
-            this->setPosition(Vec2(6000, 6000));
-			//item_vec_[tag].erase(item_vec_[tag].begin() + i);
+			close(nullptr);
 			map_scene_->addChild(pop, 52);
             
 
