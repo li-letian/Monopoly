@@ -16,11 +16,11 @@ void Dice::RollTheDice(int steps_scope)
 	cur_point_ = 1;
 	steps_ = random(steps_scope) + 1;
 	dice_change_time_ = 0.1f;
-	if (walk_steps < steps_ <= speed_steps)
+	if (walk_steps < steps_ && steps_<= speed_steps)
 	{
 		dice_change_time_ = 0.05f;
 	}
-	else if (speed_steps < steps_ <= flying_steps)
+	else if (speed_steps < steps_ && steps_ <= flying_steps)
 	{
 		dice_change_time_ = 0.025f;
 	}

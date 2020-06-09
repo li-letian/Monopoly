@@ -20,6 +20,7 @@ protected:
 
 	cocos2d::Map<std::string, cocos2d::MenuItem*>menu_item_;
 	std::vector<cocos2d::Vec2>pos_;
+	std::map<int,int>idx_;
 	std::vector<int>type_;
 	std::vector<Land*>lands_;
 	std::vector<God*>gods_;
@@ -38,6 +39,7 @@ public:
 	static MapScene* createScene();
 	bool mapInit();
 	bool landInit();
+	bool touchInit();
 	bool rollMap();
 	bool panelInit();
 	bool miniMapInit();
@@ -59,6 +61,22 @@ public:
 	{
 		auto size = pos_.size();
 		return pos_.at(index % size);
+	}
+
+	//传入一个相对于屏幕左下角的position位置，他会返回当前位置在地图上的编号
+	//如果这个位置不在路上，那么会返回-1，注意一下特殊判断
+	int touchIndex(cocos2d::Vec2 touch_position)
+	{
+		touch_position -= map_->getPosition();
+		auto tile_size = map_->getTileSize();
+		auto map_size = map_->getMapSize();
+		touch_position.y = tile_size.height * map_size.height - touch_position.y;
+		auto x = static_cast<int>(touch_position.x /tile_size.width);
+		auto y = static_cast<int>(touch_position.y / tile_size.height);
+		if (x % 2==1) x++;
+		if (y % 2==1) y++;
+		int index = (x * 100 + y) % 10000;
+		return idx_.count(index) ? idx_.at(index) :-1;
 	}
 
 	Land*& getLand(int index)

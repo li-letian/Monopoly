@@ -12,7 +12,6 @@ USING_NS_CC;
 
 class Hotel : public Land {
 protected:
-	std::string name_;
 	Character* owner_= nullptr;
 	Sprite* color_ = nullptr;
 	int rank_=0;

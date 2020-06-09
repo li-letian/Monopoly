@@ -12,8 +12,6 @@ USING_NS_CC;
 
 class Hospital : public Land {
 protected:
-	std::string name_;
-
 public:
 	virtual bool onLand(Character* standing) override;
 	static Hospital* create(int index);

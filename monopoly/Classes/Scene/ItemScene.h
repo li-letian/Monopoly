@@ -16,7 +16,7 @@ public:
 	void close(Ref* ref);
 	CREATE_FUNC(ItemScene);
 protected:
-	MapScene* map_scene_;
+	MapScene* map_scene_=nullptr;
 	vector<vector<Item* >> item_vec_;
 	vector<cocos2d::Vec2>pos_vec_;
 };
