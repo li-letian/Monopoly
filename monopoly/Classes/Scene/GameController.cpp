@@ -81,7 +81,7 @@ void GameController::addEventListenerCustom()
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
 				map_scene_->updateInformation(character);
-				//item_layer_->updateMenu(characters_.at(whose_turn_));
+				item_layer_->updateMenu(characters_.at(whose_turn_));
 				//在这里处理本回合走之前应该处理的事情
 				returnToCharacter(character);
 
