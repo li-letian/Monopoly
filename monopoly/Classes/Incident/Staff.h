@@ -61,3 +61,9 @@ bool UseHouseChange(int target_point);
 
 //使用涨价卡
 bool UseRisePriceCard(int target_point);
+
+//使用红卡
+void UseRedCard(Character* user);
+
+//使用黑卡
+void UseBlackCard(Character* user);

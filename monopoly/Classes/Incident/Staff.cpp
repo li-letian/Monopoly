@@ -8,6 +8,7 @@
 #include "Land/Business.h"
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
+#include "Scene/StockScene.h"
 
 bool SetSpeedShoes(Character* character)
 {
@@ -341,4 +342,29 @@ bool UseRisePriceCard(int target_point)
 	{
 		return false;
 	}
+}
+
+void setUserStocks(Character* user, int up_or_down)
+{
+	auto stock_scene = GetStockScene();
+	auto stocks = stock_scene->getStock();
+	int tag = user->getTag();
+	for (auto stock : stocks)
+	{
+		if (stock->store_number_[tag] > 0)
+		{
+			stock->setCondition(up_or_down);
+			stock->setDurationTime(market_duration_time);
+		}
+	}
+}
+
+void UseRedCard(Character* user)
+{
+	setUserStocks(user, up_market);
+}
+
+void UseBlackCard(Character* user)
+{
+	setUserStocks(user, down_market);
 }
