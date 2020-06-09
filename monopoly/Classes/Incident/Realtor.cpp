@@ -28,7 +28,7 @@ void SetSellPrice(float rise_rate,int pos)
 
 	if (map_scene->getType(pos) != land_hotel) return;
 
-	for (int index = pos + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
+	for (int index = pos; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto& land = map_scene->getLand(index);
@@ -74,7 +74,7 @@ void SetRentPrice(float rise_rate,int pos)
 
 	if (map_scene->getType(pos) != land_hotel) return;
 
-	for (int index = pos + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
+	for (int index = pos; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto& land = map_scene->getLand(index);
@@ -178,7 +178,7 @@ bool DestroyOneRandomHouse()
 void DestroyOneStreetHouse(int start_index)
 {
 	auto map_scene = GetMapScene();
-	for (int index = start_index + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
+	for (int index = start_index; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto land = map_scene->getLand(index);
@@ -199,7 +199,7 @@ void DestroyOneStreetHouse(int start_index)
 void PromoteOneStreetHouse(int start_index)
 {
 	auto map_scene = GetMapScene();
-	for (int index = start_index + 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
+	for (int index = start_index; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index++)
 	{
 		if (map_scene->getType(index) == land_business) continue;
 		auto land = map_scene->getLand(index);

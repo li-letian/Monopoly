@@ -327,3 +327,18 @@ bool UseHouseChange(int target_point)
 		return false;
 	}
 }
+
+bool UseRisePriceCard(int target_point)
+{
+	auto map_scene = GetMapScene();
+	auto land = map_scene->getLand(target_point);
+	if (land && map_scene->getType(target_point) == land_hotel)
+	{
+		SetSellPrice(land_price_rate, target_point);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

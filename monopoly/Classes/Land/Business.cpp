@@ -50,7 +50,7 @@ Business* Business::create(int index)
 	}
 }
 
-bool Business::promote(bool house_change = false)
+bool Business::promote(bool house_change)
 {
 	auto map_scene = GetMapScene();
 	auto tile_size = map_scene->getMap()->getTileSize();

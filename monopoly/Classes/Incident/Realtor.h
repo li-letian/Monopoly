@@ -25,6 +25,9 @@ void PromoteOneStreetHouse(int start_index);
 //不是接口
 void DestroyHouse(Hotel* hotel);
 
+//不是接口
+void SetSellPrice(float rise_rate, int pos);
+
 //随机摧毁一栋房屋(不论所有者)
 //函数返回值代表所有者是否有房，若有房返回true，否则为false
 //当然在所有者一栋房都没有的时候也可以调用此函数，只不过不产生任何效果
