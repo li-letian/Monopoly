@@ -380,7 +380,7 @@ void UseBlackCard(Character* user)
 	{
 		if (character != user)
 		{
-			setUserStocks(user, down_market);
+			setUserStocks(character, down_market);
 		}
 	}
 }
