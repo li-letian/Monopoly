@@ -30,7 +30,7 @@ bool ItemScene::init() {
 	for (int i = 0; i < 4; i++) {
 		item_vec_.push_back(vector<Item*>());
 	}
-	Frame* A = Frame::create_();
+	Frame* A = Frame::create();
 	item_vec_[1].push_back(A);
 	item_vec_[1].push_back(A);
 	return true;

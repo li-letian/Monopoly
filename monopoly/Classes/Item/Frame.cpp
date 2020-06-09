@@ -13,7 +13,7 @@ std::string Frame::getItemName(){
 	return name_;
 }
 
-Frame* Frame::create_() {
+Frame* Frame::create() {
 	Frame* frame = new Frame();
 	return frame;
 }
