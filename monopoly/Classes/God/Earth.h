@@ -11,7 +11,6 @@ public:
 	virtual bool init();
 
 	virtual bool onLand(Character* standing);
-protected:
 };
 
 #endif

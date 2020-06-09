@@ -17,6 +17,7 @@ public:
 
 	void addEventListenerCustom();												   //添加自定义事件监听器
 	void addCharacter(const std::string &name, int tag, int money, int start_pos); //添加角色
+	void initGod();																   //初始化游戏的神
 	void returnToCharacter(Character *);										   //回到角色视角
 	void addGoButton();															   //添加go按钮
 	void startGo();																   //指定当前角色开始走
@@ -27,10 +28,12 @@ public:
 	void dealWithGod();
 	void dealWithLand();
 	void backToStand();															   //回到站立状态，在endGo中调用
+	void updateGod(int god_type);															   //更新神仙在地图上的位置
 protected:
 	Dice *dice_ = nullptr;							 //储存本局游戏的随机数
 	MapScene *map_scene_ = nullptr;					 //储存地图场景
 	Vector<Character*>characters_;//储存本局游戏所有角色的Vector
+	Vector<God*>gods_;			  //储存本局游戏所有神的Vector
 public:
 	Vector<Character*>& getCharacters()
 	{

@@ -383,6 +383,7 @@ bool MapScene::touchInit()
 	auto tile_size = map_->getTileSize();
 	auto map_size = map_->getMapSize();
 	lands_.resize(pos_.size(), nullptr);
+	gods_.resize(pos_.size(), nullptr);
 	for (int c=0; c < len; c++)
 	{
 		auto x = static_cast<int>(pos_.at(c).x / tile_size.width);

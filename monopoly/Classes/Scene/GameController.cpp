@@ -422,3 +422,13 @@ void GameController::backToStand()
 		break;
 	}
 }
+
+void GameController::initGod()
+{
+	
+}
+
+void GameController::updateGod(int god_type)
+{
+
+}

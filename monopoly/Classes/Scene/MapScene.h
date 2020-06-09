@@ -89,6 +89,32 @@ public:
 		auto size = pos_.size();
 		return gods_.at(index % size);
 	}
+	
+	bool setGod(int index, God* god)
+	{
+		if (gods_.at(index) == nullptr)
+		{
+			gods_.at(index) = god;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool reMoveGod(int index)
+	{
+		if (gods_.at(index) == nullptr)
+		{
+			return false;
+		}
+		else
+		{
+			gods_.at(index) = nullptr;
+			return true;
+		}
+	}
 
 	int getType(int index)
 	{

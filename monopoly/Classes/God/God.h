@@ -15,10 +15,13 @@ public:
 
 protected:
 	God(const std::string& name);
-	void popUpExplain();
 	void initGodImage();
+	bool setPossesed(Character* standing, int god_type);
 	int pos_index_;
 	std::string name_;
+
+private:
+	void popUpExplain();
 };
 
 
