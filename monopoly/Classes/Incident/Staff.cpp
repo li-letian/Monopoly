@@ -2,6 +2,7 @@
 #include "Incident/Medical.h"
 #include "Incident/PopUpLayer.h"
 #include "Incident/Realtor.h"
+#include "Incident/Holiday.h"
 #include "Common/CommonConstant.h"
 #include "Character/Character.h"
 #include "Land/Hotel.h"
@@ -425,5 +426,17 @@ bool UseTurnAroundCard(Character* user)
 		auto game_controller = GetGameController();
 		game_controller->backToStand();
 		return true;
+	}
+}
+
+void UseHolidayCard(Character* user)
+{
+	auto characters = GetGameController()->getCharacters();
+	for (auto character : characters)
+	{
+		if (character != user && character->getCondition() == normal)
+		{
+			GoOnHoliday(character);
+		}
 	}
 }

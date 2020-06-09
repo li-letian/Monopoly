@@ -79,4 +79,6 @@ bool UseStayCard(Character* target);
 //若指定人物状态不正常则返回false
 bool UseTurnAroundCard(Character* user);
 
+//使用强制度假卡，让所有对手都去度假
+void UseHolidayCard(Character* user);
 #endif // ! STAFF_H_
