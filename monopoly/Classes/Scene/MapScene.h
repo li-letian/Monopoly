@@ -29,7 +29,7 @@ protected:
 	int day_ = 1;
 
 	int info_on_display_ = 0;
-
+	ItemScene* item_scene_ = nullptr;
     
 
 
@@ -51,7 +51,7 @@ public:
 	bool perspectiveJump(float x, float y);
 	bool perspectiveJump(cocos2d::Vec2 p);
 	void setInfoOnDisplay(Character* player);
-
+	void addItemScene(ItemScene* item_scene);
 	void updateInformation(Character* player);
 	void updateDay();
 	//返回地图上第(index%总位置数)个位置相对于地图左下角锚点的GL方向坐标

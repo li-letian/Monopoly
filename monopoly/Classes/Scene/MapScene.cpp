@@ -358,7 +358,9 @@ bool MapScene::perspectiveJump(float x, float y)
 	map_->setPosition(x, y);
 	return true;
 }
-
+void MapScene::addItemScene(ItemScene* item_scene) {
+	item_scene_ = item_scene;
+}
 
 
 //添加地图上道路中心位置相对于地图右下角锚点的GL方向以像素为单位的坐标位置
