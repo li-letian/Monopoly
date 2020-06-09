@@ -9,13 +9,16 @@ class Character;
 
 class God : public Sprite{
 public:
-	virtual bool onLand(Character* standing)
-	{
-		return true;
-	}
+	virtual bool onLand(Character* standing) = 0;
+	bool setPos(int pos_index);
+	int getPos()const;
 
 protected:
-	int index_ = 0;
+	God(const std::string& name);
+	void popUpExplain();
+	void initGodImage();
+	int pos_index_;
+	std::string name_;
 };
 
 
