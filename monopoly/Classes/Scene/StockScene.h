@@ -24,7 +24,8 @@ public:
 	Stock(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number);
 	static Stock* create(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number);
 
-	 
+	CC_SYNTHESIZE(int, condition_, Condition);
+	CC_SYNTHESIZE(int, duration_time_, DurationTime);
 };
 
 

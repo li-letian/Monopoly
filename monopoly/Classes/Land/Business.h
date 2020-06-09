@@ -13,7 +13,6 @@ USING_NS_CC;
 
 class Business : public Land {
 protected:
-	std::string name_;
 	Character* owner_ = nullptr;
 	Sprite* color_ = nullptr;
 	Sprite* color_larger_ = nullptr;
@@ -25,7 +24,7 @@ protected:
 public:
 	virtual bool onLand(Character* standing) override;
 	bool onBusinessLand(Character* standing);
-	bool promote();
+	bool promote(bool house_change = false);
 	bool demote();
 	static Business* create( int index);
 };

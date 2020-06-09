@@ -4,12 +4,13 @@
 #include "cocos2d.h"
 
 USING_NS_CC;
+class Character;
 class Dice : public Ref {
 public:
 	CREATE_FUNC(Dice);
 	virtual bool init();
 
-	void RollTheDice(int steps_scope);		//掷一次骰子
+	void RollTheDice(int steps_scope,Character*character);		//掷一次骰子
 	static int getARandomNumber(int scope);
 	void decreaseNumber();
 private:

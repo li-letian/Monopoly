@@ -14,7 +14,7 @@ Stock* Stock::create(int stock_code, std::string stock_name, int now_price, int 
 	stock->autorelease();
 	return stock;
 }
-Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number) {
+Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number){
 	this->stock_code_ = stock_code;
 	this->stock_name_ = stock_name;
 	this->now_price_ = now_price;
@@ -29,6 +29,8 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 		this->store_number_.pushBack(0);
 	}
 	*/
+	condition_ = normal;
+	duration_time_ = 0;
 
 }
 void StockScene::open(Ref* ref)
@@ -257,15 +259,18 @@ void StockScene::stockUpdate() {
 	srand(static_cast<unsigned int>(time(nullptr)));
 	for (int i = 0; i < 8; i++) {
 		float per_ = rand() / (10*RAND_MAX+static_cast<float>(0.001));
-		switch (condition_)
+		auto cur_stock = stock_vec_.at(i);
+		switch (cur_stock->getCondition())
 		{
 		case normal_market:
 			if (rand() % 2) per_ *= (-1.0);
 			break;
 		case up_market:
+			cur_stock->setDurationTime(cur_stock->getDurationTime() - 1);
 			break;
 		case down_market:
 			per_ *= (-1.0);
+			cur_stock->setDurationTime(cur_stock->getDurationTime() - 1);
 			break;
 		}
 		
@@ -273,7 +278,10 @@ void StockScene::stockUpdate() {
 		stock_vec_.at(i)->now_price_ = static_cast<int>(1.0f+stock_vec_.at(i)->now_price_*(1.0+per_));
 
 	}
-	duration_time_--;
+	if (duration_time_ > 0)
+	{
+		duration_time_--;
+	}
 	if (duration_time_ == 0)
 	{
 		switch(condition_)

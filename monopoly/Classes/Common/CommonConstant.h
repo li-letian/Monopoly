@@ -33,17 +33,23 @@ constexpr int walk_left = 2;
 constexpr int walk_right = 3;
 constexpr int walk_up = 4;
 
+//人物的朝向
+constexpr int forward_dir = 1;
+constexpr int backward_dir = -1;
+
 //人物行走的格数
 constexpr int total_position = 405;
 constexpr int start_position = 379;
+
 constexpr int turtle_steps = 1;
 constexpr int init_turtle_times = 3;
 constexpr int walk_steps = 3;
 constexpr int speed_steps = 2 * walk_steps;
 constexpr int flying_steps = 3 * walk_steps;
 
-constexpr int msg_hide_go = 1;
+constexpr int msg_start_go = 1;
 constexpr int msg_make_go_apper = 2;
+constexpr int msg_hide_go_only = 3;
 
 constexpr float grid_distance = 16.0f;
 
@@ -78,7 +84,7 @@ constexpr int down_market = 3;
 constexpr int market_duration_time = 5;
 
 //税率 = 1/tax_rate
-constexpr int tax_rate = 20.0;
+constexpr int tax_rate = 20;
 //房价、租价上涨或下降率
 constexpr float land_price_rate = 0.3f;
 

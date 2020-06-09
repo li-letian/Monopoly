@@ -60,11 +60,12 @@ void GameController::addEventListenerCustom()
 		int msg = std::atoi(buf); //解析收到的信息
 		switch (msg)
 		{
-		case (msg_hide_go):												//让go按钮消失
+		case (msg_start_go):												//让go按钮消失
 			go_button_menu_->setPosition(visible_size.width + 1000, 0); //将按钮移到屏幕外
 			startGo();													//人物开始走路
 			break;
 		case (msg_make_go_apper): //让go按钮出现
+		{
 			auto func = [=]() {
 
 				whose_turn_++;
@@ -77,7 +78,7 @@ void GameController::addEventListenerCustom()
 
 				auto character = characters_.at(whose_turn_);
 
-				
+
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
 				map_scene_->updateInformation(character);
@@ -132,6 +133,12 @@ void GameController::addEventListenerCustom()
 			}
 			break;
 		}
+		case msg_hide_go_only:
+			go_button_menu_->setPosition(visible_size.width + 1000, 0);
+			steps_to_go_ = 0;
+			steps_has_gone_ = 0;
+			break;
+		}
 	});
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->getMap());
@@ -159,7 +166,7 @@ void GameController::addGoButton()
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		SendMsg(msg_hide_go); //点击后发送隐藏按钮的信息
+		SendMsg(msg_start_go); //点击后发送隐藏按钮的信息
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
@@ -177,23 +184,36 @@ void GameController::startGo()
 
 	//视角回到该角色的所在位置
 	returnToCharacter(character);
-
-	//掷骰子开始走
-	dice_->RollTheDice(character->getStepsScope());
+	if (character->getIsStay() == true)
+	{
+		steps_to_go_ = 0;
+		steps_has_gone_ = 0;
+		character->setIsStay(false);
+		auto endGoCallFunc = CallFunc::create([=]() {
+			this->endGo();
+			});
+		auto sequence = Sequence::create(DelayTime::create(0.5f), endGoCallFunc, nullptr);
+		this->runAction(sequence);
+	}
+	else
+	{
+		if (character->getStepsScope() == turtle_steps)
+		{
+			character->setTurtleTimes(character->getTurtleTimes() - 1);
+		}
+		if (character->getTurtleTimes() == 0)
+		{
+			character->setStepsScope(walk_steps);
+		}
+		//掷骰子开始走
+		dice_->RollTheDice(character->getStepsScope(), character);
+	}
 }
 
 void GameController::startRealGo(int steps_to_go)
 {
 	steps_to_go_ = steps_to_go;
 	auto character = characters_.at(whose_turn_);
-	if (character->getStepsScope() == turtle_steps)
-	{
-		character->setTurtleTimes(character->getTurtleTimes() - 1);
-	}
-	if (character->getTurtleTimes() == 0)
-	{
-		character->setStepsScope(walk_steps);
-	}
 	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = judgeDirection(character->getCurPos());
@@ -202,10 +222,15 @@ void GameController::startRealGo(int steps_to_go)
 
 int GameController::judgeDirection(int cur_pos)
 {
-	int next_pos = cur_pos + 1;
+	auto character = characters_.at(whose_turn_);
+	int next_pos = cur_pos + character->getTowardDirection();
 	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	{
 		next_pos = start_position;
+	}
+	else if (next_pos < start_position)
+	{
+		next_pos = map_scene_->totalPosition() - 1;
 	}
 	auto cur_x = map_scene_->pos(cur_pos).x;
 	auto cur_y = map_scene_->pos(cur_pos).y;
@@ -233,11 +258,15 @@ int GameController::judgeDirection(int cur_pos)
 void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
-	int next_pos = character->getCurPos() + 1;
+	int next_pos = character->getCurPos() + character->getTowardDirection();
 	//if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	if (next_pos >= total_position)
 	{
 		next_pos = start_position;
+	}
+	if (next_pos < start_position)
+	{
+		next_pos = total_position - 1;
 	}
 	MoveTo *move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
 	Repeat *repeat = nullptr;

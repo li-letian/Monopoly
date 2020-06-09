@@ -12,7 +12,6 @@ USING_NS_CC;
 
 class Hotel : public Land {
 protected:
-	std::string name_;
 	Character* owner_= nullptr;
 	Sprite* color_ = nullptr;
 	int rank_=0;
@@ -28,10 +27,13 @@ public:
 	bool demote();
 	static Hotel* create(int index);
 	bool setRentRise(float rise_rate);
+	float getRentRise()const;
 	bool setSellRise(float rise_rate);
+	float getSellRise()const;
 	int getRank()const;
 	Character* getOwner()const;
 	bool setOwner(Character* character);	//character可为空,代表旅馆再次无主
+	int getValue()const;
 };
 
 #endif // !_HOTEL_H_
