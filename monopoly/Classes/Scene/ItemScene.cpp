@@ -5,6 +5,15 @@
 #include "Item/Item.h"
 #include "Incident/PopUpLayer.h"
 #include "Item/Frame.h"
+#include "Item/AngelCard.h"
+#include "Item/BlackCard.h"
+#include "Item/Car.h"
+#include "Item/Motor.h"
+#include "Item/HouseChange.h"
+#include "Item/RedCard.h"
+#include "Item/Turtle.h"
+#include "Item/TurnAround.h"
+#include "Item/Sleep.h"
 using namespace std;
 
 ItemScene* ItemScene::createScene(MapScene* map_scene) {
@@ -31,8 +40,14 @@ bool ItemScene::init() {
 		item_vec_.push_back(vector<Item*>());
 	}
 	Frame* A = Frame::create();
-	item_vec_[1].push_back(A);
-	item_vec_[1].push_back(A);
+	item_vec_[1].push_back(BlackCard::create());
+	item_vec_[1].push_back(Car::create());
+	item_vec_[1].push_back(Motor::create());
+	item_vec_[1].push_back(HouseChange::create());
+	item_vec_[1].push_back(RedCard::create());
+	item_vec_[1].push_back(Turtle::create());
+	item_vec_[1].push_back(TurnAround::create());
+	item_vec_[1].push_back(HolidayCard::create());
 	return true;
 }
 
