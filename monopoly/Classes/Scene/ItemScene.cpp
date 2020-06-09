@@ -50,7 +50,8 @@ void ItemScene::updateMenu(Character* player) {
 		item_label_menu_item->setCallback([=](Ref* render) {
 			auto pop = PopUpLayer::create();
 			pop->setTitle(std::string("道具"));
-			pop->setContent("使用"+ item_vec_[tag][i]->getItemName()+"道具");
+			pop->setContent("使用"+ item_vec_[tag][i]->getItemName()+"道具\n"+ item_vec_[tag][i]->getContent());
+			
 			pop->setCallBack([=](Ref* ref) {
 			   
                item_vec_[tag][i]->work(player);

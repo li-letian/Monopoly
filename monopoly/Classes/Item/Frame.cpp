@@ -17,3 +17,6 @@ Frame* Frame::create_() {
 	Frame* frame = new Frame();
 	return frame;
 }
+std::string Frame::getContent() {
+	return content_;
+}

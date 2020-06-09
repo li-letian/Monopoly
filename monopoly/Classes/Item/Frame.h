@@ -7,9 +7,13 @@ class Character;
 class Frame:public Item{
 public:
 	virtual void work(Character* player);
-	std::string name_ = std::string("打钱");
+	
 	static Frame* Frame::create_();
 	virtual std::string getItemName();
+	virtual std::string getContent();
+private:
+    std::string name_ = std::string("打钱");
+	std::string content_ = std::string("不需要操作");
 };
 
 #endif
