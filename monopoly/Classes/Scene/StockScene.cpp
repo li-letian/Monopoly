@@ -273,7 +273,10 @@ void StockScene::stockUpdate() {
 			cur_stock->setDurationTime(cur_stock->getDurationTime() - 1);
 			break;
 		}
-		
+		if (duration_time_ == 0)
+		{
+			cur_stock->setCondition(normal_market);
+		}
 		stock_vec_.at(i)->percent_ = per_;
 		stock_vec_.at(i)->now_price_ = static_cast<int>(1.0f+stock_vec_.at(i)->now_price_*(1.0+per_));
 
