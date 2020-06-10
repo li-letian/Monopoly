@@ -344,7 +344,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		break;
 	case luck:
-		if (rank_ < 4)
+		if (rank_ >= 0 && rank_ < 4 && owner_ == standing)
 		{
 			auto pre_value = this->getValue();
 			this->promote();
