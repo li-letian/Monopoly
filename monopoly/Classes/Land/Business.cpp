@@ -2,10 +2,14 @@
 #include "Land.h"
 #include "Business.h"
 #include "Scene/MapScene.h"
+#include "Scene/ItemScene.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
 #include "Incident/Holiday.h"
+#include "Item/Transmit.h"
+#include "Item/Missile.h"
+#include "Item/Worker.h"
 
 USING_NS_CC;
 
@@ -70,6 +74,7 @@ bool Business::promote(bool house_change)
 	pic.push_back("park.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_park;
+		name_ = std::string("公园") + StringUtils::format("%d", index_);
 		initWithFile("park.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
@@ -78,6 +83,7 @@ bool Business::promote(bool house_change)
 	pic.push_back("resort.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_resort;
+		name_ = std::string("度假村") + StringUtils::format("%d", index_);
 		initWithFile("resort.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
@@ -86,6 +92,7 @@ bool Business::promote(bool house_change)
 	pic.push_back("mall.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_mall;
+		name_ = std::string("购物广场") + StringUtils::format("%d", index_);
 		initWithFile("mall.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
@@ -94,6 +101,7 @@ bool Business::promote(bool house_change)
 	pic.push_back("institute.png");
 	callback.push_back([=](Ref* ref) {
 		type_ = land_institute;
+		name_ = std::string("研发中心") + StringUtils::format("%d", index_);
 		initWithFile("institute.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
@@ -110,6 +118,7 @@ bool Business::demote()
 {
 	if (type_!=4) type_=4;
 	init();
+	name_ = std::string("商业用地") + StringUtils::format("%d", index_);
 	setAnchorPoint(Vec2(0.5f, 0.0f));
 	auto map_scene = GetMapScene();
 	auto tile_size = map_scene->getMap()->getTileSize();
@@ -128,13 +137,32 @@ bool Business::onBusinessLand(Character* standing)
 		{
 			auto pop = PopUpLayer::create();
 			pop->setTitle("请选择要研发的道具");
-			std::vector<std::string>pic;
+			std::vector<std::string>txt;
 			std::vector<ccMenuCallback>callback;
-			pic.push_back("mall.png");
+
+
+			txt.push_back("传送机");
 			callback.push_back([=](Ref* ref) {
+				GetItemScene()->addItem(standing,Transmit::create());
+				pop->removeFromParentAndCleanup(true);
 				SendMsg(msg_make_go_apper);
 			});
-			pop->setMenu(pic, callback);
+			txt.push_back("机器工人");
+			callback.push_back([=](Ref* ref) {
+				GetItemScene()->addItem(standing,Worker::create());
+				pop->removeFromParentAndCleanup(true);
+				SendMsg(msg_make_go_apper);
+			});
+			txt.push_back("导弹");
+			callback.push_back([=](Ref* ref) {
+				GetItemScene()->addItem(standing,Missile::create());
+				pop->removeFromParentAndCleanup(true);
+				SendMsg(msg_make_go_apper);
+			});
+			
+
+			pop->setMenu(callback,txt);
+			pop->setCallBack([=](Ref* ref) {},"取消");
 			pop->setPosition(Vec2(0, 0));
 			map_scene->addChild(pop, 51);
 		}

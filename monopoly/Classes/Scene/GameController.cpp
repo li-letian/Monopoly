@@ -42,10 +42,9 @@ bool GameController::init()
 	//创造map_scene场景并切换
 	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
-	map_scene_->addChild(this, -50,"game_controller");
+	map_scene_->addChild(this, 500,"game_controller");
 	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
-	item_layer_ = ItemScene::createScene(map_scene_);
-	map_scene_->addItemScene(item_layer_);
+	
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器
@@ -58,6 +57,9 @@ bool GameController::init()
 	initGod();
 
 	whose_turn_ = 0;
+
+	item_layer_ = ItemScene::createScene(map_scene_,this);
+
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
@@ -214,10 +216,10 @@ void GameController::startGo()
 		if (character->getStepsScope() == turtle_steps)
 		{
 			character->setTurtleTimes(character->getTurtleTimes() - 1);
-		}
-		if (character->getTurtleTimes() == 0)
-		{
-			character->setStepsScope(walk_steps);
+			if (character->getTurtleTimes() == 0)
+			{
+				character->setStepsScope(walk_steps);
+			}
 		}
 		//掷骰子开始走
 		dice_->RollTheDice(character->getStepsScope(), character);

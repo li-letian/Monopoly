@@ -38,8 +38,8 @@ constexpr int forward_dir = 1;
 constexpr int backward_dir = -1;
 
 //人物行走的格数
-constexpr int total_position = 405;
-constexpr int start_position = 379;
+constexpr int total_position = 23;
+constexpr int start_position = 17;
 
 constexpr int turtle_steps = 1;
 constexpr int init_turtle_times = 3;
