@@ -7,14 +7,14 @@ void BlackCard::work(Character* player) {
 	UseBlackCard(player);
 
 }
-std::string BlackCard::getItemName() {
-	return name_;
-}
 
-BlackCard* BlackCard::create() {
-	BlackCard* black_card = new BlackCard();
-	return black_card;
-}
-std::string BlackCard::getContent() {
-	return content_;
+bool BlackCard::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "黑卡";
+	content_ = "股市跌到对手裤子都没了T T";
+	return true;
 }

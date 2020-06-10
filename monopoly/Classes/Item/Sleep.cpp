@@ -7,14 +7,14 @@ void HolidayCard::work(Character* player) {
 	UseHolidayCard(player);
 
 }
-std::string HolidayCard::getItemName() {
-	return name_;
-}
 
-HolidayCard* HolidayCard::create() {
-	HolidayCard* holiday_card = new HolidayCard();
-	return holiday_card;
-}
-std::string HolidayCard::getContent() {
-	return content_;
+bool HolidayCard::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "度假卡";
+	content_ = "世界这么大，我想去看看";
+	return true;
 }

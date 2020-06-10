@@ -7,14 +7,14 @@ void Car::work(Character* player) {
 	SetFlyingShoes(player);
 
 }
-std::string Car::getItemName() {
-	return name_;
-}
 
-Car* Car::create() {
-	Car* car = new Car();
-	return car;
-}
-std::string Car::getContent() {
-	return content_;
+bool Car::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "飞速鞋";
+	content_ = "根本停不下来！！";
+	return true;
 }

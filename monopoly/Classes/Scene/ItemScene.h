@@ -9,7 +9,7 @@ using namespace cocos2d;
 class Item;
 class ItemScene : public Layer {
 public:
-	static ItemScene* ItemScene::createScene(MapScene* map_scene);
+	static ItemScene* ItemScene::createScene(MapScene* map_scene, GameController* game_controller);
 	virtual bool init();
 	void posInit();
 	void updateMenu(Character* player);
@@ -17,19 +17,17 @@ public:
 	void close(Ref* ref);
 	CREATE_FUNC(ItemScene);
 
+	//因为cocos的内存机制，所以我们加道具的时候不能直接push，要调用这个addItem保护道具被addchild了
+	//被使用的道具会自动removeFromParentWithCleanup
 	void addItem(Character* player, Item* item);
 	
 
 protected:
 	MapScene* map_scene_=nullptr;
+	GameController* game_controller_ = nullptr;
 	vector<vector<Item* >> item_vec_;
 	vector<cocos2d::Vec2>pos_vec_;
 };
-
-
-
-
-
 
 
 

@@ -17,15 +17,28 @@
 #include "Item/Sleep.h"
 using namespace std;
 
-ItemScene *ItemScene::createScene(MapScene *map_scene)
+ItemScene *ItemScene::createScene(MapScene *map_scene, GameController* game_controller)
 {
 	auto item_layer = ItemScene::create();
 	item_layer->map_scene_ = map_scene;
+	item_layer->game_controller_ = game_controller;
 	item_layer->setPosition(Vec2(6000, 6000));
 	//item_layer->map_scene_->addItemScene(item_layer);
-
 	item_layer->map_scene_->addChild(item_layer, 23, "item_scene");
 	item_layer->map_scene_->setMenuCallback("item", [=](Ref *ref) { item_layer->open(ref); });
+
+	//添加原本就有的道具
+	auto characters = item_layer->game_controller_->getCharacters();
+	item_layer->addItem(characters.at(0), BlackCard::create());
+	item_layer->addItem(characters.at(0), Car::create());
+	item_layer->addItem(characters.at(0), Motor::create());
+	item_layer->addItem(characters.at(0), HouseChange::create());
+	item_layer->addItem(characters.at(0), RedCard::create());
+	item_layer->addItem(characters.at(0), Turtle::create());
+	item_layer->addItem(characters.at(0), TurnAround::create());
+	item_layer->addItem(characters.at(0), HolidayCard::create());
+
+
 	return item_layer;
 }
 
@@ -43,22 +56,13 @@ bool ItemScene::init()
 	{
 		item_vec_.push_back(vector<Item *>());
 	}
-	Frame *A = Frame::create();
-	item_vec_[1].push_back(BlackCard::create());
-	item_vec_[1].push_back(Car::create());
-	item_vec_[1].push_back(Motor::create());
-	item_vec_[1].push_back(HouseChange::create());
-	item_vec_[1].push_back(RedCard::create());
-	item_vec_[1].push_back(Turtle::create());
-	item_vec_[1].push_back(TurnAround::create());
-	item_vec_[1].push_back(HolidayCard::create());
 	return true;
 }
 
 void ItemScene::addItem(Character *player, Item *item)
 {
 	auto tag = player->getTag();
-	GetGameController()->addChild(item, 600);
+	game_controller_->addChild(item, 600);
 	item_vec_.at(tag).push_back(item);
 }
 

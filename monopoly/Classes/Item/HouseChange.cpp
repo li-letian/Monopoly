@@ -7,14 +7,14 @@ void HouseChange::work(Character* player) {
 	UseHouseBuy(player);
 
 }
-std::string HouseChange::getItemName() {
-	return name_;
-}
 
-HouseChange* HouseChange::create() {
-	HouseChange* house_change = new HouseChange();
-	return house_change;
-}
-std::string HouseChange::getContent() {
-	return content_;
+bool HouseChange::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "购地证明";
+	content_ = "这块土地和我有缘，归我了！";
+	return true;
 }

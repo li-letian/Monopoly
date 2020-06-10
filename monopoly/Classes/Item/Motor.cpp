@@ -7,14 +7,14 @@ void Motor::work(Character* player) {
 	SetSpeedShoes(player);
 
 }
-std::string Motor::getItemName() {
-	return name_;
-}
 
-Motor* Motor::create() {
-	Motor* motor = new Motor();
-	return motor;
-}
-std::string Motor::getContent() {
-	return content_;
+bool Motor::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "远行鞋";
+	content_ = "飞一般的感觉！！";
+	return true;
 }
