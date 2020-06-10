@@ -1,6 +1,7 @@
 #include "Item.h"
 #include "Missile.h"
 #include "Character/Character.h"
+#include "Common/CommonMethod.h"
 #include "Incident/Staff.h"
 #include "Scene/MapScene.h"
 #include "Scene/ItemScene.h"

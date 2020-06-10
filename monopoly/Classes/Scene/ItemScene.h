@@ -7,6 +7,7 @@
 using namespace std;
 using namespace cocos2d;
 class Item;
+class GameController;
 class ItemScene : public Layer {
 public:
 	static ItemScene* ItemScene::createScene(MapScene* map_scene, GameController* game_controller);
