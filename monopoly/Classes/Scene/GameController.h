@@ -29,7 +29,7 @@ public:
 	void endGo();																   //MoveOneStep结束前调用的函数
 	void dealWithGod();
 	void dealWithLand();
-	void backToStand();															   //回到站立状态，在endGo中调用
+	void backToStand(Character* character);													   //回到站立状态，在endGo中调用
 	void updateGod(int god_type);															   //更新神仙在地图上的位置
 protected:
 	Dice *dice_ = nullptr;							 //储存本局游戏的随机数

@@ -12,5 +12,6 @@ public:
 	virtual bool init();
 
 	virtual bool onLand(Character* standing);
+	static void Luck::popUpDialog();
 };
 #endif // ! _LUCK_H_

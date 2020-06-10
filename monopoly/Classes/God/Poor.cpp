@@ -3,6 +3,7 @@
 #include "Common/CommonConstant.h"
 #include "Scene/GameController.h"
 #include "Common/CommonMethod.h"
+#include "Incident/PopUpLayer.h"
 
 Poor::Poor()
 	:God("Poor")
@@ -26,10 +27,9 @@ bool Poor::onLand(Character* standing)
 	if (removeGodFromMap(standing))
 	{
 		standing->setGodPossessed(poor);
-		GetGameController()->updateGod(poor);
 		auto god_possessed = Poor::create();
 		addToCharacter(god_possessed, standing);
-		popUpExplain("Poor");
+		popUpExplain("Poor",poor);
 		return true;
 	}
 	else
@@ -37,4 +37,15 @@ bool Poor::onLand(Character* standing)
 		GetGameController()->dealWithLand();
 		return true;
 	}
+}
+
+void Poor::popUpDialog()
+{
+	auto pop = PopUpLayer::create();
+	pop->setTitle("穷神生效");
+	pop->setContent("本次过路费翻倍");
+	pop->setCallBack([=](Ref* render) {
+		SendMsg(msg_make_go_apper);
+		});
+	pop->setOnScene();
 }

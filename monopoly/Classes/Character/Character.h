@@ -87,6 +87,7 @@ public:
 	CC_SYNTHESIZE(int, estate_value_, EstateValue);	//地产价值
 	CC_SYNTHESIZE(int, gain_value_, GainValue);		//上次缴纳所得税起的所得价值
 	CC_SYNTHESIZE(int, god_possessed_, GodPossessed);//记录被什么神灵附身
+	CC_SYNTHESIZE(int, god_times_, GodTimes);		//记录神仙的剩余持续时间
 	CC_SYNTHESIZE(int, turtle_times_, TurtleTimes);	//记录乌龟的剩余次数
 	CC_SYNTHESIZE(int, control_dice_point_, ControlDicePoint);//记录遥控骰子的点数
 	CC_SYNTHESIZE(bool, is_stay_, IsStay);			//记录是否被使用停留卡

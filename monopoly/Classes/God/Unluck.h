@@ -11,5 +11,6 @@ public:
 	virtual bool init();
 
 	virtual bool onLand(Character* standing);
+	static void popUpDialog();
 };
 #endif

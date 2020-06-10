@@ -32,7 +32,7 @@ void Missile::work(Character* character)
 		if (index == -1) return false;
 		log("on road");
 		//先来点动画啥的不？
-		LaunchMissile(index);
+		LaunchMissile(character, index);
 		label->removeFromParentAndCleanup(true);
 		Director::getInstance()->getEventDispatcher()->removeEventListener(listener);
 		return true;

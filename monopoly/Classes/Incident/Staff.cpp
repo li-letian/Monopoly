@@ -77,7 +77,7 @@ bool SetControlDice(Character* character, int control_point)
 	}
 }
 
-void LaunchMissile(int target_point)
+void LaunchMissile(Character* user, int target_point)
 {
 	auto map_scene = GetMapScene();
 	auto game_controller = GetGameController();
@@ -116,8 +116,9 @@ void LaunchMissile(int target_point)
 		text = text + character->getPlayerName() + '\n';
 	}
 	text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
+	pop->setContent(text);
 	pop->setCallBack([=](Ref* render) {
-		SendToHospital(characters_to_hospital);
+		SendToHospital(user,characters_to_hospital);
 		});
 	pop->setOnScene();
 }
@@ -201,7 +202,7 @@ bool TransmitCharacter(Character* user, Character* target, int target_point)
 			SendMsg(msg_hide_go_only);
 			user->setPosition(map_scene->pos(target_point));
 			user->setCurPos(target_point);
-			game_controller->backToStand();
+			game_controller->backToStand(user);
 			auto endGoCallFunc = CallFunc::create([=]() {
 				game_controller->endGo();
 				});
@@ -212,7 +213,7 @@ bool TransmitCharacter(Character* user, Character* target, int target_point)
 		{
 			target->setPosition(map_scene->pos(target_point));
 			target->setCurPos(target_point);
-			game_controller->backToStand();
+			game_controller->backToStand(target);
 			auto returnToCharacterCallFunc = CallFunc::create([=]() {
 				game_controller->returnToCharacter(user);
 				});
@@ -432,7 +433,7 @@ bool UseTurnAroundCard(Character* user)
 			user->setTowardDirection(forward_dir);
 		}
 		auto game_controller = GetGameController();
-		game_controller->backToStand();
+		game_controller->backToStand(user);
 		return true;
 	}
 }
