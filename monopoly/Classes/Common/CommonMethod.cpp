@@ -8,6 +8,7 @@
 #include "Scene/ItemScene.h"
 USING_NS_CC;
 
+
 std::string ZH(const std::string& str)
 {
 	int nwLen = ::MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);

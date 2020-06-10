@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 class Character;
+USING_NS_CC;
 
 //给指定角色配上加速鞋
 //若角色已有加速鞋，返回false

@@ -2,6 +2,7 @@
 #define _MAP_SCENE_H_
 
 #include "cocos2d.h"
+#include "God/God.h"
 #include <string>
 #include <vector>
 #include <functional>
@@ -86,6 +87,36 @@ public:
 	{
 		auto size = pos_.size();
 		return gods_.at(index % size);
+	}
+	
+	bool setGod(int index, God* god)
+	{
+		if (gods_.at(index) == nullptr)
+		{
+			gods_.at(index) = god;
+			if (god->getPos() >= 0)
+			{
+				gods_.at(god->getPos()) = nullptr;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool reMoveGod(int index)
+	{
+		if (gods_.at(index) == nullptr)
+		{
+			return false;
+		}
+		else
+		{
+			gods_.at(index) = nullptr;
+			return true;
+		}
 	}
 
 	int getType(int index)

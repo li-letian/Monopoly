@@ -51,7 +51,7 @@ bool Jail::onLand(Character* standing)
 	{
 		if (character->getCondition() == in_jail)
 		{
-			pic.push_back(character->getPlayerName() + string("_avatar.png"));
+			pic.push_back(character->getPlayerName() + std::string("_avatar.png"));
 			callback.push_back([=](Ref* ref) {
 				character->setStopTimes(0);
 				PopUpJailDialog(character);

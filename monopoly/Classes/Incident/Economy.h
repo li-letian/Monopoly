@@ -1,6 +1,8 @@
 #ifndef _ECONOMY_H_
 #define _ECONOMY_H_
 
+#include "cocos2d.h"
+USING_NS_CC;
 class Character;
 //最好将所有人的税同时都收了
 //函数的返回值为征收的数目

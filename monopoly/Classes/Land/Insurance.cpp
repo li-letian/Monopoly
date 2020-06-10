@@ -3,6 +3,7 @@
 #include "Land.h"
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
+#include "Scene/StockScene.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
