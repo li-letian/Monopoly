@@ -18,7 +18,7 @@ protected:
 	void initGodImage();
 	bool removeGodFromMap(Character* standing);
 	void addToCharacter(God*god,Character* standing);
-	void popUpExplain(const std::string& name);
+	void popUpExplain(const std::string& name, int god_type);
 	int pos_index_;
 	std::string name_;
 };

@@ -34,6 +34,7 @@ public:
 	Character* getOwner()const;
 	bool setOwner(Character* character);	//character可为空,代表旅馆再次无主
 	int getValue()const;
+	void Hotel::godExecute(Character* standing, bool do_promote = false, int rent_value = 0);
 };
 
 #endif // !_HOTEL_H_

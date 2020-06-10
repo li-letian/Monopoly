@@ -93,7 +93,43 @@ void GameController::addEventListenerCustom()
 				}
 
 				auto character = characters_.at(whose_turn_);
-
+				if (character->getGodPossessed() != normal)
+				{
+					character->setGodTimes(character->getGodTimes() - 1);
+					if (character->getGodTimes() <= 0)
+					{
+						God* god;
+						switch (character->getGodPossessed())
+						{
+						case angel:
+							god = Angel::create();
+							break;
+						case devil:
+							god = Devil::create();
+							break;
+						case earth:
+							god = Earth::create();
+							break;
+						case luck:
+							god = Luck::create();
+							break;
+						case poor:
+							god = Poor::create();
+							break;
+						case rich:
+							god = Rich::create();
+							break;
+						case unluck:
+							god = Unluck::create();
+							break;
+						}
+						gods_.pushBack(god);
+						map_scene_->getMap()->addChild(god, 10);
+						updateGod(no_god);
+						character->setGodPossessed(normal);
+						character->removeChildByName("god", true);
+					}
+				}
 
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
@@ -166,6 +202,7 @@ void GameController::addCharacter(const std::string &name, int tag, int money, i
 	characters_.pushBack(character);
 	character->setPosition(map_scene_->pos(start_pos));
 	map_scene_->getMap()->addChild(character, 10,tag);
+	backToStand(character);
 	log("position: %f %f", character->getPosition().x, character->getPosition().y);
 }
 
@@ -336,7 +373,7 @@ void GameController::endGo()
 	else
 	{
 		//让人物恢复到站立状态，面朝下一格
-		backToStand();
+		backToStand(character);
 		returnToCharacter(character);
 		dealWithGod();
 		//这里处理一些着陆后的事情
@@ -409,9 +446,8 @@ void GameController::dealWithLand()
 
 }
 
-void GameController::backToStand()
+void GameController::backToStand(Character*character)
 {
-	auto character = characters_.at(whose_turn_);
 	auto name = character->getPlayerName();
 	auto direction = judgeDirection(character->getCurPos());
 	auto spfcache = SpriteFrameCache::getInstance();
@@ -465,7 +501,7 @@ void GameController::updateGod(int god_type)
 		}
 		else
 		{
-			while (god->setPos(start_position + Dice::getARandomNumber(map_scene_->totalPosition() - start_position), map_scene_) != true)
+			while (god->setPos(start_position + Dice::getARandomNumber(total_position - start_position), map_scene_) != true)
 			{
 
 			}

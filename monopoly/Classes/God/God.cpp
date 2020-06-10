@@ -43,7 +43,7 @@ int God::getPos()const
 	return pos_index_;
 }
 
-void God::popUpExplain(const std::string& name)
+void God::popUpExplain(const std::string& name,int god_type)
 {
 	auto sprite = Sprite::create(name + std::string("Pop.png"));
 	sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
@@ -51,6 +51,7 @@ void God::popUpExplain(const std::string& name)
 	sprite->setPosition(Vec2(visible_size.height / 2, visible_size.height / 2));
 	auto map_scene = GetMapScene();
 	map_scene->addChild(sprite, 50);
+	GetGameController()->updateGod(god_type);
 	auto popFadeCallFunc = CallFunc::create([=]() {
 		sprite->removeFromParentAndCleanup(true);
 		GetGameController()->dealWithLand();
@@ -82,8 +83,16 @@ bool God::removeGodFromMap(Character* standing)
 
 void God::addToCharacter(God*god,Character* standing)
 {
+	if (god->name_ == "Earth")
+	{
+		standing->setGodTimes(earth_duration_time);
+	}
+	else
+	{
+		standing->setGodTimes(weak_god_duration_time);
+	}
 	auto width = standing->getContentSize().width;
 	god->setPosition(Vec2(width / 2, 100.0f));
 	god->setAnchorPoint(Vec2(0.5f, 0.15f));
-	standing->addChild(god, 11);
+	standing->addChild(god, 11, "god");
 }

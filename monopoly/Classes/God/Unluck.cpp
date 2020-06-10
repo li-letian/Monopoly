@@ -3,6 +3,7 @@
 #include "Common/CommonConstant.h"
 #include "Scene/GameController.h"
 #include "Common/CommonMethod.h"
+#include "Incident/PopUpLayer.h"
 
 Unluck::Unluck()
 	:God("Unluck")
@@ -26,10 +27,9 @@ bool Unluck::onLand(Character* standing)
 	if (removeGodFromMap(standing))
 	{
 		standing->setGodPossessed(unluck);
-		GetGameController()->updateGod(unluck);
 		auto god_possessed = Unluck::create();
 		addToCharacter(god_possessed, standing);
-		popUpExplain("Unluck");
+		popUpExplain("Unluck",unluck);
 		return true;
 	}
 	else
@@ -37,4 +37,15 @@ bool Unluck::onLand(Character* standing)
 		GetGameController()->dealWithLand();
 		return true;
 	}
+}
+
+void Unluck::popUpDialog()
+{
+	auto pop = PopUpLayer::create();
+	pop->setTitle("衰神生效");
+	pop->setContent("投资失败");
+	pop->setCallBack([=](Ref* render) {
+		SendMsg(msg_make_go_apper);
+		});
+	pop->setOnScene();
 }
