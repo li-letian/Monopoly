@@ -3,13 +3,11 @@
 
 #include "cocos2d.h"
 #include "Land.h"
-#include "Common/CommonMethod.h"
-#include "Character/Character.h"
 
 #include<string>
 
 USING_NS_CC;
-
+class Character;
 class Chance : public Land {
 protected:
 

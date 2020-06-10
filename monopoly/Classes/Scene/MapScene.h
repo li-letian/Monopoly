@@ -2,6 +2,7 @@
 #define _MAP_SCENE_H_
 
 #include "cocos2d.h"
+#include "God/God.h"
 #include <string>
 #include <vector>
 #include <functional>
@@ -95,6 +96,10 @@ public:
 		if (gods_.at(index) == nullptr)
 		{
 			gods_.at(index) = god;
+			if (god->getPos() >= 0)
+			{
+				gods_.at(god->getPos()) = nullptr;
+			}
 			return true;
 		}
 		else

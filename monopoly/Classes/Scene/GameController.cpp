@@ -3,8 +3,11 @@
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
 #include "Scene/ItemScene.h"
-#include "Common/CommonConstant.h"
-#include "StockScene.h"
+#include "Scene/StockScene.h"
+
+#include "Character/Character.h"
+#include "Character/Dice.h"
+
 #include "Land/Business.h"
 #include "Land/Hotel.h"
 #include "Land/Jail.h"
@@ -19,6 +22,13 @@
 #include "Incident/Incident.h"
 
 #include "God/God.h"
+#include "God/Angel.h"
+#include "God/Devil.h"
+#include "God/Earth.h"
+#include "God/Luck.h"
+#include "God/Poor.h"
+#include "God/Rich.h"
+#include "God/Unluck.h"
 
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
@@ -44,6 +54,8 @@ bool GameController::init()
 	//添加角色，暂时固定添加2个:初音未来与南小鸟
 	addCharacter("miku", miku, 15000, start_position);
 	addCharacter("nanxiaoniao", nanxiaoniao, 15000, start_position+1);
+	
+	initGod();
 
 	whose_turn_ = 0;
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
@@ -425,10 +437,36 @@ void GameController::backToStand()
 
 void GameController::initGod()
 {
-	
+	gods_.pushBack(Angel::create());
+	gods_.pushBack(Devil::create());
+	gods_.pushBack(Earth::create());
+	gods_.pushBack(Luck::create());
+	gods_.pushBack(Poor::create());
+	gods_.pushBack(Rich::create());
+	gods_.pushBack(Unluck::create());
+	for (auto god : gods_)
+	{
+		map_scene_->getMap()->addChild(god, 10);
+	}
+	updateGod(no_god);
 }
 
 void GameController::updateGod(int god_type)
 {
+	for (int i = 0; i < gods_.size(); i++)
+	{
+		auto god = gods_.at(i);
+		if (god->getTag() == god_type)
+		{
+			gods_.erase(i);
+			i--;
+		}
+		else
+		{
+			while (god->setPos(start_position + Dice::getARandomNumber(map_scene_->totalPosition() - start_position), map_scene_) != true)
+			{
 
+			}
+		}
+	}
 }

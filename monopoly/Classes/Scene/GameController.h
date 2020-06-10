@@ -2,13 +2,15 @@
 #define _GAME_CONTROLLER_H_
 
 #include "cocos2d.h"
-#include "StockScene.h"
 #include "Character/Character.h"
-#include "Scene/MapScene.h"
-#include "Character/Dice.h"
-
+#include "God/God.h"
 USING_NS_CC;
 
+class God;
+class MapScene;
+class Dice;
+class StockScene;
+class ItemScene;
 class GameController : public Node
 {
 public:

@@ -1,6 +1,8 @@
 #ifndef _REALTOR_H_
 #define _REALTOR_H_
 
+#include "cocos2d.h"
+USING_NS_CC;
 class Character;
 class Hotel;
 int GetRandomHotel();

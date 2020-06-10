@@ -3,7 +3,8 @@
 
 #include <cstdlib>
 #include<string>
-
+#include "cocos2d.h"
+USING_NS_CC;
 #define random(x) (rand()%x)
 
 class MapScene;

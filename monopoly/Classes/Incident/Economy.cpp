@@ -1,9 +1,10 @@
 #include "Incident/Economy.h"
 #include "Common/CommonConstant.h"
+#include "Common/CommonMethod.h"
 #include "Scene/StockScene.h"
-#include "Scene/ItemScene.h"
 #include "Scene/GameController.h"
 #include "Character/Character.h"
+#include "Character/Dice.h"
 int LevyIncomeTax(Character* character)
 {
 	auto tax =static_cast<int>(character->getGainValue() / tax_rate);

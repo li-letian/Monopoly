@@ -3,9 +3,10 @@
 #include "Land.h"
 #include "Common/CommonConstant.h"
 #include "Scene/GameController.h"
+#include "Scene/MapScene.h"
 #include "Incident/PopUpLayer.h"
-
 #include<string>
+#include "Common/CommonMethod.h"
 
 USING_NS_CC;
 

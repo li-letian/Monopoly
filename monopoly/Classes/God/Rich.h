@@ -2,7 +2,8 @@
 #define _RICH_H_
 
 #include "cocos2d.h"
-class God;
+#include "God.h"
+class Character;
 class Rich :public God {
 public:
 	Rich();

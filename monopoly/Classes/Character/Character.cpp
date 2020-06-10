@@ -1,6 +1,7 @@
 #include "Character/Character.h"
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
+
 USING_NS_CC;
 
 Character::Character()

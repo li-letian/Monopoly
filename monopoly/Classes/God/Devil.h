@@ -2,8 +2,10 @@
 #define _DEVIL_H_
 
 #include "cocos2d.h"
+#include "God.h"
 
-class God;
+
+class Character;
 class Devil :public God {
 public:
 	Devil();

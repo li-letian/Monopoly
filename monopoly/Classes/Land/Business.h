@@ -3,10 +3,8 @@
 
 #include "cocos2d.h"
 #include "Land.h"
-#include "Common/CommonMethod.h"
-#include "Common/CommonConstant.h"
 #include "Character/Character.h"
-
+#include "Common/CommonConstant.h"
 #include<string>
 
 USING_NS_CC;

@@ -4,6 +4,7 @@
 #include "Scene/StockScene.h"
 #include "Scene/ItemScene.h"
 #include "Common/CommonMethod.h"
+#include "Common/CommonConstant.h"
 #include "Character/Character.h"
 #include "StockScene.h"
 #include "Land/Business.h"

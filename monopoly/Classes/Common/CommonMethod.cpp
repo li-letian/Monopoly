@@ -5,7 +5,6 @@
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
 #include "Scene/StockScene.h"
-USING_NS_CC;
 
 std::string ZH(const std::string& str)
 {

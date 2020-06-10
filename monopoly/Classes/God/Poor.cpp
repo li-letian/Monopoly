@@ -1,7 +1,8 @@
 #include "God/Poor.h"
-#include "God/God.h"
 #include "Character/Character.h"
 #include "Common/CommonConstant.h"
+#include "Scene/GameController.h"
+#include "Common/CommonMethod.h"
 
 Poor::Poor()
 	:God("Poor")
@@ -11,18 +12,29 @@ Poor::Poor()
 
 bool Poor::init()
 {
+	if (!Sprite::init())
+	{
+		return false;
+	}
 	initGodImage();
+	this->setTag(poor);
 	return true;
 }
 
 bool Poor::onLand(Character* standing)
 {
-	if (setPossesed(standing, poor))
+	if (removeGodFromMap(standing))
 	{
+		standing->setGodPossessed(poor);
+		GetGameController()->updateGod(poor);
+		auto god_possessed = Poor::create();
+		addToCharacter(god_possessed, standing);
+		popUpExplain("Poor");
 		return true;
 	}
 	else
 	{
-		return false;
+		GetGameController()->dealWithLand();
+		return true;
 	}
 }

@@ -2,9 +2,11 @@
 #define _EARTH_H_
 
 #include "cocos2d.h"
+#include "God.h"
 
-class God;
-class Earth : public God {
+
+class Character;
+class Earth :public God {
 public:
 	Earth();
 	CREATE_FUNC(Earth);

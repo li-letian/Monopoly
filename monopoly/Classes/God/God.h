@@ -4,24 +4,23 @@
 
 USING_NS_CC;
 
-class MapScene;
 class Character;
+class MapScene;
 
-class God : public Sprite{
+class God :public Sprite {
 public:
 	virtual bool onLand(Character* standing) = 0;
-	bool setPos(int pos_index);
+	bool setPos(int pos_index, MapScene* map_scene);
 	int getPos()const;
 
 protected:
 	God(const std::string& name);
 	void initGodImage();
-	bool setPossesed(Character* standing, int god_type);
+	bool removeGodFromMap(Character* standing);
+	void addToCharacter(God*god,Character* standing);
+	void popUpExplain(const std::string& name);
 	int pos_index_;
 	std::string name_;
-
-private:
-	void popUpExplain();
 };
 
 

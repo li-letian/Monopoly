@@ -2,7 +2,8 @@
 #define _UNLUCK_H_
 
 #include "cocos2d.h"
-class God;
+#include "God.h"
+class Character;
 class Unluck :public God {
 public:
 	Unluck();

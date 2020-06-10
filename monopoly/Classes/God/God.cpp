@@ -13,28 +13,22 @@ God::God(const std::string& name)
 
 void God::initGodImage()
 {
-	this->initWithFile(StringUtils::format("%sImage.png", name_));
+	this->initWithFile(name_ + std::string("Image.png"));
 	this->setAnchorPoint(Vec2(0.5f, 0.15f));
 }
 
-bool God::setPos(int pos_index)
+bool God::setPos(int pos_index, MapScene* map_scene)
 {
-	auto map_scene = GetMapScene();
 	if (pos_index >= map_scene->totalPosition() || pos_index < 0)
 	{
 		return false;
 	}
 	else
 	{
-		if (pos_index_ >= 0)
+		if (map_scene->setGod(pos_index, this))
 		{
-			map_scene->getGod(pos_index) = nullptr;
-		}
-		pos_index_ = pos_index;
-		if (map_scene->setGod(pos_index_, this))
-		{
+			pos_index_ = pos_index;
 			this->setPosition(map_scene->pos(pos_index_));
-			map_scene->getMap()->addChild(this, 10);
 			return true;
 		}
 		else
@@ -49,13 +43,14 @@ int God::getPos()const
 	return pos_index_;
 }
 
-void God::popUpExplain()
+void God::popUpExplain(const std::string& name)
 {
-	auto sprite = Sprite::create(StringUtils::format("%sPop.png", name_));
+	auto sprite = Sprite::create(name + std::string("Pop.png"));
 	sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 	auto visible_size = Director::getInstance()->getVisibleSize();
-	sprite->setPosition(Vec2(visible_size.width / 2, visible_size.height / 2));
+	sprite->setPosition(Vec2(visible_size.height / 2, visible_size.height / 2));
 	auto map_scene = GetMapScene();
+	map_scene->addChild(sprite, 50);
 	auto popFadeCallFunc = CallFunc::create([=]() {
 		sprite->removeFromParentAndCleanup(true);
 		GetGameController()->dealWithLand();
@@ -64,7 +59,7 @@ void God::popUpExplain()
 	map_scene->runAction(sequence);
 }
 
-bool God::setPossesed(Character* standing,int god_type)
+bool God::removeGodFromMap(Character* standing)
 {
 	if (standing->getCondition() != normal)
 	{
@@ -74,13 +69,21 @@ bool God::setPossesed(Character* standing,int god_type)
 	{
 		if (standing->getGodPossessed() == no_god)
 		{
-			standing->setGodPossessed(god_type);
 			GetMapScene()->reMoveGod(pos_index_);
-			GetGameController()->updateGod(god_type);
-			pos_index_ = 0;
-			this->setPosition(Vec2(0, 100));
-			standing->addChild(this, 12);
-			popUpExplain();
+			this->removeFromParent();
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
+}
+
+void God::addToCharacter(God*god,Character* standing)
+{
+	auto width = standing->getContentSize().width;
+	god->setPosition(Vec2(width / 2, 100.0f));
+	god->setAnchorPoint(Vec2(0.5f, 0.15f));
+	standing->addChild(god, 11);
 }

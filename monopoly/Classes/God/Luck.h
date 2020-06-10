@@ -2,7 +2,9 @@
 #define _LUCK_H_
 
 #include "cocos2d.h"
-class God;
+#include "God.h"
+
+class Character;
 class Luck :public God {
 public:
 	Luck();
