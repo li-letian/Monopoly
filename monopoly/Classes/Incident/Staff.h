@@ -26,6 +26,9 @@ bool DestroySpecialShoes(Character* character);
 //若角色本回合已使用遥控骰子，返回false
 bool SetControlDice(Character* character, int control_point);
 
+//使用机器娃娃
+void UseRobot(Character* user);
+
 //指定地点发射导弹
 void LaunchMissile(Character* user, int target_point);
 

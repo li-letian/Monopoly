@@ -5,6 +5,7 @@
 #include "Incident/Holiday.h"
 #include "Common/CommonConstant.h"
 #include "Character/Character.h"
+#include "Character/Dice.h"
 #include "Land/Hotel.h"
 #include "Land/Business.h"
 #include "Scene/MapScene.h"
@@ -77,6 +78,29 @@ bool SetControlDice(Character* character, int control_point)
 	}
 }
 
+void UseRobot(Character* user)
+{
+	auto cur_pos = user->getCurPos();
+	auto map_scene = GetMapScene();
+	for (int i = cur_pos; i < cur_pos + 10; i++)
+	{
+		if (map_scene->getGod(i) != nullptr)
+		{
+			while (1)
+			{
+				auto index = start_position + Dice::getARandomNumber(total_position - start_position);
+				if (index < cur_pos || index >= (cur_pos + 10) % map_scene->totalPosition())
+				{
+					if (map_scene->getGod(i)->setPos(index, map_scene))
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 void LaunchMissile(Character* user, int target_point)
 {
 	auto map_scene = GetMapScene();
@@ -88,7 +112,7 @@ void LaunchMissile(Character* user, int target_point)
 	{
 		for (auto character : characters)
 		{
-			if (character->getCurPos() == i)
+			if (character->getCurPos() == i % map_scene->totalPosition())
 			{
 				if (character->getStopTimes() == 0)
 				{
