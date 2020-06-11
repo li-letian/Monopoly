@@ -37,6 +37,8 @@ bool UseRobotWorker(Character* user, int target_point);
 //若不满足使用条件则返回false
 bool UseDevilCard(int target_point);
 
+bool UseAngelCard(int target_poin);
+
 //传送神到指定地点
 bool TransmitGod();
 

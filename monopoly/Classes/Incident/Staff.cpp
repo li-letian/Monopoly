@@ -172,6 +172,7 @@ bool UseDevilCard(int target_point)
 	}
 }
 
+
 bool UseAngelCard(int target_point)
 {
 	auto map_scene = GetMapScene();

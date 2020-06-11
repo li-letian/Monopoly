@@ -165,6 +165,7 @@ bool Hotel::onLand(Character* standing)
 				auto land = map_scene->getLand(index);
 				if (!land) continue;
 				auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
+				if (!hotel->owner_) continue;
 				if (hotel->owner_->getTag() == owner_->getTag())
 				{
 					rent += hotel->rent_value_;
@@ -176,6 +177,7 @@ bool Hotel::onLand(Character* standing)
 				auto land = map_scene->getLand(index);
 				if (!land) continue;
 				auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
+				if (!hotel->owner_) continue;
 				if (hotel->owner_->getTag() == owner_->getTag())
 				{
 					rent += hotel->rent_value_;
