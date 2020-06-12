@@ -98,7 +98,7 @@ void GameController::addEventListenerCustom()
 					character->setGodTimes(character->getGodTimes() - 1);
 					if (character->getGodTimes() <= 0)
 					{
-						God* god;
+						God* god=nullptr;
 						switch (character->getGodPossessed())
 						{
 						case angel:
@@ -162,7 +162,7 @@ void GameController::addEventListenerCustom()
 					break;
 				}
 			};
-			auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create(func), nullptr);
+			auto seq = Sequence::create(DelayTime::create(0.001f), CallFunc::create(func), nullptr);
 			if (characters_.at(whose_turn_)->getMoney() < 0)
 			{
 				auto character = characters_.at(whose_turn_);

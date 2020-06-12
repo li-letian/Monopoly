@@ -41,6 +41,10 @@ public:
 	{
 		return characters_;
 	}
+	Vector<God*>& getGods()
+	{
+		return gods_;
+	}
 
 protected:
 	EventListenerCustom *listener_custom_ = nullptr; //自定义事件分发器
