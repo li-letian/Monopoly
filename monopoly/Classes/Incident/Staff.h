@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 class Character;
+class God;
 USING_NS_CC;
 
 //给指定角色配上加速鞋
@@ -43,7 +44,7 @@ bool UseDevilCard(int target_point);
 bool UseAngelCard(int target_poin);
 
 //传送神到指定地点
-bool TransmitGod();
+bool TransmitGod(God* target, int target_point);
 
 //传送角色到指定地点,若角色状态不正常，返回false
 bool TransmitCharacter(Character* user, Character* target, int target_point);
@@ -91,4 +92,8 @@ void UseHolidayCard(Character* user);
 //使用请神卡
 //若无神可请则返回false
 bool UsePrayCard(Character* user);
+
+//设置地雷
+//若指定地点已有神（包括地雷）则返回false
+bool SetMinePosition(int target_point);
 #endif // ! STAFF_H_

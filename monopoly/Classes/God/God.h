@@ -10,7 +10,7 @@ class MapScene;
 class God :public Sprite {
 public:
 	static God* createGod(int god_type);
-	bool onLand(Character* standing);
+	virtual bool onLand(Character* standing);
 	bool setPos(int pos_index, MapScene* map_scene);
 	int getPos()const;
 	void removeGodFromMap();

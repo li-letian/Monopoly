@@ -12,6 +12,7 @@
 #include "Scene/GameController.h"
 #include "Scene/StockScene.h"
 #include "God/God.h"
+#include "God/MinePosition.h"
 
 bool SetSpeedShoes(Character* character)
 {
@@ -164,7 +165,10 @@ void LaunchMissile(Character* user, int target_point)
 	{
 		text = text + character->getPlayerName() + '\n';
 	}
-	text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
+	if (demote_cnt > 0)
+	{
+		text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
+	}
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* render) {
 		SendToHospital(user,characters_to_hospital);
@@ -236,9 +240,16 @@ bool UseAngelCard(int target_point)
 	}
 }
 
-bool TransmitGod()
+bool TransmitGod(God*target,int target_point)
 {
-	return true;
+	if (target->setPos(target_point,GetMapScene()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool TransmitCharacter(Character* user, Character* target, int target_point)
@@ -528,4 +539,17 @@ bool UsePrayCard(Character* user)
 	prayed_god->addToCharacter(user);
 	prayed_god->popUpExplain(false);
 	return true;
+}
+
+bool SetMinePosition(int target_point)
+{
+	auto mine_pos = MinePosition::create();
+	if (mine_pos->setPos(target_point, GetMapScene()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
