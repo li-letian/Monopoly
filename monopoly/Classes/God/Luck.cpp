@@ -22,23 +22,6 @@ bool Luck::init()
 	return true;
 }
 
-bool Luck::onLand(Character* standing)
-{
-	if (removeGodFromMap(standing))
-	{
-		standing->setGodPossessed(luck);
-		auto god_possessed = Luck::create();
-		addToCharacter(god_possessed, standing);
-		popUpExplain("Luck",luck);
-		return true;
-	}
-	else
-	{
-		GetGameController()->dealWithLand();
-		return true;
-	}
-}
-
 void Luck::popUpDialog()
 {
 	auto pop = PopUpLayer::create();

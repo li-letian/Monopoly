@@ -22,23 +22,6 @@ bool Devil::init()
 	return true;
 }
 
-bool Devil::onLand(Character* standing)
-{
-	if (removeGodFromMap(standing))
-	{
-		standing->setGodPossessed(devil);
-		auto god_possessed = Devil::create();
-		addToCharacter(god_possessed, standing);
-		popUpExplain("Devil",devil);
-		return true;
-	}
-	else
-	{
-		GetGameController()->dealWithLand();
-		return true;
-	}
-}
-
 void Devil::popUpDialog()
 {
 	auto pop = PopUpLayer::create();

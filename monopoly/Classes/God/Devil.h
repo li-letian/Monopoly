@@ -10,9 +10,8 @@ class Devil :public God {
 public:
 	Devil();
 	CREATE_FUNC(Devil);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void popUpDialog();
 };
 #endif

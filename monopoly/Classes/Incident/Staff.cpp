@@ -11,6 +11,7 @@
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
 #include "Scene/StockScene.h"
+#include "God/God.h"
 
 bool SetSpeedShoes(Character* character)
 {
@@ -82,18 +83,38 @@ void UseRobot(Character* user)
 {
 	auto cur_pos = user->getCurPos();
 	auto map_scene = GetMapScene();
-	for (int i = cur_pos; i < cur_pos + 10; i++)
+	int toward_dir = user->getTowardDirection();
+	for (int i = cur_pos; i < cur_pos + 10 * toward_dir; i += toward_dir)
 	{
 		if (map_scene->getGod(i) != nullptr)
 		{
-			while (1)
+			switch (toward_dir)
 			{
-				auto index = start_position + Dice::getARandomNumber(total_position - start_position);
-				if (index < cur_pos || index >= (cur_pos + 10) % map_scene->totalPosition())
+			case forward_dir:
+				while (1)
 				{
-					if (map_scene->getGod(i)->setPos(index, map_scene))
+					auto index = start_position + Dice::getARandomNumber(total_position - start_position);
+					if ((index < cur_pos && index + total_position - 10>cur_pos)
+						|| index > cur_pos + 10)
 					{
-						break;
+						if (map_scene->getGod(i)->setPos(index, map_scene))
+						{
+							break;
+						}
+					}
+				}
+				break;
+			case backward_dir:
+				while (1)
+				{
+					auto index = start_position + Dice::getARandomNumber(total_position - start_position);
+					if ((index > cur_pos&& index - total_position + 10 < cur_pos)
+						|| index < cur_pos - 10)
+					{
+						if (map_scene->getGod(i)->setPos(index, map_scene))
+						{
+							break;
+						}
 					}
 				}
 			}
@@ -110,6 +131,10 @@ void LaunchMissile(Character* user, int target_point)
 	int demote_cnt = 0;
 	for (int i = target_point - 1; i <= target_point + 1; i++)
 	{
+		if (i < 0)
+		{
+			i = GetMapScene()->totalPosition() - 1;
+		}
 		for (auto character : characters)
 		{
 			if (character->getCurPos() == i % map_scene->totalPosition())
@@ -473,4 +498,34 @@ void UseHolidayCard(Character* user)
 			GoOnHoliday(character);
 		}
 	}
+}
+
+bool UsePrayCard(Character* user)
+{
+	if (user->getGodPossessed() != no_god)
+	{
+		return false;
+	}
+	auto gods = GetGameController()->getGods();
+	int min_distance = GetMapScene()->totalPosition();
+	God* prayed_god = nullptr;
+	for (auto god : gods)
+	{
+		int bigger_pos = max(god->getPos(), user->getCurPos());
+		int smaller_pos = min(god->getPos(), user->getCurPos());
+		int cur_distance = min(bigger_pos - smaller_pos, smaller_pos - bigger_pos + GetMapScene()->totalPosition() - 1);
+		if (cur_distance < min_distance)
+		{
+			min_distance = cur_distance;
+			prayed_god = god;
+		}
+	}
+	if (prayed_god == nullptr)
+	{
+		return false;
+	}
+	prayed_god->removeGodFromMap();
+	prayed_god->addToCharacter(user);
+	prayed_god->popUpExplain(false);
+	return true;
 }

@@ -22,23 +22,6 @@ bool Rich::init()
 	return true;
 }
 
-bool Rich::onLand(Character* standing)
-{
-	if (removeGodFromMap(standing))
-	{
-		standing->setGodPossessed(rich);
-		auto god_possessed = Rich::create();
-		addToCharacter(god_possessed, standing);
-		popUpExplain("Rich",rich);
-		return true;
-	}
-	else
-	{
-		GetGameController()->dealWithLand();
-		return true;
-	}
-}
-
 void Rich::popUpDialog()
 {
 	auto pop = PopUpLayer::create();

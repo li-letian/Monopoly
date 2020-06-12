@@ -10,9 +10,8 @@ class Earth :public God {
 public:
 	Earth();
 	CREATE_FUNC(Earth);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void popUpDialog();
 };
 

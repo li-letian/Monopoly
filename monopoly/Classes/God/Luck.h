@@ -9,9 +9,8 @@ class Luck :public God {
 public:
 	Luck();
 	CREATE_FUNC(Luck);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void Luck::popUpDialog();
 };
 #endif // ! _LUCK_H_

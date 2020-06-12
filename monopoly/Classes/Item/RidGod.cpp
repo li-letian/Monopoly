@@ -16,37 +16,12 @@
 void RidGod::work(Character* character) {
 	if (character->getGodPossessed() == normal) return;
 	auto game_controller = GetGameController();
-	auto map_scene = GetMapScene();
-	God* god=nullptr;
-	switch (character->getGodPossessed())
-	{
-	case angel:
-		god = Angel::create();
-		break;
-	case devil:
-		god = Devil::create();
-		break;
-	case earth:
-		god = Earth::create();
-		break;
-	case luck:
-		god = Luck::create();
-		break;
-	case poor:
-		god = Poor::create();
-		break;
-	case rich:
-		god = Rich::create();
-		break;
-	case unluck:
-		god = Unluck::create();
-		break;
-	}
-	game_controller->getGods().pushBack(god);
-	map_scene->getMap()->addChild(god, 10);
-	game_controller->updateGod(no_god);
+
+	character->setGodTimes(0);
 	character->setGodPossessed(normal);
+	game_controller->getGods().pushBack(dynamic_cast<God*>(character->getChildByName("god")));
 	character->removeChildByName("god", true);
+	game_controller->updateGod(no_god);
 }
 
 bool RidGod::init()

@@ -8,9 +8,8 @@ class Poor :public God {
 public:
 	Poor();
 	CREATE_FUNC(Poor);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void popUpDialog();
 };
 #endif

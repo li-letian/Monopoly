@@ -22,23 +22,6 @@ bool Earth::init()
 	return true;
 }
 
-bool Earth::onLand(Character* standing)
-{
-	if (removeGodFromMap(standing))
-	{
-		standing->setGodPossessed(earth);
-		auto god_possessed = Earth::create();
-		addToCharacter(god_possessed, standing);
-		popUpExplain("Earth",earth);
-		return true;
-	}
-	else
-	{
-		GetGameController()->dealWithLand();
-		return true;
-	}
-}
-
 void Earth::popUpDialog()
 {
 	auto pop = PopUpLayer::create();

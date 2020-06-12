@@ -10,9 +10,8 @@ class Angel :public God {
 public:
 	Angel();
 	CREATE_FUNC(Angel);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void popUpDialog();
 };
 #endif // !_ANGEL_H_

@@ -87,4 +87,8 @@ bool UseTurnAroundCard(Character* user);
 
 //使用强制度假卡，让所有对手都去度假
 void UseHolidayCard(Character* user);
+
+//使用请神卡
+//若无神可请则返回false
+bool UsePrayCard(Character* user);
 #endif // ! STAFF_H_

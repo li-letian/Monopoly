@@ -23,7 +23,7 @@ Hotel* Hotel::create(int index)
 	{
 		auto map_scene = GetMapScene();
 		auto tile_size = map_scene->getMap()->getTileSize();
-		pRet->index_ = index;
+		pRet->index_ = index % GetMapScene()->totalPosition();
 		pRet->rank_ = -1;
 		pRet->name_ = std::string("¼ÒÍ¥ÂÃ¹Ý") + StringUtils::format("%d", index);
 		pRet->sell_value_ = hotel_land_value;
@@ -365,6 +365,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 			standing->setMoney(standing->getMoney() - rent_value);
 			owner_->setGainValue(owner_->getGainValue() + rent_value);
 			owner_->setMoney(owner_->getMoney() + rent_value);
+			Poor::popUpDialog();
 		}
 		else
 		{
@@ -377,6 +378,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 			standing->setMoney(standing->getMoney() + rent_value);
 			owner_->setGainValue(owner_->getGainValue() - rent_value);
 			owner_->setMoney(owner_->getMoney() - rent_value);
+			Rich::popUpDialog();
 		}
 		else
 		{

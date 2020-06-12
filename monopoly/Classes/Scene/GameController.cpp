@@ -98,36 +98,10 @@ void GameController::addEventListenerCustom()
 					character->setGodTimes(character->getGodTimes() - 1);
 					if (character->getGodTimes() <= 0)
 					{
-						God* god=nullptr;
-						switch (character->getGodPossessed())
-						{
-						case angel:
-							god = Angel::create();
-							break;
-						case devil:
-							god = Devil::create();
-							break;
-						case earth:
-							god = Earth::create();
-							break;
-						case luck:
-							god = Luck::create();
-							break;
-						case poor:
-							god = Poor::create();
-							break;
-						case rich:
-							god = Rich::create();
-							break;
-						case unluck:
-							god = Unluck::create();
-							break;
-						}
-						gods_.pushBack(god);
-						map_scene_->getMap()->addChild(god, 10);
-						updateGod(no_god);
 						character->setGodPossessed(normal);
+						gods_.pushBack(dynamic_cast<God*>(character->getChildByName("god")));
 						character->removeChildByName("god", true);
+						updateGod(no_god);
 					}
 				}
 
@@ -162,7 +136,7 @@ void GameController::addEventListenerCustom()
 					break;
 				}
 			};
-			auto seq = Sequence::create(DelayTime::create(0.001f), CallFunc::create(func), nullptr);
+			auto seq = Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr);
 			if (characters_.at(whose_turn_)->getMoney() < 0)
 			{
 				auto character = characters_.at(whose_turn_);
@@ -265,8 +239,8 @@ void GameController::startGo()
 
 void GameController::startRealGo(int steps_to_go)
 {
-	steps_to_go_ = steps_to_go;
 	auto character = characters_.at(whose_turn_);
+	steps_to_go_ = steps_to_go;	//设置将要走的步数
 	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = judgeDirection(character->getCurPos());
@@ -277,9 +251,9 @@ int GameController::judgeDirection(int cur_pos)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = cur_pos + character->getTowardDirection();
-	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
+	if (next_pos >= map_scene_->totalPosition())
 	{
-		next_pos = start_position;
+		next_pos = 0;
 	}
 	else if (next_pos < start_position)
 	{
@@ -312,7 +286,6 @@ void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + character->getTowardDirection();
-	//if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	if (next_pos >= total_position)
 	{
 		next_pos = start_position;

@@ -8,9 +8,8 @@ class Unluck :public God {
 public:
 	Unluck();
 	CREATE_FUNC(Unluck);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void popUpDialog();
 };
 #endif

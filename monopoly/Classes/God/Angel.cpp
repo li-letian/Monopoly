@@ -22,23 +22,6 @@ bool Angel::init()
 	return true;
 }
 
-bool Angel::onLand(Character* standing)
-{
-	if (removeGodFromMap(standing))
-	{
-		standing->setGodPossessed(angel);
-		auto god_possessed = Angel::create();
-		addToCharacter(god_possessed, standing);
-		popUpExplain("Angel",angel);
-		return true;
-	}
-	else
-	{
-		GetGameController()->dealWithLand();
-		return true;
-	}
-}
-
 void Angel::popUpDialog()
 {
 	auto pop = PopUpLayer::create();

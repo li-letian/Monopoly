@@ -9,16 +9,18 @@ class MapScene;
 
 class God :public Sprite {
 public:
-	virtual bool onLand(Character* standing) = 0;
+	static God* createGod(int god_type);
+	bool onLand(Character* standing);
 	bool setPos(int pos_index, MapScene* map_scene);
 	int getPos()const;
+	void removeGodFromMap();
+	void addToCharacter(Character* standing);
+	void popUpExplain(bool deal_with_land = true);
 
 protected:
 	God(const std::string& name);
 	void initGodImage();
-	bool removeGodFromMap(Character* standing);
-	void addToCharacter(God*god,Character* standing);
-	void popUpExplain(const std::string& name, int god_type);
+
 	int pos_index_;
 	std::string name_;
 };

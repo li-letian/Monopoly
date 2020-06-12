@@ -8,9 +8,8 @@ class Rich :public God {
 public:
 	Rich();
 	CREATE_FUNC(Rich);
-	virtual bool init();
 
-	virtual bool onLand(Character* standing);
+	virtual bool init();
 	static void popUpDialog();
 };
 #endif

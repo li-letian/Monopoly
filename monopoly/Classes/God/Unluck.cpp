@@ -22,23 +22,6 @@ bool Unluck::init()
 	return true;
 }
 
-bool Unluck::onLand(Character* standing)
-{
-	if (removeGodFromMap(standing))
-	{
-		standing->setGodPossessed(unluck);
-		auto god_possessed = Unluck::create();
-		addToCharacter(god_possessed, standing);
-		popUpExplain("Unluck",unluck);
-		return true;
-	}
-	else
-	{
-		GetGameController()->dealWithLand();
-		return true;
-	}
-}
-
 void Unluck::popUpDialog()
 {
 	auto pop = PopUpLayer::create();
