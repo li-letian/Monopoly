@@ -14,7 +14,7 @@
 #include "God/Unluck.h"
 
 void Pray::work(Character* character) {
-	//«Î…Ò‘ı√¥–¥∞°
+	UsePrayCard(character);
 }
 
 bool Pray::init()
