@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 class Character;
+class God;
 USING_NS_CC;
 
 //给指定角色配上加速鞋
