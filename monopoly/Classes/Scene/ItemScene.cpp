@@ -128,8 +128,8 @@ void ItemScene::updateMenu(Character *player)
 
 		item_label_menu_item->setCallback([=](Ref *render) {
 			auto pop = PopUpLayer::create();
-			pop->setTitle(std::string("ï¿½ï¿½ï¿½ï¿½"));
-			pop->setContent("Ê¹ï¿½ï¿½" + item_vec_[tag][i]->getItemName() + "ï¿½ï¿½ï¿½ï¿½\n" + item_vec_[tag][i]->getContent());
+			pop->setTitle(std::string("µÀ¾ß"));
+			pop->setContent("Ê¹ÓÃ" + item_vec_[tag][i]->getItemName() + "µÀ¾ß\n" + item_vec_[tag][i]->getContent());
 
 			pop->setCallBack([=](Ref *ref) {
 				item_vec_[tag][i]->work(player);

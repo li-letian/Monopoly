@@ -28,6 +28,7 @@ void Frame::work(Character* player) {
 			pop->removeFromParentAndCleanup(true);
 		});
 	}
+	pop->setMenu(fun,txt);
 	pop->setOnScene(51);
 
 }
