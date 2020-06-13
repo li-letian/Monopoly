@@ -78,6 +78,13 @@ public:
 		loan_ = loan;
 		map_scene_->updateInformation(this);
 	}
+	bool aiFinanceOK(int use_money)
+	{
+		if (use_money < money_ / 5 && use_money < (money_ + deposit_ - loan_) / 3)
+		{
+			return true;
+		}
+	}
 	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置
 	CC_SYNTHESIZE(int, steps_scope_, StepsScope);	//一次可走的格数范围
 
@@ -92,6 +99,7 @@ public:
 	CC_SYNTHESIZE(int, control_dice_point_, ControlDicePoint);//记录遥控骰子的点数
 	CC_SYNTHESIZE(bool, is_stay_, IsStay);			//记录是否被使用停留卡
 	CC_SYNTHESIZE(int, toward_direction_, TowardDirection);//人物朝向（前或后）
+	CC_SYNTHESIZE(bool, is_ai_, IsAI);				//记录人物是否是AI
 };
 
 

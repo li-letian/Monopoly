@@ -14,8 +14,7 @@ USING_NS_CC;
 	pop->setCallBack([=](Ref* sender) {
 		log("confirm button ok");
 		});
-	pop->setPosition(Vec2(0, 0));
-	map_scene_->addChild(pop,50);
+	pop->setOnScene();
 	*/
 class PopUpLayer:public Layer
 {
@@ -39,6 +38,7 @@ private:
 	Sprite* back_ground_ = nullptr;
 	float back_ground_width_ = 0;
 	float back_ground_height_ = 0;
+	std::function<void()> call_back_func_ = nullptr;
 };
 
 #endif

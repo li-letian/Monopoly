@@ -22,7 +22,8 @@ Character::Character()
 	turtle_times_(0),
 	control_dice_point_(0),
 	is_stay_(false),
-	toward_direction_(forward_dir)
+	toward_direction_(forward_dir),
+	is_ai_(false)
 {
 	this->setTag(0);
 }

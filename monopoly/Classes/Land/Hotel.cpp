@@ -76,10 +76,6 @@ bool Hotel::onLand(Character* standing)
 	if (!owner_)
 	{
 		auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
-		auto pop = PopUpLayer::create();
-		pop->setTitle(name_);
-		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格购买这块土地吗？");
-		pop->setContent(text);
 		auto yes = [=](Ref* ref)
 		{
 			auto money = standing->getMoney();
@@ -108,9 +104,35 @@ bool Hotel::onLand(Character* standing)
 			}
 		};
 		auto no = [=](Ref* ref) { godExecute(standing); };
-		pop->setCallBack(yes, no);
-		pop->setPosition(Vec2(0, 0));
-		map_scene->addChild(pop, 50);
+		if (standing->getIsAI())
+		{
+			switch (random(2))
+			{
+			case AI_yes:
+				if (standing->aiFinanceOK(sell_value))
+				{
+					yes(nullptr);
+				}
+				else
+				{
+					no(nullptr);
+				}
+				break;
+			case AI_no:
+				no(nullptr);
+				break;
+			}
+		}
+		else
+		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle(name_);
+			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格购买这块土地吗？");
+			pop->setContent(text);
+			pop->setCallBack(yes, no);
+			pop->setPosition(Vec2(0, 0));
+			map_scene->addChild(pop, 50);
+		}
 	}
 	else
 	{
@@ -119,10 +141,6 @@ bool Hotel::onLand(Character* standing)
 			if (rank_ < 4)
 			{
 				auto sell_value = static_cast<int>(sell_value_ * sell_rise_);
-				auto pop = PopUpLayer::create();
-				pop->setTitle(name_);
-				auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格升级这块土地吗？");
-				pop->setContent(text);
 				auto yes = [=](Ref* ref)
 				{
 					auto money = standing->getMoney();
@@ -145,6 +163,29 @@ bool Hotel::onLand(Character* standing)
 					}
 				};
 				auto no = [=](Ref* ref) {godExecute(standing); };
+				if (standing->getIsAI())
+				{
+					switch (random(2))
+					{
+					case AI_yes:
+						if (standing->aiFinanceOK(sell_value))
+						{
+							yes(nullptr);
+						}
+						else
+						{
+							no(nullptr);
+						}
+						break;
+					case AI_no:
+						no(nullptr);
+						break;
+					}
+				}
+				auto pop = PopUpLayer::create();
+				pop->setTitle(name_);
+				auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value) + std::string("的价格升级这块土地吗？");
+				pop->setContent(text);
 				pop->setCallBack(yes, no);
 				pop->setPosition(Vec2(0, 0));
 				map_scene->addChild(pop, 50);
@@ -205,16 +246,14 @@ bool Hotel::onLand(Character* standing)
 					}
 				};
 				pop->setCallBack(yes);
-				pop->setPosition(Vec2(0, 0));
-				map_scene->addChild(pop, 50);
+				pop->setOnScene();
 			}
 			else
 			{
 				auto text = std::string("此处房产的所有者当前没空收取费用，本次过路免费");
 				pop->setContent(text);
 				pop->setCallBack([=](Ref* ref) {godExecute(standing); });
-				pop->setPosition(Vec2(0, 0));
-				map_scene->addChild(pop, 50);
+				pop->setOnScene();
 			}
 		}
 	}
