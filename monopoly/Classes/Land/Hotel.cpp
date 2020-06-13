@@ -6,6 +6,13 @@
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
 #include "Incident/Incident.h"
+#include "God/Angel.h"
+#include "God/Devil.h"
+#include "God/Earth.h"
+#include "God/Luck.h"
+#include "God/Poor.h"
+#include "God/Rich.h"
+#include "God/Unluck.h"
 
 USING_NS_CC;
 
@@ -16,7 +23,7 @@ Hotel* Hotel::create(int index)
 	{
 		auto map_scene = GetMapScene();
 		auto tile_size = map_scene->getMap()->getTileSize();
-		pRet->index_ = index;
+		pRet->index_ = index % GetMapScene()->totalPosition();
 		pRet->rank_ = -1;
 		pRet->name_ = std::string("家庭旅馆") + StringUtils::format("%d", index);
 		pRet->sell_value_ = hotel_land_value;
@@ -86,7 +93,7 @@ bool Hotel::onLand(Character* standing)
 				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
 				map_scene->getMap()->addChild(color_, 1);
 				promote();
-				SendMsg(msg_make_go_apper);
+				godExecute(standing, true);
 				//画点东西表示已经买完了
 			}
 			else
@@ -95,12 +102,12 @@ bool Hotel::onLand(Character* standing)
 				fail->setTitle("购买失败");
 				fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
 				fail->setCallBack([=](Ref* ref) {
-					SendMsg(msg_make_go_apper); });
+					godExecute(standing); });
 				fail->setPosition(Vec2(0, 0));
 				map_scene->addChild(fail, 51);
 			}
 		};
-		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
+		auto no = [=](Ref* ref) { godExecute(standing); };
 		pop->setCallBack(yes, no);
 		pop->setPosition(Vec2(0, 0));
 		map_scene->addChild(pop, 50);
@@ -124,7 +131,7 @@ bool Hotel::onLand(Character* standing)
 						standing->setMoney(money - sell_value);
 						standing->setEstateValue(standing->getEstateValue() + sell_value);
 						promote();
-						SendMsg(msg_make_go_apper);
+						godExecute(standing, true);
 						//画点东西表示已经买完了
 					}
 					else
@@ -137,7 +144,7 @@ bool Hotel::onLand(Character* standing)
 						map_scene->addChild(fail, 51);
 					}
 				};
-				auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
+				auto no = [=](Ref* ref) {godExecute(standing); };
 				pop->setCallBack(yes, no);
 				pop->setPosition(Vec2(0, 0));
 				map_scene->addChild(pop, 50);
@@ -158,6 +165,7 @@ bool Hotel::onLand(Character* standing)
 				auto land = map_scene->getLand(index);
 				if (!land) continue;
 				auto hotel = static_cast<Hotel*>(map_scene->getLand(index));
+				if (!hotel->owner_) continue;
 				if (hotel->owner_->getTag() == owner_->getTag())
 				{
 					rent += hotel->rent_value_;
@@ -169,6 +177,7 @@ bool Hotel::onLand(Character* standing)
 				auto land = map_scene->getLand(index);
 				if (!land) continue;
 				auto hotel = dynamic_cast<Hotel*>(map_scene->getLand(index));
+				if (!hotel->owner_) continue;
 				if (hotel->owner_->getTag() == owner_->getTag())
 				{
 					rent += hotel->rent_value_;
@@ -187,12 +196,12 @@ bool Hotel::onLand(Character* standing)
 						standing->setMoney(money - rent_value);
 						owner_->setGainValue(owner_->getGainValue() + rent_value);
 						owner_->setMoney(owner_->getMoney() + rent_value);
-						SendMsg(msg_make_go_apper);
+						godExecute(standing, false, rent_value);
 					}
 					else
 					{
 						//这里弄破产
-						SendMsg(msg_make_go_apper);
+						godExecute(standing);
 					}
 				};
 				pop->setCallBack(yes);
@@ -203,7 +212,7 @@ bool Hotel::onLand(Character* standing)
 			{
 				auto text = std::string("此处房产的所有者当前没空收取费用，本次过路免费");
 				pop->setContent(text);
-				pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); });
+				pop->setCallBack([=](Ref* ref) {godExecute(standing); });
 				pop->setPosition(Vec2(0, 0));
 				map_scene->addChild(pop, 50);
 			}
@@ -259,13 +268,23 @@ bool Hotel::setOwner(Character* character)
 	}
 	else
 	{
-		owner_->setEstateValue(owner_->getEstateValue() - static_cast<int>(sell_value_ * sell_rise_));
-		character->setEstateValue(character->getEstateValue() + static_cast<int>(sell_value_ * sell_rise_));
-		owner_ = character;
-		color_->initWithFile(StringUtils::format("character%d.png", character->getTag()));
-		color_->setPosition(map_scene->pos(index_));
-		color_->setAnchorPoint(Vec2(0.5f, 0.5f));
-		return true;
+		if (character)
+		{
+			owner_->setEstateValue(owner_->getEstateValue() - static_cast<int>(sell_value_ * sell_rise_));
+			character->setEstateValue(character->getEstateValue() + static_cast<int>(sell_value_ * sell_rise_));
+			owner_ = character;
+			color_->initWithFile(StringUtils::format("character%d.png", character->getTag()));
+			color_->setPosition(map_scene->pos(index_));
+			color_->setAnchorPoint(Vec2(0.5f, 0.5f));
+			return true;
+		}
+		else
+		{
+			owner_->setEstateValue(owner_->getEstateValue() - static_cast<int>(sell_value_ * sell_rise_));
+			owner_ = character;
+			color_->removeFromParent();
+			return true;
+		}
 	}
 }
 
@@ -278,4 +297,114 @@ int Hotel::getValue()const
 	}
 	value = static_cast<int>(value * sell_rise_);
 	return value;
+}
+
+void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
+{
+	switch (standing->getGodPossessed())
+	{
+	case no_god:
+		SendMsg(msg_make_go_apper);
+		break;
+	case angel:
+		if (rank_ >= 0 && rank_ < 4)
+		{
+			auto pre_value = this->getValue();
+			promote();
+			auto cur_value = this->getValue();
+			owner_->setEstateValue(owner_->getEstateValue() + cur_value - pre_value);
+			Angel::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	case devil:
+		if (rank_ >= 1)
+		{
+			auto pre_value = this->getValue();
+			demote();
+			auto cur_value = this->getValue();
+			owner_->setEstateValue(owner_->getEstateValue() + cur_value - pre_value);
+			Devil::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	case earth:
+		if (owner_ != standing)
+		{
+			this->setOwner(standing);
+			Earth::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	case luck:
+		if (rank_ >= 0 && rank_ < 4 && owner_ == standing)
+		{
+			auto pre_value = this->getValue();
+			this->promote();
+			auto cur_value = this->getValue();
+			owner_->setEstateValue(owner_->getEstateValue() + cur_value - pre_value);
+			Luck::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	case poor:
+		if (rent_value > 0)
+		{
+			standing->setMoney(standing->getMoney() - rent_value);
+			owner_->setGainValue(owner_->getGainValue() + rent_value);
+			owner_->setMoney(owner_->getMoney() + rent_value);
+			Poor::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	case rich:
+		if (rent_value > 0)
+		{
+			standing->setMoney(standing->getMoney() + rent_value);
+			owner_->setGainValue(owner_->getGainValue() - rent_value);
+			owner_->setMoney(owner_->getMoney() - rent_value);
+			Rich::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	case unluck:
+		if (do_promote == true)
+		{
+			if (rank_ == 0)
+			{
+				setOwner(nullptr);
+			}
+			else
+			{
+				auto pre_value = this->getValue();
+				demote();
+				auto cur_value = this->getValue();
+				owner_->setEstateValue(owner_->getEstateValue() + cur_value - pre_value);
+			}
+			Unluck::popUpDialog();
+		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
+		break;
+	}	
 }

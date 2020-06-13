@@ -3,8 +3,6 @@
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
 
-USING_NS_CC;
-
 Scene *SelectScene::createScene()
 {
 	return SelectScene::create();

@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 class Character;
+class God;
+USING_NS_CC;
 
 //给指定角色配上加速鞋
 //若角色已有加速鞋，返回false
@@ -25,8 +27,11 @@ bool DestroySpecialShoes(Character* character);
 //若角色本回合已使用遥控骰子，返回false
 bool SetControlDice(Character* character, int control_point);
 
+//使用机器娃娃
+void UseRobot(Character* user);
+
 //指定地点发射导弹
-void LaunchMissile(int target_point);
+void LaunchMissile(Character* user, int target_point);
 
 //对指定地点使用机器工人
 //若不满足使用条件则返回false
@@ -36,8 +41,10 @@ bool UseRobotWorker(Character* user, int target_point);
 //若不满足使用条件则返回false
 bool UseDevilCard(int target_point);
 
+bool UseAngelCard(int target_poin);
+
 //传送神到指定地点
-bool TransmitGod();
+bool TransmitGod(God* target, int target_point);
 
 //传送角色到指定地点,若角色状态不正常，返回false
 bool TransmitCharacter(Character* user, Character* target, int target_point);
@@ -81,4 +88,12 @@ bool UseTurnAroundCard(Character* user);
 
 //使用强制度假卡，让所有对手都去度假
 void UseHolidayCard(Character* user);
+
+//使用请神卡
+//若无神可请则返回false
+bool UsePrayCard(Character* user);
+
+//设置地雷
+//若指定地点已有神（包括地雷）则返回false
+bool SetMinePosition(int target_point);
 #endif // ! STAFF_H_

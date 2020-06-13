@@ -7,13 +7,8 @@ class Character;
 class RedCard :public Item {
 public:
 	virtual void work(Character* player);
-
-	static RedCard* RedCard::create();
-	virtual std::string getItemName();
-	virtual std::string getContent();
-private:
-	std::string name_ = std::string("ºì¿¨");
-	std::string content_ = std::string("¹É¼Û±©ÕÇ");
+	CREATE_FUNC(RedCard);
+	virtual bool init();
 };
 
 #endif

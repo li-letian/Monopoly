@@ -3,8 +3,11 @@
 #include "Scene/GameController.h"
 #include "Scene/MapScene.h"
 #include "Scene/ItemScene.h"
-#include "Common/CommonConstant.h"
-#include "StockScene.h"
+#include "Scene/StockScene.h"
+
+#include "Character/Character.h"
+#include "Character/Dice.h"
+
 #include "Land/Business.h"
 #include "Land/Hotel.h"
 #include "Land/Jail.h"
@@ -18,6 +21,15 @@
 #include "Land/Chance.h"
 #include "Incident/Incident.h"
 
+#include "God/God.h"
+#include "God/Angel.h"
+#include "God/Devil.h"
+#include "God/Earth.h"
+#include "God/Luck.h"
+#include "God/Poor.h"
+#include "God/Rich.h"
+#include "God/Unluck.h"
+
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 
@@ -30,10 +42,9 @@ bool GameController::init()
 	//创造map_scene场景并切换
 	dice_ = Dice::create(); //创造骰子
 	map_scene_ = MapScene::createScene();
-	map_scene_->addChild(this, -50,"game_controller");
+	map_scene_->addChild(this, 500,"game_controller");
 	stock_layer_ = StockScene::createScene(map_scene_); //初始化stock
-	item_layer_ = ItemScene::createScene(map_scene_);
-	map_scene_->addItemScene(item_layer_);
+	
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
 	//添加自定义事件监听器
@@ -42,8 +53,13 @@ bool GameController::init()
 	//添加角色，暂时固定添加2个:初音未来与南小鸟
 	addCharacter("miku", miku, 15000, start_position);
 	addCharacter("nanxiaoniao", nanxiaoniao, 15000, start_position+1);
+	
+	initGod();
 
 	whose_turn_ = 0;
+
+	item_layer_ = ItemScene::createScene(map_scene_,this);
+
 	returnToCharacter(characters_.at(whose_turn_)); //回到第一个角色的视角
 	addGoButton();									//添加go按钮
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
@@ -77,7 +93,17 @@ void GameController::addEventListenerCustom()
 				}
 
 				auto character = characters_.at(whose_turn_);
-
+				if (character->getGodPossessed() != normal)
+				{
+					character->setGodTimes(character->getGodTimes() - 1);
+					if (character->getGodTimes() <= 0)
+					{
+						character->setGodPossessed(normal);
+						gods_.pushBack(dynamic_cast<God*>(character->getChildByName("god")));
+						character->removeChildByName("god", true);
+						updateGod(no_god);
+					}
+				}
 
 				stock_layer_->remakeLabel(character);
 				map_scene_->setInfoOnDisplay(character);
@@ -110,7 +136,7 @@ void GameController::addEventListenerCustom()
 					break;
 				}
 			};
-			auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create(func), nullptr);
+			auto seq = Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr);
 			if (characters_.at(whose_turn_)->getMoney() < 0)
 			{
 				auto character = characters_.at(whose_turn_);
@@ -150,6 +176,7 @@ void GameController::addCharacter(const std::string &name, int tag, int money, i
 	characters_.pushBack(character);
 	character->setPosition(map_scene_->pos(start_pos));
 	map_scene_->getMap()->addChild(character, 10,tag);
+	backToStand(character);
 	log("position: %f %f", character->getPosition().x, character->getPosition().y);
 }
 
@@ -212,8 +239,8 @@ void GameController::startGo()
 
 void GameController::startRealGo(int steps_to_go)
 {
-	steps_to_go_ = steps_to_go;
 	auto character = characters_.at(whose_turn_);
+	steps_to_go_ = steps_to_go;	//设置将要走的步数
 	steps_has_gone_ = 0; //已走步数置0
 
 	int direction = judgeDirection(character->getCurPos());
@@ -224,9 +251,9 @@ int GameController::judgeDirection(int cur_pos)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = cur_pos + character->getTowardDirection();
-	if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
+	if (next_pos >= map_scene_->totalPosition())
 	{
-		next_pos = start_position;
+		next_pos = 0;
 	}
 	else if (next_pos < start_position)
 	{
@@ -259,7 +286,6 @@ void GameController::moveOneStep(int direction)
 {
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + character->getTowardDirection();
-	//if (next_pos >= static_cast<int>(map_scene_->totalPosition()))
 	if (next_pos >= total_position)
 	{
 		next_pos = start_position;
@@ -320,7 +346,7 @@ void GameController::endGo()
 	else
 	{
 		//让人物恢复到站立状态，面朝下一格
-		backToStand();
+		backToStand(character);
 		returnToCharacter(character);
 		dealWithGod();
 		//这里处理一些着陆后的事情
@@ -333,7 +359,7 @@ void GameController::dealWithGod()
 {
 	auto character = characters_.at(whose_turn_);
 	auto pos = character->getCurPos();
-	auto& god = map_scene_->getLand(pos);
+	auto god = map_scene_->getGod(pos);
 	if (god)
 		god->onLand(character);
 	else
@@ -393,9 +419,8 @@ void GameController::dealWithLand()
 
 }
 
-void GameController::backToStand()
+void GameController::backToStand(Character*character)
 {
-	auto character = characters_.at(whose_turn_);
 	auto name = character->getPlayerName();
 	auto direction = judgeDirection(character->getCurPos());
 	auto spfcache = SpriteFrameCache::getInstance();
@@ -418,5 +443,41 @@ void GameController::backToStand()
 		sprite_frame = spfcache->getSpriteFrameByName(StringUtils::format("%s-12.png", name.c_str()));
 		character->setSpriteFrame(sprite_frame);
 		break;
+	}
+}
+
+void GameController::initGod()
+{
+	gods_.pushBack(Angel::create());
+	gods_.pushBack(Devil::create());
+	gods_.pushBack(Earth::create());
+	gods_.pushBack(Luck::create());
+	gods_.pushBack(Poor::create());
+	gods_.pushBack(Rich::create());
+	gods_.pushBack(Unluck::create());
+	for (auto god : gods_)
+	{
+		map_scene_->getMap()->addChild(god, 10);
+	}
+	updateGod(no_god);
+}
+
+void GameController::updateGod(int god_type)
+{
+	for (int i = 0; i < gods_.size(); i++)
+	{
+		auto god = gods_.at(i);
+		if (god->getTag() == god_type)
+		{
+			gods_.erase(i);
+			i--;
+		}
+		else
+		{
+			while (god->setPos(start_position + Dice::getARandomNumber(total_position - start_position), map_scene_) != true)
+			{
+
+			}
+		}
 	}
 }

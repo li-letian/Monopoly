@@ -7,13 +7,8 @@ class Character;
 class Motor :public Item {
 public:
 	virtual void work(Character* player);
-
-	static Motor* Motor::create();
-	virtual std::string getItemName();
-	virtual std::string getContent();
-private:
-	std::string name_ = std::string("远行鞋");
-	std::string content_ = std::string("飞一般的感觉！！");
+	CREATE_FUNC(Motor);
+	virtual bool init();
 };
 
 #endif

@@ -7,14 +7,14 @@ void ControlDice::work(Character* player) {
 	//UseControlDice(player);
 
 }
-std::string ControlDice::getItemName() {
-	return name_;
-}
 
-ControlDice* ControlDice::create() {
-	ControlDice* control_dice = new ControlDice();
-	return control_dice;
-}
-std::string ControlDice::getContent() {
-	return content_;
+bool ControlDice::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "遥控骰子";
+	content_ = "决定移动步数";
+	return true;
 }

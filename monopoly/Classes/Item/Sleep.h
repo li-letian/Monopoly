@@ -7,13 +7,11 @@ class Character;
 class HolidayCard :public Item {
 public:
 	virtual void work(Character* player);
-
-	static HolidayCard* HolidayCard::create();
-	virtual std::string getItemName();
-	virtual std::string getContent();
+	CREATE_FUNC(HolidayCard);
+	virtual bool init();
 private:
-	std::string name_ = std::string("度假卡");
-	std::string content_ = std::string("世界这么大，我想去看看");
+	std::string name_ = std::string("");
+	std::string content_ = std::string("");
 };
 
 #endif

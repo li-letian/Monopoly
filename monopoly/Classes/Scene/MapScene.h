@@ -2,6 +2,7 @@
 #define _MAP_SCENE_H_
 
 #include "cocos2d.h"
+#include "God/God.h"
 #include <string>
 #include <vector>
 #include <functional>
@@ -30,7 +31,6 @@ protected:
 	int day_ = 1;
 
 	int info_on_display_ = 0;
-	ItemScene* item_scene_ = nullptr;
     
 
 
@@ -53,7 +53,6 @@ public:
 	bool perspectiveJump(float x, float y);
 	bool perspectiveJump(cocos2d::Vec2 p);
 	void setInfoOnDisplay(Character* player);
-	void addItemScene(ItemScene* item_scene);
 	void updateInformation(Character* player);
 	void updateDay();
 	//返回地图上第(index%总位置数)个位置相对于地图左下角锚点的GL方向坐标
@@ -88,6 +87,36 @@ public:
 	{
 		auto size = pos_.size();
 		return gods_.at(index % size);
+	}
+	
+	bool setGod(int index, God* god)
+	{
+		if (gods_.at(index) == nullptr)
+		{
+			gods_.at(index) = god;
+			if (god->getPos() >= 0)
+			{
+				gods_.at(god->getPos()) = nullptr;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool reMoveGod(int index)
+	{
+		if (gods_.at(index) == nullptr)
+		{
+			return false;
+		}
+		else
+		{
+			gods_.at(index) = nullptr;
+			return true;
+		}
 	}
 
 	int getType(int index)
@@ -128,6 +157,7 @@ public:
 	{
 		return panel_;
 	}
+	
 
 };
 

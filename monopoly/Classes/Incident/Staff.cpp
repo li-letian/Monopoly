@@ -5,11 +5,14 @@
 #include "Incident/Holiday.h"
 #include "Common/CommonConstant.h"
 #include "Character/Character.h"
+#include "Character/Dice.h"
 #include "Land/Hotel.h"
 #include "Land/Business.h"
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
 #include "Scene/StockScene.h"
+#include "God/God.h"
+#include "God/MinePosition.h"
 
 bool SetSpeedShoes(Character* character)
 {
@@ -77,7 +80,50 @@ bool SetControlDice(Character* character, int control_point)
 	}
 }
 
-void LaunchMissile(int target_point)
+void UseRobot(Character* user)
+{
+	auto cur_pos = user->getCurPos();
+	auto map_scene = GetMapScene();
+	int toward_dir = user->getTowardDirection();
+	for (int i = cur_pos; i < cur_pos + 10 * toward_dir; i += toward_dir)
+	{
+		if (map_scene->getGod(i) != nullptr)
+		{
+			switch (toward_dir)
+			{
+			case forward_dir:
+				while (1)
+				{
+					auto index = start_position + Dice::getARandomNumber(total_position - start_position);
+					if ((index < cur_pos && index + total_position - 10>cur_pos)
+						|| index > cur_pos + 10)
+					{
+						if (map_scene->getGod(i)->setPos(index, map_scene))
+						{
+							break;
+						}
+					}
+				}
+				break;
+			case backward_dir:
+				while (1)
+				{
+					auto index = start_position + Dice::getARandomNumber(total_position - start_position);
+					if ((index > cur_pos&& index - total_position + 10 < cur_pos)
+						|| index < cur_pos - 10)
+					{
+						if (map_scene->getGod(i)->setPos(index, map_scene))
+						{
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void LaunchMissile(Character* user, int target_point)
 {
 	auto map_scene = GetMapScene();
 	auto game_controller = GetGameController();
@@ -86,9 +132,13 @@ void LaunchMissile(int target_point)
 	int demote_cnt = 0;
 	for (int i = target_point - 1; i <= target_point + 1; i++)
 	{
+		if (i < 0)
+		{
+			i = GetMapScene()->totalPosition() - 1;
+		}
 		for (auto character : characters)
 		{
-			if (character->getCurPos() == i)
+			if (character->getCurPos() == i % map_scene->totalPosition())
 			{
 				if (character->getStopTimes() == 0)
 				{
@@ -115,9 +165,13 @@ void LaunchMissile(int target_point)
 	{
 		text = text + character->getPlayerName() + '\n';
 	}
-	text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
+	if (demote_cnt > 0)
+	{
+		text = text + StringUtils::format("有%d栋房屋被严重损坏", demote_cnt);
+	}
+	pop->setContent(text);
 	pop->setCallBack([=](Ref* render) {
-		SendToHospital(characters_to_hospital);
+		SendToHospital(user,characters_to_hospital);
 		});
 	pop->setOnScene();
 }
@@ -131,7 +185,8 @@ bool UseRobotWorker(Character* user, int target_point)
 		auto hotel = dynamic_cast<Hotel*>(land);
 		auto owner = hotel->getOwner();
 		auto pre_value = hotel->getValue();
-		if (user == owner)
+		if (owner == nullptr) return false;
+		else if (user == owner)
 		{
 			hotel->promote();
 			user->setEstateValue(user->getEstateValue() + hotel->getValue() - pre_value);
@@ -170,6 +225,7 @@ bool UseDevilCard(int target_point)
 	}
 }
 
+
 bool UseAngelCard(int target_point)
 {
 	auto map_scene = GetMapScene();
@@ -184,9 +240,16 @@ bool UseAngelCard(int target_point)
 	}
 }
 
-bool TransmitGod()
+bool TransmitGod(God*target,int target_point)
 {
-	return true;
+	if (target->setPos(target_point,GetMapScene()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool TransmitCharacter(Character* user, Character* target, int target_point)
@@ -200,7 +263,7 @@ bool TransmitCharacter(Character* user, Character* target, int target_point)
 			SendMsg(msg_hide_go_only);
 			user->setPosition(map_scene->pos(target_point));
 			user->setCurPos(target_point);
-			game_controller->backToStand();
+			game_controller->backToStand(user);
 			auto endGoCallFunc = CallFunc::create([=]() {
 				game_controller->endGo();
 				});
@@ -211,7 +274,7 @@ bool TransmitCharacter(Character* user, Character* target, int target_point)
 		{
 			target->setPosition(map_scene->pos(target_point));
 			target->setCurPos(target_point);
-			game_controller->backToStand();
+			game_controller->backToStand(target);
 			auto returnToCharacterCallFunc = CallFunc::create([=]() {
 				game_controller->returnToCharacter(user);
 				});
@@ -431,7 +494,7 @@ bool UseTurnAroundCard(Character* user)
 			user->setTowardDirection(forward_dir);
 		}
 		auto game_controller = GetGameController();
-		game_controller->backToStand();
+		game_controller->backToStand(user);
 		return true;
 	}
 }
@@ -445,5 +508,48 @@ void UseHolidayCard(Character* user)
 		{
 			GoOnHoliday(character);
 		}
+	}
+}
+
+bool UsePrayCard(Character* user)
+{
+	if (user->getGodPossessed() != no_god)
+	{
+		return false;
+	}
+	auto gods = GetGameController()->getGods();
+	int min_distance = GetMapScene()->totalPosition();
+	God* prayed_god = nullptr;
+	for (auto god : gods)
+	{
+		int bigger_pos = max(god->getPos(), user->getCurPos());
+		int smaller_pos = min(god->getPos(), user->getCurPos());
+		int cur_distance = min(bigger_pos - smaller_pos, smaller_pos - bigger_pos + GetMapScene()->totalPosition() - 1);
+		if (cur_distance < min_distance)
+		{
+			min_distance = cur_distance;
+			prayed_god = god;
+		}
+	}
+	if (prayed_god == nullptr)
+	{
+		return false;
+	}
+	prayed_god->removeGodFromMap();
+	prayed_god->addToCharacter(user);
+	prayed_god->popUpExplain(false);
+	return true;
+}
+
+bool SetMinePosition(int target_point)
+{
+	auto mine_pos = MinePosition::create();
+	if (mine_pos->setPos(target_point, GetMapScene()))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }

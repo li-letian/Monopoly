@@ -38,8 +38,8 @@ constexpr int forward_dir = 1;
 constexpr int backward_dir = -1;
 
 //人物行走的格数
-constexpr int total_position = 405;
-constexpr int start_position = 379;
+constexpr int total_position = 50;
+constexpr int start_position = 17;
 
 constexpr int turtle_steps = 1;
 constexpr int init_turtle_times = 3;
@@ -103,6 +103,9 @@ constexpr int angel = 5;
 constexpr int devil = 6;
 constexpr int earth = 7;	//土地公
 constexpr int mine_position = 8;//地雷
+
+constexpr int earth_duration_time = 3;
+constexpr int weak_god_duration_time = 5;
 
 //交通罚款
 constexpr int traffic_fine = 5000;
