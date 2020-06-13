@@ -14,6 +14,7 @@
 #include "Item/RedCard.h"
 #include "Item/Turtle.h"
 #include "Item/TurnAround.h"
+#include "AudioEngine.h"
 #include "Item/Sleep.h"
 using namespace std;
 
@@ -27,7 +28,7 @@ ItemScene *ItemScene::createScene(MapScene *map_scene, GameController* game_cont
 	item_layer->map_scene_->addChild(item_layer, 23, "item_scene");
 	item_layer->map_scene_->setMenuCallback("item", [=](Ref *ref) { item_layer->open(ref); });
 
-	//Ìí¼ÓÔ­±¾¾ÍÓÐµÄµÀ¾ß
+	//ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄµï¿½ï¿½ï¿½
 	auto characters = item_layer->game_controller_->getCharacters();
 	item_layer->addItem(characters.at(0), BlackCard::create());
 	item_layer->addItem(characters.at(0), Car::create());
@@ -81,8 +82,8 @@ void ItemScene::updateMenu(Character *player)
 
 		item_label_menu_item->setCallback([=](Ref *render) {
 			auto pop = PopUpLayer::create();
-			pop->setTitle(std::string("µÀ¾ß"));
-			pop->setContent("Ê¹ÓÃ" + item_vec_[tag][i]->getItemName() + "µÀ¾ß\n" + item_vec_[tag][i]->getContent());
+			pop->setTitle(std::string("ï¿½ï¿½ï¿½ï¿½"));
+			pop->setContent("Ê¹ï¿½ï¿½" + item_vec_[tag][i]->getItemName() + "ï¿½ï¿½ï¿½ï¿½\n" + item_vec_[tag][i]->getContent());
 
 			pop->setCallBack([=](Ref *ref) {
 				item_vec_[tag][i]->work(player);
@@ -105,12 +106,14 @@ void ItemScene::updateMenu(Character *player)
 
 void ItemScene::open(Ref *ref)
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(0, 0));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { close(ref); });
 }
 
 void ItemScene::close(Ref *ref)
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(6000, 6000));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { open(ref); });
 }
@@ -121,30 +124,30 @@ void ItemScene::posInit()
 	pos_vec_.push_back(Vec2(165, 550));
 	pos_vec_.push_back(Vec2(310, 550));
 	pos_vec_.push_back(Vec2(455, 550));
-	pos_vec_.push_back(Vec2(597, 550)); //µÚÒ»ÐÐ
+	pos_vec_.push_back(Vec2(597, 550)); //ï¿½ï¿½Ò»ï¿½ï¿½
 	pos_vec_.push_back(Vec2(20, 468));
 	pos_vec_.push_back(Vec2(165, 468));
 	pos_vec_.push_back(Vec2(310, 468));
 	pos_vec_.push_back(Vec2(455, 468));
-	pos_vec_.push_back(Vec2(597, 468)); //µÚ¶þÐÐ
+	pos_vec_.push_back(Vec2(597, 468)); //ï¿½Ú¶ï¿½ï¿½ï¿½
 	pos_vec_.push_back(Vec2(20, 388));
 	pos_vec_.push_back(Vec2(165, 388));
 	pos_vec_.push_back(Vec2(310, 388));
 	pos_vec_.push_back(Vec2(455, 388));
-	pos_vec_.push_back(Vec2(597, 388)); //µÚÈýÐÐ
+	pos_vec_.push_back(Vec2(597, 388)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	pos_vec_.push_back(Vec2(20, 306));
 	pos_vec_.push_back(Vec2(165, 306));
 	pos_vec_.push_back(Vec2(310, 306));
 	pos_vec_.push_back(Vec2(455, 306));
-	pos_vec_.push_back(Vec2(597, 306)); //µÚËÄÐÐ
+	pos_vec_.push_back(Vec2(597, 306)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	pos_vec_.push_back(Vec2(20, 226));
 	pos_vec_.push_back(Vec2(165, 226));
 	pos_vec_.push_back(Vec2(310, 226));
 	pos_vec_.push_back(Vec2(455, 226));
-	pos_vec_.push_back(Vec2(597, 226)); //µÚÎåÐÐ
+	pos_vec_.push_back(Vec2(597, 226)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	pos_vec_.push_back(Vec2(20, 146));
 	pos_vec_.push_back(Vec2(165, 146));
 	pos_vec_.push_back(Vec2(310, 146));
 	pos_vec_.push_back(Vec2(455, 146));
-	pos_vec_.push_back(Vec2(597, 146)); //µÚÁùÐÐ
+	pos_vec_.push_back(Vec2(597, 146)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }
