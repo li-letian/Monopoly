@@ -17,10 +17,10 @@
 #include "Land/Life.h"
 #include "Land/Chance.h"
 #include "Incident/Incident.h"
-
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 
+#include "AudioEngine.h"
 bool GameController::init()
 {
 	if (!Node::init())
@@ -166,6 +166,7 @@ void GameController::addGoButton()
 	//暂时没有找到好的按钮素材，先将按前按后的按钮设为同一张图
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		SendMsg(msg_start_go); //点击后发送隐藏按钮的信息
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);

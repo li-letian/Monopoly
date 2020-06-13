@@ -13,6 +13,7 @@
 #include "Item/RedCard.h"
 #include "Item/Turtle.h"
 #include "Item/TurnAround.h"
+#include "AudioEngine.h"
 #include "Item/Sleep.h"
 using namespace std;
 
@@ -63,12 +64,13 @@ void ItemScene::updateMenu(Character* player) {
 		auto item_label_menu_item = MenuItemLabel::create(item_label);
 
 		item_label_menu_item->setCallback([=](Ref* render) {
+			auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
 			auto pop = PopUpLayer::create();
 			pop->setTitle(std::string("道具"));
 			pop->setContent("使用"+ item_vec_[tag][i]->getItemName()+"道具\n"+ item_vec_[tag][i]->getContent());
 			
 			pop->setCallBack([=](Ref* ref) {
-			   
+
                item_vec_[tag][i]->work(player);
 			   item_vec_[tag].erase(item_vec_[tag].begin() + i);
 			   this->updateMenu(player);
@@ -91,12 +93,14 @@ void ItemScene::updateMenu(Character* player) {
 
 void ItemScene::open(Ref* ref)
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(0, 0));
 	this->map_scene_->setMenuCallback("item", [=](Ref* ref) {close(ref); });
 }
 
 void ItemScene::close(Ref* ref)
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(6000, 6000));
 	this->map_scene_->setMenuCallback("item", [=](Ref* ref) {open(ref); });
 }
