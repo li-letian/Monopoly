@@ -27,16 +27,33 @@ ItemScene *ItemScene::createScene(MapScene *map_scene, GameController* game_cont
 	item_layer->map_scene_->addChild(item_layer, 23, "item_scene");
 	item_layer->map_scene_->setMenuCallback("item", [=](Ref *ref) { item_layer->open(ref); });
 
+	auto visible_size = Director::getInstance()->getVisibleSize();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(false);
+	listener->onTouchBegan = [=](Touch* touch, Event* event) {
+		if (item_layer->is_open_)
+		{
+			if (touch->getLocation().x > visible_size.height) listener->setSwallowTouches(false);
+			else listener->setSwallowTouches(true);
+		}
+		else
+		{
+			listener->setSwallowTouches(false);
+		}
+		return true;
+	};
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, item_layer);
+
 	//添加原本就有的道具
-	auto characters = item_layer->game_controller_->getCharacters();
-	item_layer->addItem(characters.at(0), BlackCard::create());
-	item_layer->addItem(characters.at(0), Car::create());
-	item_layer->addItem(characters.at(0), Motor::create());
-	item_layer->addItem(characters.at(0), HouseChange::create());
-	item_layer->addItem(characters.at(0), RedCard::create());
-	item_layer->addItem(characters.at(0), Turtle::create());
-	item_layer->addItem(characters.at(0), TurnAround::create());
-	item_layer->addItem(characters.at(0), HolidayCard::create());
+	//auto characters = item_layer->game_controller_->getCharacters();
+	//item_layer->addItem(characters.at(0), BlackCard::create());
+	//item_layer->addItem(characters.at(0), Car::create());
+	//item_layer->addItem(characters.at(0), Motor::create());
+	//item_layer->addItem(characters.at(0), HouseChange::create());
+	//item_layer->addItem(characters.at(0), RedCard::create());
+	//item_layer->addItem(characters.at(0), Turtle::create());
+	//item_layer->addItem(characters.at(0), TurnAround::create());
+	//item_layer->addItem(characters.at(0), Sleep::create());
 
 
 	return item_layer;
@@ -59,11 +76,39 @@ bool ItemScene::init()
 	return true;
 }
 
+int ItemScene::getItemSize(Character* player)
+{
+	auto tag = player->getTag();
+	return item_vec_.at(tag).size();
+}
+
 void ItemScene::addItem(Character *player, Item *item)
 {
 	auto tag = player->getTag();
 	game_controller_->addChild(item, 600);
 	item_vec_.at(tag).push_back(item);
+}
+
+void ItemScene::removeItem(Character* player, Item* item)
+{
+	auto tag = player->getTag();
+	item->removeFromParentAndCleanup(true);
+	auto& vec = item_vec_.at(tag);
+	vec.erase(std::find(vec.begin(),vec.end(),item));
+}
+
+Item* ItemScene::getItem(Character* player, std::string name)
+{
+	auto tag = player->getTag();
+	auto& vec = item_vec_.at(tag);
+	for (auto item : vec)
+	{
+		if (item->getItemName() == name)
+		{
+			return item;
+		}
+	}
+	return nullptr;
 }
 
 void ItemScene::updateMenu(Character *player)
@@ -74,7 +119,7 @@ void ItemScene::updateMenu(Character *player)
 	this->addChild(item_sprite, 24, "sprite");
 	int tag = player->getTag();
 
-	for (int i = 0; i < item_vec_[tag].size(); i++)
+	for (decltype(item_vec_[tag].size()) i = 0; i < item_vec_[tag].size(); i++)
 	{
 		auto item_label = Label::createWithSystemFont(ZH(item_vec_[tag][i]->getItemName()), "fonts/arial.ttf", 34);
 		auto item_label_menu_item = MenuItemLabel::create(item_label);
@@ -105,12 +150,14 @@ void ItemScene::updateMenu(Character *player)
 
 void ItemScene::open(Ref *ref)
 {
+	is_open_ = true;
 	this->setPosition(Vec2(0, 0));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { close(ref); });
 }
 
 void ItemScene::close(Ref *ref)
 {
+	is_open_ = false;
 	this->setPosition(Vec2(6000, 6000));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { open(ref); });
 }

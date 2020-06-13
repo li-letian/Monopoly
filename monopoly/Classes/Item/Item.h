@@ -16,6 +16,10 @@ public:
 	{
 		return;
 	}
+	virtual void worked(Character* player)
+	{
+		return;
+	}
 	virtual std::string getItemName()
 	{
 		return name_;

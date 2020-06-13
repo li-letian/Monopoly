@@ -3,9 +3,54 @@
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 #include "Character/Character.h"
+#include "Scene/ItemScene.h"
+#include "Item/Item.h"
+#include "Scene/GameController.h"
 
 bool SendToJail(Character* character)
 {
+	auto item = GetItemScene()->getItem(character, "åÐÒ£·¨Íâ");
+	if (item!=nullptr)
+	{
+		item->worked(character);
+		GetItemScene()->removeItem(character, item);
+		return true;
+	}
+	item = GetItemScene()->getItem(character, "¼Þ»ö¿¨");
+	if (item != nullptr)
+	{
+		auto pop = PopUpLayer::create();
+		std::vector<std::string>name;
+		std::vector<std::function<void(Ref*)>>fun;
+		auto characters = GetGameController()->getCharacters();
+		for (auto c : characters)
+		{
+			name.push_back(c->getPlayerName());
+			fun.push_back([=](Ref* ref)
+			{
+				if (c->getStopTimes() > 0)
+				{
+					return;
+				}
+				else
+				{
+					c->setVisible(false);
+					c->setCurPos(283);
+					c->setPosition(GetMapScene()->pos(238));
+					c->setStopTimes(default_stop_times);
+					c->setCondition(in_jail);
+					return;
+				}
+				GetItemScene()->removeItem(character, item);
+				pop->removeFromParentAndCleanup(true);
+			});
+		}
+		pop->setTitle("ÇëÑ¡Ôñ¼Þ»ö¸ø");
+		pop->setMenu(fun, name);
+		item->worked(character);
+		pop->setOnScene();
+		return true;
+	}
 	if (character->getStopTimes() > 0)
 	{
 		return false;

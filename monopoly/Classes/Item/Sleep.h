@@ -4,10 +4,10 @@
 class Character;
 #include "Item.h"
 #include "Common/CommonMethod.h"
-class HolidayCard :public Item {
+class Sleep :public Item {
 public:
 	virtual void work(Character* player);
-	CREATE_FUNC(HolidayCard);
+	CREATE_FUNC(Sleep);
 	virtual bool init();
 private:
 	std::string name_ = std::string("");

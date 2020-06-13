@@ -7,6 +7,8 @@
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
 #include "Incident/Incident.h"
+#include "Scene/ItemScene.h"
+#include "Item/Item.h"
 
 USING_NS_CC;
 
@@ -38,7 +40,8 @@ Hospital* Hospital::create( int index)
 bool Hospital::onLand(Character* standing)
 {
 	//要是没有出院证明就直接退出
-	if (false) return false;
+	auto item = GetItemScene()->getItem(standing, "出院证明");
+	if (item == nullptr) return false;
 	auto map_scene = GetMapScene();
 	auto tile_size = map_scene->getMap()->getTileSize();
 	auto& characters = dynamic_cast<GameController*>(Director::getInstance()->getRunningScene()->getChildByName("game_controller"))->getCharacters();
@@ -55,6 +58,7 @@ bool Hospital::onLand(Character* standing)
 			callback.push_back([=](Ref* ref) {
 				character->setStopTimes(0);
 				PopUpHospitalDialog(character);
+				GetItemScene()->removeItem(standing, item);
 				SendMsg(msg_make_go_apper);
 			});
 		}

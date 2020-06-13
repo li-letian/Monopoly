@@ -2,13 +2,13 @@
 #include "Character/Character.h"
 #include "Incident/Staff.h"
 
-void HolidayCard::work(Character* player) {
+void Sleep::work(Character* player) {
 
 	UseHolidayCard(player);
 
 }
 
-bool HolidayCard::init()
+bool Sleep::init()
 {
 	if (!Item::init())
 	{
