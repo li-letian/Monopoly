@@ -19,7 +19,7 @@
 #include "Land/Life.h"
 #include "Land/Chance.h"
 #include "Incident/Incident.h"
-
+#include "AudioEngine.h"
 #include <algorithm>
 
 USING_NS_CC;
@@ -197,11 +197,14 @@ bool MapScene::panelInit()
 
 	//更改按钮回调的执行
 	close_item->setCallback([=](Ref *render) {
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+		AudioEngine::stopAll();
 		auto scene = StartScene::createScene();
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 
 	setting_item->setCallback([=](Ref *render) {
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = SettingScene::createScene();
 		Director::getInstance()->pushScene(scene);
 	});

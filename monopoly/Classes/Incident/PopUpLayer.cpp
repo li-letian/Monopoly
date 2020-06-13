@@ -2,7 +2,7 @@
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Scene/MapScene.h"
-
+#include "AudioEngine.h"
 
 bool PopUpLayer::init()
 {
@@ -95,6 +95,7 @@ void PopUpLayer::setContent(const std::string& content)
 
 void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back,const std::string text)
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(25);
 	auto confirm_item = MenuItemFont::create(ZH(text), [=](Ref* ref) {
@@ -111,10 +112,12 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 
 void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back)
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(25);
 
 	auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
+		auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
 		confirm_call_back(ref);
 		this->removeFromParentAndCleanup(true); });
 	confirm_item->setColor(Color3B(0, 0, 0));
@@ -122,6 +125,7 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	confirm_item->setPosition(Vec2(2 * grid_distance, 2 * grid_distance));
 
 	auto cancel_item = MenuItemFont::create(ZH("取消"), [=](Ref* ref) {
+		auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
 		cancel_call_back(ref);
 		this->removeFromParentAndCleanup(true);
 	});

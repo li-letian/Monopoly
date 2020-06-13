@@ -5,6 +5,7 @@
 #include "Common/CommonMethod.h"
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
+#include "AudioEngine.h"
 
 bool Dice::init()
 {
@@ -43,6 +44,7 @@ int Dice::getARandomNumber(int scope)
 
 void Dice::increaseNumber()
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
 	auto map_scene = GetMapScene();
 	showCurNumber();
 	auto endAppearCallFunc = CallFunc::create([=]() {
@@ -75,6 +77,7 @@ void Dice::endAppear()
 
 void Dice::decreaseNumber()
 {
+	auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
 	auto map_scene = GetMapScene();
 	map_scene->removeChildByName(StringUtils::format("number_%d", cur_point_), true);
 	cur_point_--;

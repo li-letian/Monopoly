@@ -2,7 +2,7 @@
 #include "Scene/SelectScene.h"
 #include "Scene/SettingScene.h"
 #include "Common/CommonMethod.h"
-
+#include "AudioEngine.h"
 USING_NS_CC;
 
 Scene* StartScene::createScene()
@@ -18,7 +18,7 @@ bool StartScene::init()
 	{
 		return false;
 	}
-
+	auto soundEffectID = AudioEngine::play2d("BGM.mp3", true);
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
@@ -32,16 +32,19 @@ bool StartScene::init()
 
 	auto select_item = MenuItemFont::create(ZH("| 开始游戏 |"), [&](Ref* render)
 	{
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = SelectScene::createScene();
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 	auto setting_item = MenuItemFont::create(ZH("| 游戏设置 |"), [&](Ref* render)
 	{
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = SettingScene::createScene();
 		Director::getInstance()->pushScene(scene);
 	});
 	auto close_item = MenuItemFont::create(ZH("| 退出游戏 |"), [&](Ref* render)
 	{
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		Director::getInstance()->end();
 	});
 
