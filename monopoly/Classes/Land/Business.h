@@ -3,10 +3,8 @@
 
 #include "cocos2d.h"
 #include "Land.h"
-#include "Common/CommonMethod.h"
-#include "Common/CommonConstant.h"
 #include "Character/Character.h"
-
+#include "Common/CommonConstant.h"
 #include<string>
 
 USING_NS_CC;
@@ -26,6 +24,9 @@ public:
 	bool onBusinessLand(Character* standing);
 	bool promote(bool house_change = false);
 	bool demote();
+	Character* getOwner() {
+		return owner_;
+	}
 	static Business* create( int index);
 };
 

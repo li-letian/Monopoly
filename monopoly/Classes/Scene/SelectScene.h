@@ -2,6 +2,7 @@
 #define _SELECT_SCENE_H_
 
 #include "cocos2d.h"
+USING_NS_CC;
 
 class SelectScene : public cocos2d::Scene
 {

@@ -7,14 +7,14 @@ void RedCard::work(Character* player) {
 	UseRedCard(player);
 
 }
-std::string RedCard::getItemName() {
-	return name_;
-}
 
-RedCard* RedCard::create() {
-	RedCard* red_card = new RedCard();
-	return red_card;
-}
-std::string RedCard::getContent() {
-	return content_;
+bool RedCard::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "ºì¿¨";
+	content_ = "¹É¼Û±©ÕÇ";
+	return true;
 }

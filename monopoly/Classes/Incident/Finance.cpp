@@ -1,6 +1,7 @@
 #include "Incident/Finance.h"
 #include "Incident/PopUpLayer.h"
 #include "Common/CommonConstant.h"
+#include "Common/CommonMethod.h"
 #include "Scene/StockScene.h"
 
 void SetStockMarket(int up_or_down)

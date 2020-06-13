@@ -1,6 +1,8 @@
 #ifndef _HOLIDAY_H_
 #define _HOLIDAY_H_
 
+#include "cocos2d.h"
+USING_NS_CC;
 class Character;
 //ÀÕ»•∂»ºŸ
 bool GoOnHoliday(Character* character);

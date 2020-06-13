@@ -40,7 +40,7 @@ bool SendToHospital(Character* character)
 	}
 }
 
-bool SendToHospital(Vector<Character*>characters_to_hospital)
+bool SendToHospital(Character*user,Vector<Character*>characters_to_hospital)
 {
 	Vector<Character*>characters_have_insurance;
 	for (auto character : characters_to_hospital)
@@ -55,19 +55,41 @@ bool SendToHospital(Vector<Character*>characters_to_hospital)
 		character->setStopTimes(default_stop_times);
 		character->setCondition(in_hospital);
 	}
-	auto pop = PopUpLayer::create();
-	pop->setTitle("保险生效");
-	auto text = std::string("以下人得到补偿\n");
-	for (auto character : characters_have_insurance)
+	if (characters_have_insurance.size() > 0)
 	{
-		text = text + character->getPlayerName() + StringUtils::format(":%d\n", insurance_value * 2);
-		character->setMoney(character->getMoney() + insurance_value * 2);
+		auto pop = PopUpLayer::create();
+		pop->setTitle("保险生效");
+		auto text = std::string("以下人得到补偿\n");
+		for (auto character : characters_have_insurance)
+		{
+			text = text + character->getPlayerName() + StringUtils::format(":%d\n", insurance_value * 2);
+			character->setMoney(character->getMoney() + insurance_value * 2);
+		}
+		pop->setContent(text);
+		pop->setCallBack([=](Ref* render) {
+			for (int i = 0; i < characters_to_hospital.size(); i++)
+			{
+				if (characters_to_hospital.at(i) == user)
+				{
+					SendMsg(msg_hide_go_only);
+					SendMsg(msg_make_go_apper);
+				}
+			}
+			});
+		pop->setOnScene();
 	}
-	pop->setContent(text);
-	pop->setCallBack([=](Ref* render) {
-		
-		});
-	pop->setOnScene();
+	else
+	{
+		for (int i = 0; i < characters_to_hospital.size(); i++)
+		{
+			if (characters_to_hospital.at(i) == user)
+			{
+				SendMsg(msg_hide_go_only);
+				SendMsg(msg_make_go_apper);
+			}
+		}
+	}
+	
 	return true;
 }
 

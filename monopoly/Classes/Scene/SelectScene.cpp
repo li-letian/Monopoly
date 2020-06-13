@@ -4,8 +4,6 @@
 #include "Scene/GameController.h"
 #include "AudioEngine.h"
 
-USING_NS_CC;
-
 Scene *SelectScene::createScene()
 {
 	return SelectScene::create();

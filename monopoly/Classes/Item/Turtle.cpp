@@ -7,14 +7,14 @@ void Turtle::work(Character* player) {
 	SetTurtle(player);
 
 }
-std::string Turtle::getItemName() {
-	return name_;
-}
 
-Turtle* Turtle::create() {
-	Turtle* turtle = new Turtle();
-	return turtle;
-}
-std::string Turtle::getContent() {
-	return content_;
+bool Turtle::init()
+{
+	if (!Item::init())
+	{
+		return false;
+	}
+	name_ = "乌龟卡";
+	content_ = "只走一步，可能会有额外惊喜哦！";
+	return true;
 }
