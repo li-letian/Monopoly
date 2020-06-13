@@ -2,7 +2,6 @@
 #include "Scene/StartScene.h"
 #include "Scene/MapScene.h"
 #include "Scene/GameController.h"
-#include "AudioEngine.h"
 
 Scene *SelectScene::createScene()
 {
@@ -30,12 +29,10 @@ bool SelectScene::init()
 	MenuItemFont::setFontSize(50);
 
 	auto exit_item = MenuItemFont::create("Exit", [&](Ref *render) {
-		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = StartScene::createScene();
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 	auto start_item = MenuItemFont::create("Start", [&](Ref *render) {
-		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		auto temp = GameController::create();
 	});
 

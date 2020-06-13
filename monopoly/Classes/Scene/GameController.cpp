@@ -33,25 +33,24 @@
 #include "Common/CommonConstant.h"
 #include "Common/CommonMethod.h"
 
-#include "AudioEngine.h"
 bool GameController::init()
 {
 	if (!Node::init())
 	{
 		return false;
 	}
-	//ï¿½ï¿½ï¿½ï¿½map_sceneï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½
-	dice_ = Dice::create(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//´´Ôìmap_scene³¡¾°²¢ÇÐ»»
+	dice_ = Dice::create(); //´´Ôì÷»×Ó
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, 500,"game_controller");
-	stock_layer_ = StockScene::createScene(map_scene_); //ï¿½ï¿½Ê¼ï¿½ï¿½stock
+	stock_layer_ = StockScene::createScene(map_scene_); //³õÊ¼»¯stock
 	
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
-	//ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//Ìí¼Ó×Ô¶¨ÒåÊÂ¼þ¼àÌýÆ÷
 	addEventListenerCustom();
 
-	//ï¿½ï¿½ï¿½Ó½ï¿½É«ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ì¶ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½:ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½
+	//Ìí¼Ó½ÇÉ«£¬ÔÝÊ±¹Ì¶¨Ìí¼Ó2¸ö:³õÒôÎ´À´ÓëÄÏÐ¡Äñ
 	addCharacter("miku", miku, 15000, start_position);
 	addCharacter("nanxiaoniao", nanxiaoniao, 15000, start_position+1);
 	
@@ -61,8 +60,8 @@ bool GameController::init()
 
 	item_layer_ = ItemScene::createScene(map_scene_,this);
 
-	returnToCharacter(characters_.at(whose_turn_)); //ï¿½Øµï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½Ó½ï¿½
-	addGoButton();									//ï¿½ï¿½ï¿½ï¿½goï¿½ï¿½Å¥
+	returnToCharacter(characters_.at(whose_turn_)); //»Øµ½µÚÒ»¸ö½ÇÉ«µÄÊÓ½Ç
+	addGoButton();									//Ìí¼Ógo°´Å¥
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
 	map_scene_->setInfoOnDisplay(characters_.at(whose_turn_));
 	map_scene_->updateInformation(characters_.at(whose_turn_));
@@ -74,14 +73,14 @@ void GameController::addEventListenerCustom()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom *event) {
 		char *buf = static_cast<char *>(event->getUserData());
-		int msg = std::atoi(buf); //ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+		int msg = std::atoi(buf); //½âÎöÊÕµ½µÄÐÅÏ¢
 		switch (msg)
 		{
-		case (msg_start_go):												//ï¿½ï¿½goï¿½ï¿½Å¥ï¿½ï¿½Ê§
-			go_button_menu_->setPosition(visible_size.width + 1000, 0); //ï¿½ï¿½ï¿½ï¿½Å¥ï¿½Æµï¿½ï¿½ï¿½Ä»ï¿½ï¿½
-			startGo();													//ï¿½ï¿½ï¿½ï¿ªÊ¼ï¿½ï¿½Â·
+		case (msg_start_go):												//ÈÃgo°´Å¥ÏûÊ§
+			go_button_menu_->setPosition(visible_size.width + 1000, 0); //½«°´Å¥ÒÆµ½ÆÁÄ»Íâ
+			startGo();													//ÈËÎï¿ªÊ¼×ßÂ·
 			break;
-		case (msg_make_go_apper): //ï¿½ï¿½goï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
+		case (msg_make_go_apper): //ÈÃgo°´Å¥³öÏÖ
 		{
 			auto func = [=]() {
 
@@ -110,12 +109,12 @@ void GameController::addEventListenerCustom()
 				map_scene_->setInfoOnDisplay(character);
 				map_scene_->updateInformation(character);
 				item_layer_->updateMenu(characters_.at(whose_turn_));
-				//ï¿½ï¿½ï¿½ï¿½ï¿½ï´¦ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½Ö®Ç°Ó¦ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				//ÔÚÕâÀï´¦Àí±¾»ØºÏ×ßÖ®Ç°Ó¦¸Ã´¦ÀíµÄÊÂÇé
 				returnToCharacter(character);
 
-				//ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó»ØºÏ¿ï¿½Ê¼Ç°Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				//ÔÚºóÃæÌí¼Ó»ØºÏ¿ªÊ¼Ç°Òª×öµÄÊÂ
 
-				//1.ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+				//1.ÏÈÅÐ¶ÏÈËÎï×´Ì¬
 				switch (character->getCondition())
 				{
 				case normal:
@@ -142,9 +141,9 @@ void GameController::addEventListenerCustom()
 			{
 				auto character = characters_.at(whose_turn_);
 				auto pop = PopUpLayer::create();
-				pop->setTitle("ï¿½Æ²ï¿½");
+				pop->setTitle("ÆÆ²ú");
 				auto text = StringUtils::format("%s", character->getPlayerName())
-					+ std::string("ï¿½ï¿½ï¿½Æ²ï¿½");
+					+ std::string("ÒÑÆÆ²ú");
 				pop->setContent(text);
 				pop->setCallBack([=](Ref* render) {
 					characters_.erase(whose_turn_);
@@ -184,22 +183,21 @@ void GameController::addCharacter(const std::string &name, int tag, int money, i
 void GameController::returnToCharacter(Character *character)
 {
 	map_scene_->perspectiveJump(map_scene_->pos(character->getCurPos()).x, map_scene_->pos(character->getCurPos()).y);
-	//ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»»ï¿½ï¿½ï¿½Ó½ï¿½×ªï¿½ï¿½ï¿½ï¿½É«
+	//¾­¹ýÄ³ÖÖÉñÆæµÄ×ø±ê±ä»»½«ÊÓ½Ç×ªµ½½ÇÉ«
 }
 
 void GameController::addGoButton()
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
 
-	//ï¿½ï¿½Ê±Ã»ï¿½ï¿½ï¿½Òµï¿½ï¿½ÃµÄ°ï¿½Å¥ï¿½Ø²Ä£ï¿½ï¿½È½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ä°ï¿½Å¥ï¿½ï¿½ÎªÍ¬Ò»ï¿½ï¿½Í¼
+	//ÔÝÊ±Ã»ÓÐÕÒµ½ºÃµÄ°´Å¥ËØ²Ä£¬ÏÈ½«°´Ç°°´ºóµÄ°´Å¥ÉèÎªÍ¬Ò»ÕÅÍ¼
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
-		SendMsg(msg_start_go); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ï¢
+		SendMsg(msg_start_go); //µã»÷ºó·¢ËÍÒþ²Ø°´Å¥µÄÐÅÏ¢
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
-	//ï¿½ï¿½ï¿½ï¿½Ãªï¿½ã¡¢ï¿½ï¿½Ê¼Î»ï¿½ï¿½
+	//ÉèÖÃÃªµã¡¢³õÊ¼Î»ÖÃ
 	go_button_menu_->setAnchorPoint(Vec2(0.5f, 0.5f));
 	go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
 
@@ -208,10 +206,10 @@ void GameController::addGoButton()
 
 void GameController::startGo()
 {
-	//ï¿½Ãµï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ßµÄ½ï¿½É«
+	//µÃµ½µ±Ç°¸Ã×ßµÄ½ÇÉ«
 	auto character = characters_.at(whose_turn_);
 
-	//ï¿½Ó½Ç»Øµï¿½ï¿½Ã½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+	//ÊÓ½Ç»Øµ½¸Ã½ÇÉ«µÄËùÔÚÎ»ÖÃ
 	returnToCharacter(character);
 	if (character->getIsStay() == true)
 	{
@@ -234,7 +232,7 @@ void GameController::startGo()
 				character->setStepsScope(walk_steps);
 			}
 		}
-		//ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½Ê¼ï¿½ï¿½
+		//ÖÀ÷»×Ó¿ªÊ¼×ß
 		dice_->RollTheDice(character->getStepsScope(), character);
 	}
 }
@@ -242,8 +240,8 @@ void GameController::startGo()
 void GameController::startRealGo(int steps_to_go)
 {
 	auto character = characters_.at(whose_turn_);
-	steps_to_go_ = steps_to_go;	//ï¿½ï¿½ï¿½Ã½ï¿½Òªï¿½ßµÄ²ï¿½ï¿½ï¿½
-	steps_has_gone_ = 0; //ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½ï¿½ï¿½0
+	steps_to_go_ = steps_to_go;	//ÉèÖÃ½«Òª×ßµÄ²½Êý
+	steps_has_gone_ = 0; //ÒÑ×ß²½ÊýÖÃ0
 
 	int direction = judgeDirection(character->getCurPos());
 	moveOneStep(direction);
@@ -331,14 +329,14 @@ void GameController::endGo()
 	if (steps_has_gone_ < steps_to_go_)
 	{
 
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Ò»Ð©ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//ÕâÀï¿ÉÒÔ´¦ÀíÒ»Ð©¹ýÂ·µÄÊÂÇé
 		auto pos = character->getCurPos();
 		auto& land = map_scene_->getLand(pos);
 		if (map_scene_->getType(pos) == land_bank)
 		{
 			if (!land) land = Bank::create(pos);
 			land->byLand(character);
-		}//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+		}//¼ÌÐø×ßÏÂÒ»²½
 		else
 		{
 			auto direction = judgeDirection(pos);
@@ -347,11 +345,11 @@ void GameController::endGo()
 	}
 	else
 	{
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½æ³¯ï¿½ï¿½Ò»ï¿½ï¿½
+		//ÈÃÈËÎï»Ö¸´µ½Õ¾Á¢×´Ì¬£¬Ãæ³¯ÏÂÒ»¸ñ
 		backToStand(character);
 		returnToCharacter(character);
 		dealWithGod();
-		//ï¿½ï¿½ï¿½ï´¦ï¿½ï¿½Ò»Ð©ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//ÕâÀï´¦ÀíÒ»Ð©×ÅÂ½ºóµÄÊÂÇé
 		
 		return;
 	}

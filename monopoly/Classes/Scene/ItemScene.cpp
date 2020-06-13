@@ -14,11 +14,10 @@
 #include "Item/RedCard.h"
 #include "Item/Turtle.h"
 #include "Item/TurnAround.h"
-#include "AudioEngine.h"
 #include "Item/Sleep.h"
 using namespace std;
 
-ItemScene *ItemScene::createScene(MapScene *map_scene, GameController *game_controller)
+ItemScene *ItemScene::createScene(MapScene *map_scene, GameController* game_controller)
 {
 	auto item_layer = ItemScene::create();
 	item_layer->map_scene_ = map_scene;
@@ -31,13 +30,11 @@ ItemScene *ItemScene::createScene(MapScene *map_scene, GameController *game_cont
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(false);
-	listener->onTouchBegan = [=](Touch *touch, Event *event) {
+	listener->onTouchBegan = [=](Touch* touch, Event* event) {
 		if (item_layer->is_open_)
 		{
-			if (touch->getLocation().x > visible_size.height)
-				listener->setSwallowTouches(false);
-			else
-				listener->setSwallowTouches(true);
+			if (touch->getLocation().x > visible_size.height) listener->setSwallowTouches(false);
+			else listener->setSwallowTouches(true);
 		}
 		else
 		{
@@ -57,6 +54,7 @@ ItemScene *ItemScene::createScene(MapScene *map_scene, GameController *game_cont
 	//item_layer->addItem(characters.at(0), Turtle::create());
 	//item_layer->addItem(characters.at(0), TurnAround::create());
 	//item_layer->addItem(characters.at(0), Sleep::create());
+
 
 	return item_layer;
 }
@@ -78,7 +76,7 @@ bool ItemScene::init()
 	return true;
 }
 
-int ItemScene::getItemSize(Character *player)
+int ItemScene::getItemSize(Character* player)
 {
 	auto tag = player->getTag();
 	return item_vec_.at(tag).size();
@@ -91,18 +89,18 @@ void ItemScene::addItem(Character *player, Item *item)
 	item_vec_.at(tag).push_back(item);
 }
 
-void ItemScene::removeItem(Character *player, Item *item)
+void ItemScene::removeItem(Character* player, Item* item)
 {
 	auto tag = player->getTag();
 	item->removeFromParentAndCleanup(true);
-	auto &vec = item_vec_.at(tag);
-	vec.erase(std::find(vec.begin(), vec.end(), item));
+	auto& vec = item_vec_.at(tag);
+	vec.erase(std::find(vec.begin(),vec.end(),item));
 }
 
-Item *ItemScene::getItem(Character *player, std::string name)
+Item* ItemScene::getItem(Character* player, std::string name)
 {
 	auto tag = player->getTag();
-	auto &vec = item_vec_.at(tag);
+	auto& vec = item_vec_.at(tag);
 	for (auto item : vec)
 	{
 		if (item->getItemName() == name)
@@ -128,8 +126,8 @@ void ItemScene::updateMenu(Character *player)
 
 		item_label_menu_item->setCallback([=](Ref *render) {
 			auto pop = PopUpLayer::create();
-			pop->setTitle(std::string("ï¿½ï¿½ï¿½ï¿½"));
-			pop->setContent("Ê¹ï¿½ï¿½" + item_vec_[tag][i]->getItemName() + "ï¿½ï¿½ï¿½ï¿½\n" + item_vec_[tag][i]->getContent());
+			pop->setTitle(std::string("µÀ¾ß"));
+			pop->setContent("Ê¹ÓÃ" + item_vec_[tag][i]->getItemName() + "µÀ¾ß\n" + item_vec_[tag][i]->getContent());
 
 			pop->setCallBack([=](Ref *ref) {
 				item_vec_[tag][i]->work(player);
@@ -153,7 +151,6 @@ void ItemScene::updateMenu(Character *player)
 void ItemScene::open(Ref *ref)
 {
 	is_open_ = true;
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(0, 0));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { close(ref); });
 }
@@ -161,7 +158,6 @@ void ItemScene::open(Ref *ref)
 void ItemScene::close(Ref *ref)
 {
 	is_open_ = false;
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(6000, 6000));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { open(ref); });
 }
