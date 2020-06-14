@@ -219,7 +219,7 @@ void GameController::addGoButton()
 
 	auto go_button = MenuItemImage::create("go.png", "go.png");
 	go_button->setCallback([=](Ref *render) {
-		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 		SendMsg(msg_start_go);
 	});
 	go_button_menu_ = Menu::create(go_button, NULL);

@@ -15,7 +15,7 @@ bool SelectScene::transformToAi(int i,Ref* render, Sprite* ai,Sprite* player,Men
 {
 	if (i == 1) return false;
 	auto visible_size = Director::getInstance()->getVisibleSize();
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	is_ai_.at(i) = true;
 	ai->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f / 10.f));
 	player->setPosition(Vec2(visible_size.width * 10.f, visible_size.height * 10.f));
@@ -27,7 +27,7 @@ bool SelectScene::transformToPlayer(int i, Ref* render, Sprite* ai, Sprite* play
 {
 	if (i == 1) return false;
 	auto visible_size = Director::getInstance()->getVisibleSize();
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	is_ai_.at(i) = false;
 	ai->setPosition(Vec2(visible_size.width * 10.f, visible_size.height * 10));
 	player->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f / 10.f));
@@ -103,12 +103,13 @@ bool SelectScene::init()
 	MenuItemFont::setFontSize(50);
 
 	auto exit_item = MenuItemFont::create("Exit", [=](Ref *render) {
-		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
+		AudioEngine::stopAll();
 		auto scene = StartScene::createScene();
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 	auto start_item = MenuItemFont::create("Start", [=](Ref *render) {
-		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 		auto temp = GameController::create(this->is_ai_);
 	});
 

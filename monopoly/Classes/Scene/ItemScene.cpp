@@ -153,7 +153,7 @@ void ItemScene::updateMenu(Character *player)
 void ItemScene::open(Ref *ref)
 {
 	is_open_ = true;
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(0, 0));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { close(ref); });
 }
@@ -161,7 +161,7 @@ void ItemScene::open(Ref *ref)
 void ItemScene::close(Ref *ref)
 {
 	is_open_ = false;
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(6000, 6000));
 	this->map_scene_->setMenuCallback("item", [=](Ref *ref) { open(ref); });
 }

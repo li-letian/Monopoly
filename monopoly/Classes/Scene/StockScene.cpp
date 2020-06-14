@@ -35,14 +35,14 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 }
 void StockScene::open(Ref* ref)
 {
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(0, 0));
 	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {close(ref); });
 }
 
 void StockScene::close(Ref* ref)
 {
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	this->setPosition(Vec2(6000, 6000));
 	this->map_scene_->setMenuCallback("stock", [=](Ref* ref) {open(ref); });
 }
@@ -348,7 +348,7 @@ void StockScene::remakeLabel(Character* player) {
 		auto label_buy = Label::createWithSystemFont(ZH("ÂòÈë"), "fonts/arial.ttf", 36);
 		auto menuItem_buy = MenuItemLabel::create(label_buy);
 		menuItem_buy->setCallback([=](Ref* render) {
-			auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
+			auto sound_effect = AudioEngine::play2d("bottom_up.mp3", false);
 			int money_ = player->getMoney();
 			if (money_ >= val_price.asInt() * buy_number_min) {
 				player->setMoney(money_ - val_price.asInt() * buy_number_min);
@@ -368,7 +368,7 @@ void StockScene::remakeLabel(Character* player) {
 		auto menuItem_sell = MenuItemLabel::create(label_sell);
 
 		menuItem_sell->setCallback([=](Ref* render) {
-			auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
+			auto sound_effect = AudioEngine::play2d("bottom_up.mp3", false);
 			if (stock_vec_.at(i)->store_number_[player->getTag()] >= buy_number_min) {
 				int money_ = player->getMoney();
 				stock_vec_.at(i)->store_number_[player->getTag()] -= buy_number_min;
