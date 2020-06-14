@@ -40,20 +40,27 @@ bool SelectScene::addOption(int i)
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(25);
 	auto visible_size = Director::getInstance()->getVisibleSize();
+
+	auto avatar = Sprite::create(StringUtils::format("%s_avatar.png", player_name[i].c_str()));
+	avatar->setAnchorPoint(Vec2(0.5, 0.5));
+	avatar->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 9.f / 10.f));
+	this->addChild(avatar, 20);
+
 	auto label = Label::createWithSystemFont(player_name[i], "fonts/arial.ttf", 22);
 	label->setTextColor(Color4B::WHITE);
 	label->setAnchorPoint(Vec2(0.5, 0.5));
-	label->setPosition(Vec2(visible_size.width * (1.5+i) / 10, visible_size.height * 8 / 10));
+	label->setPosition(Vec2(visible_size.width * (1.5f+i) / 10.f, visible_size.height * 8.f / 10.f));
 	this->addChild(label, 26);
 	auto ai = Sprite::create("ai_image.png");
 	ai->setAnchorPoint(Vec2(0.5, 0.5));
-	ai->setPosition(Vec2(visible_size.width * 10, visible_size.height * 10));
+	ai->setPosition(Vec2(visible_size.width * 10.f, visible_size.height * 10.f));
 	this->addChild(ai, 50);
 	auto player = Sprite::create("player_image.png");
 	player->setAnchorPoint(Vec2(0.5, 0.5));
-	player->setPosition(Vec2(visible_size.width * (1.5 + i) / 10, visible_size.height * 7/10));
+	player->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f/10.f));
 	this->addChild(player, 50);
 
+	if (i == 1) return true;
 	auto item = MenuItemFont::create("Switch");
 	item->setCallback([=](Ref* render) {
 		transformToAi(i,render,ai,player,item);
@@ -77,11 +84,10 @@ bool SelectScene::init()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	/* 这里等后面添背景
-	auto background = Sprite::create("startbackground.png");
+	auto background = Sprite::create("selectbackground.png");
 	background->setAnchorPoint(Vec2(0, 0));
 	background->setPosition(origin);
-	this->addChild(background, 0);*/
+	this->addChild(background, 0);
 
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(50);
