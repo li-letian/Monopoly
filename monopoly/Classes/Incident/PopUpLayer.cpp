@@ -123,31 +123,41 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 
 void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back)
 {
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
-	MenuItemFont::setFontName("华文琥珀");
-	MenuItemFont::setFontSize(25);
+	if (GetGameController()->getCurCharacter()->getIsAI())
+	{
+		call_back_func_ = [=]() {
+			confirm_call_back(nullptr);
+			this->removeFromParent();
+		};
+	}
+	else
+	{
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+		MenuItemFont::setFontName("华文琥珀");
+		MenuItemFont::setFontSize(25);
 
-	auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
-		auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
-		confirm_call_back(ref);
-		this->removeFromParentAndCleanup(true); });
-	confirm_item->setColor(Color3B(0, 0, 0));
-	confirm_item->setAnchorPoint(Vec2(0, 0));
-	confirm_item->setPosition(Vec2(2 * grid_distance, 2 * grid_distance));
+		auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
+			auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
+			confirm_call_back(ref);
+			this->removeFromParentAndCleanup(true); });
+		confirm_item->setColor(Color3B(0, 0, 0));
+		confirm_item->setAnchorPoint(Vec2(0, 0));
+		confirm_item->setPosition(Vec2(2 * grid_distance, 2 * grid_distance));
 
-	auto cancel_item = MenuItemFont::create(ZH("取消"), [=](Ref* ref) {
-		auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
-		cancel_call_back(ref);
-		this->removeFromParentAndCleanup(true);
-	});
-	cancel_item->setColor(Color3B(0, 0, 0));
-	cancel_item->setAnchorPoint(Vec2(1.0f, 0));
-	cancel_item->setPosition(Vec2(back_ground_width_ - 2 * grid_distance, 2 * grid_distance));
+		auto cancel_item = MenuItemFont::create(ZH("取消"), [=](Ref* ref) {
+			auto soundEffectID = AudioEngine::play2d("bottom_up.mp3", false);
+			cancel_call_back(ref);
+			this->removeFromParentAndCleanup(true);
+		});
+		cancel_item->setColor(Color3B(0, 0, 0));
+		cancel_item->setAnchorPoint(Vec2(1.0f, 0));
+		cancel_item->setPosition(Vec2(back_ground_width_ - 2 * grid_distance, 2 * grid_distance));
 
-	auto menu = Menu::create(confirm_item, cancel_item, nullptr);
-	menu->setAnchorPoint(Vec2(0, 0));
-	menu->setPosition(Vec2(0,0));
-	back_ground_->addChild(menu);
+		auto menu = Menu::create(confirm_item, cancel_item, nullptr);
+		menu->setAnchorPoint(Vec2(0, 0));
+		menu->setPosition(Vec2(0,0));
+		back_ground_->addChild(menu);
+	}
 }
 
 void PopUpLayer::setOnScene(int z_order)

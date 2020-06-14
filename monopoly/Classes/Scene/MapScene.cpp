@@ -167,7 +167,7 @@ bool MapScene::panelInit()
 
 	//向这个成员变量中添加按钮
 	menu_item_.insert("close", MenuItemFont::create(ZH(" 退出 ")));
-	menu_item_.insert("setting", MenuItemFont::create(ZH(" 设置 ")));
+	menu_item_.insert("setting", MenuItemFont::create(ZH(" 音乐 ")));
 	menu_item_.insert("item", MenuItemFont::create(ZH(" 道具 ")));
 	menu_item_.insert("stock", MenuItemFont::create(ZH(" 股市 ")));
 

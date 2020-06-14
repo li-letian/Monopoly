@@ -208,7 +208,7 @@ void PromoteOneStreetHouse(int start_index)
 		auto owner = hotel->getOwner();
 		auto pre_value = hotel->getValue();
 		hotel->promote();
-		owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
+		if (owner) owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
 	}
 	for (int index = start_index - 1; map_scene->getType(index) == land_hotel || map_scene->getType(index) == land_business; index--)
 	{
@@ -219,7 +219,7 @@ void PromoteOneStreetHouse(int start_index)
 		auto owner = hotel->getOwner();
 		auto pre_value = hotel->getValue();
 		hotel->promote();
-		owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
+		if(owner) owner->setEstateValue(owner->getEstateValue() + hotel->getValue() - pre_value);
 	}
 }
 
