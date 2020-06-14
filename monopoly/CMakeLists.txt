@@ -57,7 +57,6 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
 
      Classes/Character/Character.cpp
      Classes/Character/Dice.cpp
@@ -81,6 +80,7 @@ list(APPEND GAME_SOURCE
      Classes/Incident/Holiday.cpp
      Classes/Incident/Medical.cpp
      Classes/Incident/Staff.cpp
+     Classes/Incident/PopUpLayer.cpp
 
      Classes/Item/AngelCard.cpp
      Classes/Item/ControlDice.cpp
@@ -116,31 +116,34 @@ list(APPEND GAME_SOURCE
      Classes/Land/Aviation.cpp
      Classes/Land/Business.cpp
      Classes/Land/Enterprise.cpp
-     Classes/Land/Hotel.cpp
-     Classes/Land/Insurance.cpp
+	 Classes/Land/Insurance.cpp
+	 Classes/Land/Hotel.cpp
      Classes/Land/Land.cpp
      Classes/Land/Lottery.cpp
-     Classes/Land/Oil.cpp
-     Classes/Land/Resort.cpp
      Classes/Land/Bank.cpp
      Classes/Land/Chance.cpp
      Classes/Land/Hospital.cpp
-     Classes/Land/Institute.cpp
      Classes/Land/Jail.cpp
-     Classes/Land/Life.cpp
-     Classes/Land/Mall.cpp
-     Classes/Land/Park.cpp
+	 Classes/Land/Life.cpp
+     Classes/Land/Oil.cpp
      Classes/Land/Technology.cpp
 
      Classes/Scene/BankScene.cpp
-     Classes/Scene/IncidentScene.cpp
+     Classes/Scene/ItemScene.cpp
      Classes/Scene/MapScene.cpp
      Classes/Scene/SettingScene.cpp
-     Classes/Scene/StorkScene.cpp
+     Classes/Scene/StockScene.cpp
+     Classes/Scene/ExchangeScene.cpp
+     Classes/Scene/LotteryScene.cpp
+     Classes/Scene/SelectScene.cpp
+     Classes/Scene/StartScene.cpp
+     Classes/Scene/GameController.cpp
+
+     Classes/Common/CommonMethod.cpp
      )
+      
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
 
      Classes/Character/Character.h
      Classes/Character/Dice.h
@@ -164,8 +167,9 @@ list(APPEND GAME_HEADER
      Classes/Incident/Holiday.h
      Classes/Incident/Medical.h
      Classes/Incident/Staff.h
+     Classes/Incident/PopUpLayer.h
 
-          Classes/Item/AngelCard.h
+     Classes/Item/AngelCard.h
      Classes/Item/ControlDice.h
      Classes/Item/HouseChange.h
      Classes/Item/Item.h
@@ -204,22 +208,26 @@ list(APPEND GAME_HEADER
      Classes/Land/Land.h
      Classes/Land/Lottery.h
      Classes/Land/Oil.h
-     Classes/Land/Resort.h
      Classes/Land/Bank.h
      Classes/Land/Chance.h
      Classes/Land/Hospital.h
-     Classes/Land/Institute.h
      Classes/Land/Jail.h
      Classes/Land/Life.h
-     Classes/Land/Mall.h
-     Classes/Land/Park.h
      Classes/Land/Technology.h
 
      Classes/Scene/BankScene.h
-     Classes/Scene/IncidentScene.h
+     Classes/Scene/ItemScene.h
      Classes/Scene/MapScene.h
      Classes/Scene/SettingScene.h
-     Classes/Scene/StorkScene.h
+     Classes/Scene/StockScene.h
+     Classes/Scene/ExchangeScene.h
+     Classes/Scene/LotteryScene.h
+     Classes/Scene/SelectScene.h
+     Classes/Scene/StartScene.h
+     Classes/Scene/GameController.h
+
+     Classes/Common/CommonConstant.h
+     Classes/Common/CommonMethod.h
      )
 
 if(ANDROID)
