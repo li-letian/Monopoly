@@ -232,18 +232,11 @@ bool Hotel::onLand(Character* standing)
 				auto yes = [=](Ref* ref)
 				{
 					auto money = standing->getMoney();
-					if (money > rent_value)
-					{
-						standing->setMoney(money - rent_value);
-						owner_->setGainValue(owner_->getGainValue() + rent_value);
-						owner_->setMoney(owner_->getMoney() + rent_value);
-						godExecute(standing, false, rent_value);
-					}
-					else
-					{
-						//ÕâÀïÅªÆÆ²ú
-						godExecute(standing);
-					}
+					standing->setMoney(money - rent_value);
+					owner_->setGainValue(owner_->getGainValue() + rent_value);
+					owner_->setMoney(owner_->getMoney() + rent_value);
+					godExecute(standing, false, rent_value);
+
 				};
 				pop->setCallBack(yes);
 				pop->setOnScene();

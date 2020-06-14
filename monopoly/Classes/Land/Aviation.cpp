@@ -67,6 +67,10 @@ bool Aviation::onLand(Character* standing)
 			pop->setCallBack([=](Ref* ref) { SendMsg(msg_make_go_apper); });
 			pop->setOnScene(51);
 		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
 	}
 	else
 	{

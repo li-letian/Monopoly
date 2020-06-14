@@ -56,7 +56,7 @@ bool GameController::init()
 	//添加角色
 	addCharacter("miku", 1, 15000, 0, false);
 	addCharacter("nanxiaoniao", 2, 15000, 71, true);
-	addCharacter("jingtian", 3,15000, 149, true);
+	addCharacter("jingtian", 3, 15000, 149, true);
 	addCharacter("luff", 4, 15000, 224, false);
 	addCharacter("usagi", 5, 15000, 293, false);
 	addCharacter("iori", 6, 15000, 368, false);
@@ -170,14 +170,14 @@ void GameController::addEventListenerCustom()
 				auto character = characters_.at(whose_turn_);
 				auto pop = PopUpLayer::create();
 				pop->setTitle("破产");
-				auto text = StringUtils::format("%s", character->getPlayerName())
+				auto text = character->getPlayerName()
 					+ std::string("已破产");
 				pop->setContent(text);
 				pop->setCallBack([=](Ref* render) {
 					characters_.erase(whose_turn_);
 					whose_turn_--;
-					character->removeFromParentAndCleanup(true);
-					this->runAction(seq);
+					character->removeFromParent();
+					this->runAction(Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr));
 					});
 				pop->setOnScene();
 			}
