@@ -39,6 +39,10 @@ Hospital* Hospital::create( int index)
 
 bool Hospital::onLand(Character* standing)
 {
+	if (standing->getIsAI())
+	{
+		return false;
+	}
 	//要是没有出院证明就直接退出
 	auto item = GetItemScene()->getItem(standing, "出院证明");
 	if (item == nullptr) return false;

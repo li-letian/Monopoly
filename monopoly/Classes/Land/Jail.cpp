@@ -39,9 +39,18 @@ Jail* Jail::create(int index)
 
 bool Jail::onLand(Character* standing)
 {
+	if (standing->getIsAI())
+	{
+		SendMsg(msg_make_go_apper);
+		return true;
+	}
 	//要是没有保释证明就直接退出
 	auto item = GetItemScene()->getItem(standing, "保释证明");
-	if (item == nullptr) return false;
+	if (item == nullptr)
+	{
+		SendMsg(msg_make_go_apper);
+		return true;
+	}
 	auto map_scene = GetMapScene();
 	auto tile_size = map_scene->getMap()->getTileSize();
 	auto& characters = dynamic_cast<GameController*>(Director::getInstance()->getRunningScene()->getChildByName("game_controller"))->getCharacters();

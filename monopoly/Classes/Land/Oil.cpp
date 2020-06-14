@@ -59,12 +59,15 @@ bool Oil::onLand(Character* standing)
 	}
 	if (!owner)
 	{
-		auto pop = PopUpLayer::create();
-		pop->setTitle(name_);
-		pop->setContent("想要当董事长吗？快快购买本公司的股票哦，当前持仓数最多的人会成为本公司的董事长，享有公司所有权");
-		pop->setCallBack([=](Ref* ref) { SendMsg(msg_make_go_apper); });
-		pop->setPosition(Vec2(0, 0));
-		map_scene->addChild(pop, 51);
+		if (standing->getIsAI() == false)
+		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle(name_);
+			pop->setContent("想要当董事长吗？快快购买本公司的股票哦，当前持仓数最多的人会成为本公司的董事长，享有公司所有权");
+			pop->setCallBack([=](Ref* ref) { SendMsg(msg_make_go_apper); });
+			pop->setPosition(Vec2(0, 0));
+			map_scene->addChild(pop, 51);
+		}
 	}
 	else
 	{
@@ -79,8 +82,7 @@ bool Oil::onLand(Character* standing)
 				standing->setMoney(standing->getMoney() - oil_value);
 				SendMsg(msg_make_go_apper);
 			});
-			pop->setPosition(Vec2(0, 0));
-			map_scene->addChild(pop, 51);
+			pop->setOnScene(51);
 		}
 		else SendMsg(msg_make_go_apper);
 

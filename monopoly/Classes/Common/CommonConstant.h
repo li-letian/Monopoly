@@ -111,4 +111,10 @@ constexpr int weak_god_duration_time = 5;
 constexpr int traffic_fine = 5000;
 
 constexpr float dice_stay_time = 0.5f;
+
+constexpr int AI_save_money = 0;
+constexpr int AI_withdraw_money = 1;
+
+constexpr int AI_yes = 0;
+constexpr int AI_no = 1;
 #endif

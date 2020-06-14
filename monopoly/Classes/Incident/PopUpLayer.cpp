@@ -3,6 +3,7 @@
 #include "Common/CommonConstant.h"
 #include "Scene/MapScene.h"
 #include "AudioEngine.h"
+#include "Scene/GameController.h"
 
 bool PopUpLayer::init()
 {
@@ -95,19 +96,29 @@ void PopUpLayer::setContent(const std::string& content)
 
 void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back,const std::string text)
 {
-	auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
-	MenuItemFont::setFontName("华文琥珀");
-	MenuItemFont::setFontSize(25);
-	auto confirm_item = MenuItemFont::create(ZH(text), [=](Ref* ref) {
-		confirm_call_back(ref);
-		this->removeFromParentAndCleanup(true); });
-	confirm_item->setColor(Color3B(0, 0, 0));
-	confirm_item->setAnchorPoint(Vec2(0.5f, 0));
-	confirm_item->setPosition(Vec2(back_ground_width_ / 2, 2 * grid_distance));
-	auto menu = Menu::create(confirm_item, nullptr);
-	menu->setAnchorPoint(Vec2(0, 0));
-	menu->setPosition(Vec2(0, 0));
-	back_ground_->addChild(menu);
+	if (GetGameController()->getCurCharacter()->getIsAI())
+	{
+		call_back_func_ = [=]() {
+			confirm_call_back(nullptr);
+			this->removeFromParent();
+		};
+	}
+	else
+	{
+		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
+		MenuItemFont::setFontName("华文琥珀");
+		MenuItemFont::setFontSize(25);
+		auto confirm_item = MenuItemFont::create(ZH(text), [=](Ref* ref) {
+			confirm_call_back(ref);
+			this->removeFromParentAndCleanup(true); });
+		confirm_item->setColor(Color3B(0, 0, 0));
+		confirm_item->setAnchorPoint(Vec2(0.5f, 0));
+		confirm_item->setPosition(Vec2(back_ground_width_ / 2, 2 * grid_distance));
+		auto menu = Menu::create(confirm_item, nullptr);
+		menu->setAnchorPoint(Vec2(0, 0));
+		menu->setPosition(Vec2(0, 0));
+		back_ground_->addChild(menu);
+	}
 }
 
 void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back)
@@ -144,4 +155,9 @@ void PopUpLayer::setOnScene(int z_order)
 	auto map_scene = GetMapScene();
 	this->setPosition(Vec2::ZERO);
 	map_scene->addChild(this, z_order);
+	if (GetGameController()->getCurCharacter()->getIsAI())
+	{
+		auto sequence = Sequence::create(DelayTime::create(1.5f), CallFunc::create(call_back_func_), nullptr);
+		GetGameController()->runAction(sequence);
+	}
 }

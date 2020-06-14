@@ -18,7 +18,9 @@ bool StartScene::init()
 	{
 		return false;
 	}
-	auto soundEffectID = AudioEngine::play2d("BGM.mp3", true);
+
+	auto bgm_sound = AudioEngine::play2d("BGM.mp3", true);
+	AudioEngine::setVolume(bgm_sound, 0.4);
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 

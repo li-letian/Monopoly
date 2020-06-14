@@ -3,6 +3,7 @@
 #include "Business.h"
 #include "Scene/MapScene.h"
 #include "Scene/ItemScene.h"
+#include "Scene/GameController.h"
 #include "Common/CommonMethod.h"
 #include "Common/CommonConstant.h"
 #include "Incident/PopUpLayer.h"
@@ -88,58 +89,70 @@ bool Business::promote(bool house_change)
 	auto tile_size = map_scene->getMap()->getTileSize();
 	auto x = 0.5f * (map_scene->pos(index_).x + map_scene->pos(index_larger_).x);
 	auto y = map_scene->pos(index_).y + tile_size.height;
-	auto pop = PopUpLayer::create();
-	if (house_change == true)
+	if (GetGameController()->getCurCharacter()->getIsAI())
 	{
-		pop->setTitle("请选择要改建的地产");
-	}
-	else
-	{
-		pop->setTitle("请选择要投资的地产");
-	}
-	std::vector<std::string>pic;
-	std::vector<ccMenuCallback>callback;
-	pic.push_back("park.png");
-	callback.push_back([=](Ref* ref) {
 		type_ = land_park;
 		name_ = std::string("公园") + StringUtils::format("%d", index_);
 		initWithFile("park.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
 		SendMsg(msg_make_go_apper);
-		});
-	pic.push_back("resort.png");
-	callback.push_back([=](Ref* ref) {
-		type_ = land_resort;
-		name_ = std::string("度假村") + StringUtils::format("%d", index_);
-		initWithFile("resort.png");
-		setAnchorPoint(Vec2(0.5f, 0.0f));
-		setPosition(x, y);
-		SendMsg(msg_make_go_apper);
-		});
-	pic.push_back("mall.png");
-	callback.push_back([=](Ref* ref) {
-		type_ = land_mall;
-		name_ = std::string("购物广场") + StringUtils::format("%d", index_);
-		initWithFile("mall.png");
-		setAnchorPoint(Vec2(0.5f, 0.0f));
-		setPosition(x, y);
-		SendMsg(msg_make_go_apper);
-		});
-	pic.push_back("institute.png");
-	callback.push_back([=](Ref* ref) {
-		type_ = land_institute;
-		name_ = std::string("研发中心") + StringUtils::format("%d", index_);
-		initWithFile("institute.png");
-		setAnchorPoint(Vec2(0.5f, 0.0f));
-		setPosition(x, y);
-		onBusinessLand(owner_);
-		});
-	pop->setMenu(pic, callback);
-	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
-	pop->setPosition(Vec2(0, 0));
-	map_scene->addChild(pop, 51);
-	return true;
+	}
+	else
+	{
+		auto pop = PopUpLayer::create();
+		if (house_change == true)
+		{
+			pop->setTitle("请选择要改建的地产");
+		}
+		else
+		{
+			pop->setTitle("请选择要投资的地产");
+		}
+		std::vector<std::string>pic;
+		std::vector<ccMenuCallback>callback;
+		pic.push_back("park.png");
+		callback.push_back([=](Ref* ref) {
+			type_ = land_park;
+			name_ = std::string("公园") + StringUtils::format("%d", index_);
+			initWithFile("park.png");
+			setAnchorPoint(Vec2(0.5f, 0.0f));
+			setPosition(x, y);
+			SendMsg(msg_make_go_apper);
+			});
+		pic.push_back("resort.png");
+		callback.push_back([=](Ref* ref) {
+			type_ = land_resort;
+			name_ = std::string("度假村") + StringUtils::format("%d", index_);
+			initWithFile("resort.png");
+			setAnchorPoint(Vec2(0.5f, 0.0f));
+			setPosition(x, y);
+			SendMsg(msg_make_go_apper);
+			});
+		pic.push_back("mall.png");
+		callback.push_back([=](Ref* ref) {
+			type_ = land_mall;
+			name_ = std::string("购物广场") + StringUtils::format("%d", index_);
+			initWithFile("mall.png");
+			setAnchorPoint(Vec2(0.5f, 0.0f));
+			setPosition(x, y);
+			SendMsg(msg_make_go_apper);
+			});
+		pic.push_back("institute.png");
+		callback.push_back([=](Ref* ref) {
+			type_ = land_institute;
+			name_ = std::string("研发中心") + StringUtils::format("%d", index_);
+			initWithFile("institute.png");
+			setAnchorPoint(Vec2(0.5f, 0.0f));
+			setPosition(x, y);
+			onBusinessLand(owner_);
+			});
+		pop->setMenu(pic, callback);
+		pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
+		pop->setPosition(Vec2(0, 0));
+		map_scene->addChild(pop, 51);
+		return true;
+	}
 }
 
 bool Business::demote()
@@ -384,8 +397,7 @@ bool Business::onBusinessLand(Character* standing)
 				}
 			};
 			pop->setCallBack(yes);
-			pop->setPosition(Vec2(0, 0));
-			map_scene->addChild(pop, 50);
+			pop->setOnScene();
 		}
 		else if (type_ == land_mall)
 		{
@@ -410,8 +422,7 @@ bool Business::onBusinessLand(Character* standing)
 				}
 			};
 			pop->setCallBack(yes);
-			pop->setPosition(Vec2(0, 0));
-			map_scene->addChild(pop, 50);
+			pop->setOnScene();
 		}
 		else
 		{
@@ -426,10 +437,6 @@ bool Business::onLand(Character* standing)
 	auto map_scene = GetMapScene();
 	if (!owner_)
 	{
-		auto pop = PopUpLayer::create();
-		pop->setTitle(name_);
-		auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格购买这块土地吗？");
-		pop->setContent(text);
 		auto yes = [=](Ref* ref)
 		{
 			auto money = standing->getMoney();
@@ -438,7 +445,7 @@ bool Business::onLand(Character* standing)
 				standing->setMoney(money - sell_value_);
 				owner_ = standing;
 				color_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
-				color_larger_=Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
+				color_larger_ = Sprite::create(StringUtils::format("character%d.png", standing->getTag()));
 				color_larger_->setPosition(map_scene->pos(index_larger_));
 				color_larger_->setAnchorPoint(Vec2(0.5f, 0.5f));
 				color_->setPosition(map_scene->pos(index_));
@@ -460,26 +467,67 @@ bool Business::onLand(Character* standing)
 			}
 		};
 		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
-		pop->setCallBack(yes, no);
-		pop->setPosition(Vec2(0, 0));
-		map_scene->addChild(pop, 50);
+		//如果是AI
+		if (standing->getIsAI())
+		{
+			switch (random(2))
+			{
+			case AI_yes:
+				if (standing->aiFinanceOK(sell_value_))
+				{
+					yes(nullptr);
+				}
+				else
+				{
+					no(nullptr);
+				}
+				break;
+			case AI_no:
+				no(nullptr);
+			}
+		}
+		else
+		{
+			auto pop = PopUpLayer::create();
+			pop->setTitle(name_);
+			auto text = std::string("看起来真是很有前景的一块地呢，确认以 ") + StringUtils::format("%d", sell_value_) + std::string("的价格购买这块土地吗？");
+			pop->setContent(text);
+			pop->setCallBack(yes, no);
+			pop->setPosition(Vec2(0, 0));
+			map_scene->addChild(pop, 50);
+		}
 	}
 	else
 	{
 		if (type_ == land_business&& standing->getTag() == owner_->getTag())
 		{
-			auto pop = PopUpLayer::create();
-			pop->setTitle(name_);
-			auto text = std::string("看起来真是很有前景的一块地呢，确认要升级这块土地吗？");
-			pop->setContent(text);
 			auto yes = [=](Ref* ref)
 			{
 				promote();
 			};
 			auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
-			pop->setCallBack(yes, no);
-			pop->setPosition(Vec2(0, 0));
-			map_scene->addChild(pop, 50);
+			if (standing->getIsAI())
+			{
+				switch (random(2))
+				{
+				case AI_yes:
+					yes(nullptr);
+					break;
+				case AI_no:
+					no(nullptr);
+					break;
+				}
+			}
+			else
+			{
+				auto pop = PopUpLayer::create();
+				pop->setTitle(name_);
+				auto text = std::string("看起来真是很有前景的一块地呢，确认要升级这块土地吗？");
+				pop->setContent(text);
+				pop->setCallBack(yes, no);
+				pop->setPosition(Vec2(0, 0));
+				map_scene->addChild(pop, 50);
+			}
 		}
 		else
 		{

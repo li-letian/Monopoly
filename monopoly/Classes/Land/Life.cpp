@@ -145,7 +145,6 @@ bool Life::onLand(Character* standing)
 	}
 	pop->setContent(txt);
 	pop->setCallBack([=](Ref* ref) {fun(ref); SendMsg(msg_make_go_apper); });
-	pop->setPosition(Vec2(0, 0));
-	map_scene->addChild(pop, 51);
+	pop->setOnScene(51);
 	return true;
 }

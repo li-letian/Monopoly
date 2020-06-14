@@ -18,7 +18,7 @@ public:
 	virtual bool init();
 
 	void addEventListenerCustom();												   //添加自定义事件监听器
-	void addCharacter(const std::string &name, int tag, int money, int start_pos); //添加角色
+	void addCharacter(const std::string& name, int tag, int money, int start_pos, bool is_ai); //添加角色
 	void initGod();																   //初始化游戏的神
 	void returnToCharacter(Character *);										   //回到角色视角
 	void addGoButton();															   //添加go按钮
@@ -45,7 +45,10 @@ public:
 	{
 		return gods_;
 	}
-
+	Character* getCurCharacter()const
+	{
+		return characters_.at(whose_turn_);
+	}
 protected:
 	EventListenerCustom *listener_custom_ = nullptr; //自定义事件分发器
 	Menu *go_button_menu_ = nullptr;				 //go_button
