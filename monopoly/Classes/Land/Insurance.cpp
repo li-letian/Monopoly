@@ -70,6 +70,10 @@ bool Insurance::onLand(Character* standing)
 			pop->setPosition(Vec2(0, 0));
 			map_scene->addChild(pop, 51);
 		}
+		else
+		{
+			SendMsg(msg_make_go_apper);
+		}
 	}
 	else
 	{

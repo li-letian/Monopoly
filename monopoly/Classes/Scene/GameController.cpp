@@ -34,7 +34,7 @@
 #include "Common/CommonMethod.h"
 
 #include "AudioEngine.h"
-bool GameController::init(std::vector<bool>is_ai)
+bool GameController::init(std::vector<bool> is_ai)
 {
 	if (!Node::init())
 	{
@@ -56,7 +56,7 @@ bool GameController::init(std::vector<bool>is_ai)
 	//添加角色
 	addCharacter("miku", 1, 15000, 0, is_ai[1]);
 	addCharacter("nanxiaoniao", 2, 15000, 71, is_ai[2]);
-	addCharacter("jingtian", 3,15000, 149, is_ai[3]);
+	addCharacter("jingtian", 3, 15000, 149, is_ai[3]);
 	addCharacter("luff", 4, 15000, 224, is_ai[4]);
 	addCharacter("usagi", 5, 15000, 293, is_ai[5]);
 	addCharacter("iori", 6, 15000, 368, is_ai[6]);
@@ -82,9 +82,9 @@ bool GameController::init(std::vector<bool>is_ai)
 void GameController::addEventListenerCustom()
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
-	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom* event) {
+	listener_custom_ = EventListenerCustom::create("monopoly_msg", [=](EventCustom *event) {
 		//解析收到的信息
-		char* buf = static_cast<char*>(event->getUserData());
+		char *buf = static_cast<char *>(event->getUserData());
 		int msg = std::atoi(buf);
 		switch (msg)
 		{
@@ -98,7 +98,6 @@ void GameController::addEventListenerCustom()
 		{
 			//func函数将在一段时间后执行
 			auto func = [=]() {
-
 				//定位到下一个角色
 				whose_turn_++;
 				if (whose_turn_ >= characters_.size())
@@ -111,14 +110,13 @@ void GameController::addEventListenerCustom()
 				//找到当前角色
 				auto character = characters_.at(whose_turn_);
 
-
 				if (character->getGodPossessed() != normal)
 				{
 					character->setGodTimes(character->getGodTimes() - 1);
 					if (character->getGodTimes() <= 0)
 					{
 						character->setGodPossessed(normal);
-						gods_.pushBack(dynamic_cast<God*>(character->getChildByName("god")));
+						gods_.pushBack(dynamic_cast<God *>(character->getChildByName("god")));
 						character->removeChildByName("god", true);
 						updateGod(no_god);
 					}
@@ -170,15 +168,14 @@ void GameController::addEventListenerCustom()
 				auto character = characters_.at(whose_turn_);
 				auto pop = PopUpLayer::create();
 				pop->setTitle("破产");
-				auto text = StringUtils::format("%s", character->getPlayerName())
-					+ std::string("已破产");
+				auto text = character->getPlayerName() + std::string("已破产");
 				pop->setContent(text);
-				pop->setCallBack([=](Ref* render) {
+				pop->setCallBack([=](Ref *render) {
 					characters_.erase(whose_turn_);
 					whose_turn_--;
-					character->removeFromParentAndCleanup(true);
-					this->runAction(seq);
-					});
+					character->removeFromParent();
+					this->runAction(Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr));
+				});
 				pop->setOnScene();
 			}
 			else
@@ -195,12 +192,12 @@ void GameController::addEventListenerCustom()
 			steps_has_gone_ = 0;
 			break;
 		}
-		});
+	});
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->getMap());
 }
 
-void GameController::addCharacter(const std::string& name, int tag, int money, int start_pos, bool is_ai)
+void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos, bool is_ai)
 {
 	auto character = Character::create(name, tag, money, start_pos, map_scene_);
 	character->setIsAI(is_ai);
@@ -211,7 +208,7 @@ void GameController::addCharacter(const std::string& name, int tag, int money, i
 	log("position: %f %f", character->getPosition().x, character->getPosition().y);
 }
 
-void GameController::returnToCharacter(Character* character)
+void GameController::returnToCharacter(Character *character)
 {
 	map_scene_->perspectiveJump(map_scene_->pos(character->getCurPos()).x, map_scene_->pos(character->getCurPos()).y);
 }
@@ -221,10 +218,10 @@ void GameController::addGoButton()
 	auto visible_size = Director::getInstance()->getVisibleSize();
 
 	auto go_button = MenuItemImage::create("go.png", "go.png");
-	go_button->setCallback([=](Ref* render) {
+	go_button->setCallback([=](Ref *render) {
 		auto soundEffectID = AudioEngine::play2d("bottom_down.mp3", false);
 		SendMsg(msg_start_go);
-		});
+	});
 	go_button_menu_ = Menu::create(go_button, NULL);
 
 	go_button_menu_->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -247,7 +244,7 @@ void GameController::startGo()
 		character->setIsStay(false);
 		auto endGoCallFunc = CallFunc::create([=]() {
 			this->endGo();
-			});
+		});
 		auto sequence = Sequence::create(DelayTime::create(0.5f), endGoCallFunc, nullptr);
 		this->runAction(sequence);
 	}
@@ -325,8 +322,8 @@ void GameController::moveOneStep(int direction)
 	{
 		next_pos = total_position - 1;
 	}
-	MoveTo* move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
-	Repeat* repeat = nullptr;
+	MoveTo *move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
+	Repeat *repeat = nullptr;
 	switch (direction)
 	{
 	case walk_down:
@@ -345,13 +342,11 @@ void GameController::moveOneStep(int direction)
 	auto endGoCallBack = CallFunc::create([=]() {
 		dice_->decreaseNumber();
 		this->endGo();
-		});
+	});
 	character->setCurPos(next_pos);
 	auto spawn_action = Sequence::create(Spawn::create(move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
 }
-
-
 
 void GameController::endGo()
 {
@@ -361,10 +356,11 @@ void GameController::endGo()
 	{
 
 		auto pos = character->getCurPos();
-		auto& land = map_scene_->getLand(pos);
+		auto &land = map_scene_->getLand(pos);
 		if (map_scene_->getType(pos) == land_bank)
 		{
-			if (!land) land = Bank::create(pos);
+			if (!land)
+				land = Bank::create(pos);
 			land->byLand(character);
 		}
 		else
@@ -398,7 +394,7 @@ void GameController::dealWithLand()
 {
 	auto character = characters_.at(whose_turn_);
 	auto pos = character->getCurPos();
-	auto& land = map_scene_->getLand(pos);
+	auto &land = map_scene_->getLand(pos);
 	if (!land)
 	{
 		switch (map_scene_->getType(pos))
@@ -444,15 +440,14 @@ void GameController::dealWithLand()
 		land->onLand(character);
 	else
 		SendMsg(msg_make_go_apper);
-
 }
 
-void GameController::backToStand(Character* character)
+void GameController::backToStand(Character *character)
 {
 	auto name = character->getPlayerName();
 	auto direction = judgeDirection(character->getCurPos());
 	auto spfcache = SpriteFrameCache::getInstance();
-	SpriteFrame* sprite_frame = nullptr;
+	SpriteFrame *sprite_frame = nullptr;
 	switch (direction)
 	{
 	case walk_down:

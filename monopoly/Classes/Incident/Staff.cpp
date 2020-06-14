@@ -546,6 +546,7 @@ bool SetMinePosition(int target_point)
 	auto mine_pos = MinePosition::create();
 	if (mine_pos->setPos(target_point, GetMapScene()))
 	{
+		GetMapScene()->getMap()->addChild(mine_pos, 10);
 		return true;
 	}
 	else

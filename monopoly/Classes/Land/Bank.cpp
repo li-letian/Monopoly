@@ -34,68 +34,119 @@ Bank* Bank::create(int index)
 
 bool Bank::onLand(Character* standing)
 {
-	auto pop = PopUpLayer::create();
-	auto map_scene = GetMapScene();
-	pop->setTitle(name_);
-	std::vector<std::string>txt;
-	std::vector<std::function<void(Ref*)>>fun;
-	for (auto money = standing->getMoney(), num = 1; money; money /= 10, num *= 10)
+	auto game_controller = GetGameController();
+	if (standing->getIsAI())
 	{
-		txt.push_back(StringUtils::format("  存%d  ", num));
-		fun.push_back([=](Ref* ref)
+		auto base_money = 1000000;
+		switch (random(2))
 		{
-			auto delta = std::min(num, standing->getMoney());
-			standing->setMoney(standing->getMoney() - delta);
-			standing->setDeposit(standing->getDeposit() + delta);
-		});
-	}
-	for (auto money = standing->getDeposit(), num = 1; money; money /= 10, num *= 10)
-	{
-		txt.push_back(StringUtils::format("  取%d  ", num));
-		fun.push_back([=](Ref* ref)
-		{
-			auto delta = std::min(num, standing->getDeposit());
-			standing->setMoney(standing->getMoney() + delta);
-			standing->setDeposit(standing->getDeposit() - delta);
-		});
-	}
-	pop->setMenu(fun, txt);
-	pop->setCallBack([=](Ref* ref)
-	{
-		auto pop1 = PopUpLayer::create();
-		pop1->setTitle(name_);
-		std::vector<std::string>txt1;
-		std::vector<std::function<void(Ref*)>>fun1;
-		if (!standing->getLoan())
-		{
-			txt1.push_back(StringUtils::format(" 贷款%d ", loan_value));
-			fun1.push_back([=](Ref* ref)
+		case AI_save_money:
+			while (true)
 			{
-				standing->setMoney(standing->getMoney() + loan_value);
-				standing->setLoan(loan_value);
-				pop1->removeFromParentAndCleanup(true);
-				SendMsg(msg_make_go_apper);
-			});
-		}
-		else
-		{
-			txt1.push_back(StringUtils::format(" 还款%d ", loan_value));
-			fun1.push_back([=](Ref* ref)
+				base_money /= 10;
+				if (base_money < 100)
+				{
+					game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos()));
+					break;
+				}
+				if (standing->aiFinanceOK(base_money))
+				{
+					standing->setMoney(standing->getMoney() - base_money);
+					standing->setDeposit(standing->getDeposit() + base_money);
+					auto call_back_func = CallFunc::create([=]() {game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos())); });
+					auto sequence = Sequence::create(DelayTime::create(0.5f), call_back_func, nullptr);
+					game_controller->runAction(sequence);
+					break;
+				}
+			}
+			break;
+		case AI_withdraw_money:
+			while (true)
 			{
-				standing->setMoney(standing->getMoney() - loan_value);
-				standing->setLoan(0);
-				pop1->removeFromParentAndCleanup(true);
-				SendMsg(msg_make_go_apper);
-			});
+				base_money /= 10;
+				if (base_money < 100)
+				{
+					break;
+				}
+				if (standing->aiFinanceOK(base_money)&&base_money<standing->getDeposit())
+				{
+					standing->setMoney(standing->getMoney() + base_money);
+					standing->setDeposit(standing->getDeposit() - base_money);
+					auto call_back_func = CallFunc::create([=]() {SendMsg(msg_make_go_apper); });
+					auto sequence = Sequence::create(DelayTime::create(0.5f), call_back_func, nullptr);
+					game_controller->runAction(sequence);
+					break;
+				}
+			}
+			break;
 		}
-		pop1->setMenu(fun1, txt1);
-		pop1->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
-		pop1->setPosition(Vec2::ZERO);
-		map_scene->addChild(pop1, 51);
-	});
-	pop->setPosition(Vec2::ZERO);
-	map_scene->addChild(pop, 50);
-	return true;
+		SendMsg(msg_make_go_apper);
+	}
+	else
+	{
+		auto pop = PopUpLayer::create();
+		auto map_scene = GetMapScene();
+		pop->setTitle(name_);
+		std::vector<std::string>txt;
+		std::vector<std::function<void(Ref*)>>fun;
+		for (auto money = standing->getMoney(), num = 1; money; money /= 10, num *= 10)
+		{
+			txt.push_back(StringUtils::format("  存%d  ", num));
+			fun.push_back([=](Ref* ref)
+				{
+					auto delta = std::min(num, standing->getMoney());
+					standing->setMoney(standing->getMoney() - delta);
+					standing->setDeposit(standing->getDeposit() + delta);
+				});
+		}
+		for (auto money = standing->getDeposit(), num = 1; money; money /= 10, num *= 10)
+		{
+			txt.push_back(StringUtils::format("  取%d  ", num));
+			fun.push_back([=](Ref* ref)
+				{
+					auto delta = std::min(num, standing->getDeposit());
+					standing->setMoney(standing->getMoney() + delta);
+					standing->setDeposit(standing->getDeposit() - delta);
+				});
+		}
+		pop->setMenu(fun, txt);
+		pop->setCallBack([=](Ref* ref)
+			{
+				auto pop1 = PopUpLayer::create();
+				pop1->setTitle(name_);
+				std::vector<std::string>txt1;
+				std::vector<std::function<void(Ref*)>>fun1;
+				if (!standing->getLoan())
+				{
+					txt1.push_back(StringUtils::format(" 贷款%d ", loan_value));
+					fun1.push_back([=](Ref* ref)
+						{
+							standing->setMoney(standing->getMoney() + loan_value);
+							standing->setLoan(loan_value);
+							pop1->removeFromParentAndCleanup(true);
+							SendMsg(msg_make_go_apper);
+						});
+				}
+				else
+				{
+					txt1.push_back(StringUtils::format(" 还款%d ", loan_value));
+					fun1.push_back([=](Ref* ref)
+						{
+							standing->setMoney(standing->getMoney() - loan_value);
+							standing->setLoan(0);
+							pop1->removeFromParentAndCleanup(true);
+							SendMsg(msg_make_go_apper);
+						});
+				}
+				pop1->setMenu(fun1, txt1);
+				pop1->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
+				pop1->setPosition(Vec2::ZERO);
+				map_scene->addChild(pop1, 51);
+			});
+		pop->setPosition(Vec2::ZERO);
+		map_scene->addChild(pop, 50);
+		return true;
+	}
 }
 
 bool Bank::byLand(Character* standing)
@@ -113,6 +164,7 @@ bool Bank::byLand(Character* standing)
 				base_money /= 10;
 				if (base_money < 100)
 				{
+					game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos()));
 					break;
 				}
 				if (standing->aiFinanceOK(base_money))
@@ -122,6 +174,7 @@ bool Bank::byLand(Character* standing)
 					auto call_back_func = CallFunc::create([=]() {game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos())); });
 					auto sequence = Sequence::create(DelayTime::create(0.5f), call_back_func, nullptr);
 					game_controller->runAction(sequence);
+					break;
 				}
 			}
 			break;
@@ -131,15 +184,17 @@ bool Bank::byLand(Character* standing)
 				base_money /= 10;
 				if (base_money < 100)
 				{
+					game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos()));
 					break;
 				}
-				if (standing->aiFinanceOK(base_money))
+				if (standing->aiFinanceOK(base_money)&&base_money<standing->getDeposit())
 				{
 					standing->setMoney(standing->getMoney() + base_money);
 					standing->setDeposit(standing->getDeposit() - base_money);
 					auto call_back_func = CallFunc::create([=]() {game_controller->moveOneStep(game_controller->judgeDirection(standing->getCurPos())); });
 					auto sequence = Sequence::create(DelayTime::create(0.5f), call_back_func, nullptr);
 					game_controller->runAction(sequence);
+					break;
 				}
 			}
 			break;
