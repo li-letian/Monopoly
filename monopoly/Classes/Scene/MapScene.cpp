@@ -273,6 +273,12 @@ void MapScene::updateInformation(Character *player)
 	sprite_color->setPosition(Vec2(940, visible_size.height - 290));
 	information_layer->addChild(sprite_color, 25);
 
+	auto label_avatar = Label::createWithSystemFont(player->getPlayerName().c_str(), "fonts/arial.ttf", 25);
+	label_avatar->setTextColor(Color4B::BLACK);
+	label_avatar->setAnchorPoint(Vec2(0.5, 0.5));
+	label_avatar->setPosition(Vec2(940, visible_size.height - 290));
+	information_layer->addChild(label_avatar, 26);
+
 	Value val_year(ZH("Äê")), val_mon(ZH("ÔÂ")), val_day(ZH("ÈÕ")), val_date;
 	if (day_ >= 31)
 	{

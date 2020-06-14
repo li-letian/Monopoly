@@ -54,8 +54,12 @@ bool GameController::init()
 	addEventListenerCustom();
 
 	//添加角色
-	addCharacter("miku", miku, 15000, start_position, false);
-	addCharacter("nanxiaoniao", nanxiaoniao, 15000, start_position + 1, true);
+	addCharacter("miku", 1, 15000, start_position, false);
+	addCharacter("nanxiaoniao", 2, 15000, start_position + 1, true);
+	addCharacter("jingtian", 3,15000, start_position + 2, true);
+	addCharacter("luff", 4, 15000, start_position + 3, false);
+	addCharacter("usagi", 5, 15000, start_position + 4, false);
+	addCharacter("iori", 6, 15000, start_position + 5, false);
 
 	//初始化神
 	initGod();

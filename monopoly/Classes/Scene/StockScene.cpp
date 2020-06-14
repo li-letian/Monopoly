@@ -21,8 +21,8 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 	this->percent_ = percent_;
 	//this->store_number_ = store_number__;
 	this->make_deal_price_ = make_deal_price;
-	int num[4] = { 0 };
-	vector<int> vec(num, num + 4);
+	int num[8] = { 0 };
+	vector<int> vec(num, num + 8);
 	this->store_number_ = vec;
 	/*
 	for (int i = 0; i < 4; i++) {

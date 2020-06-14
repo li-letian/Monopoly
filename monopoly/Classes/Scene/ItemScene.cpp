@@ -71,7 +71,7 @@ bool ItemScene::init()
 	auto sprite = Sprite::create("Item.png");
 	sprite->setAnchorPoint(Vec2(0, 0));
 	this->addChild(sprite, 10);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		item_vec_.push_back(vector<Item *>());
 	}
@@ -136,7 +136,7 @@ void ItemScene::updateMenu(Character *player)
 				item_vec_[tag][i]->removeFromParentAndCleanup(true);
 				item_vec_[tag].erase(item_vec_[tag].begin() + i);
 				this->updateMenu(player);
-			});
+			}, [=](Ref* ref) {});
 			pop->setPosition(Vec2(0, 0));
 			close(nullptr);
 			map_scene_->addChild(pop, 52);
