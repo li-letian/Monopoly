@@ -153,6 +153,7 @@ bool Business::promote(bool house_change)
 		map_scene->addChild(pop, 51);
 		return true;
 	}
+	return true;
 }
 
 bool Business::demote()

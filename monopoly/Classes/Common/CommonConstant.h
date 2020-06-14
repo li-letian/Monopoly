@@ -1,8 +1,12 @@
 #ifndef _COMMON_CONSTANT_H_
 #define _COMMON_CONSTANT_H_
 
+#include <string>
 constexpr int miku = 1;		   //初音未来
 constexpr int nanxiaoniao = 2; //南小鸟
+
+const std::string player_name[7]={"none","miku","nanxiaoniao","jingtian","luff","usagi","iori" };
+
 
 constexpr int initial_money = 150000;
 //各种类型位置的代号

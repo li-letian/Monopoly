@@ -34,7 +34,7 @@
 #include "Common/CommonMethod.h"
 
 #include "AudioEngine.h"
-bool GameController::init()
+bool GameController::init(std::vector<bool>is_ai)
 {
 	if (!Node::init())
 	{
@@ -54,12 +54,12 @@ bool GameController::init()
 	addEventListenerCustom();
 
 	//添加角色
-	addCharacter("miku", 1, 15000, 0, false);
-	addCharacter("nanxiaoniao", 2, 15000, 71, true);
-	addCharacter("jingtian", 3,15000, 149, true);
-	addCharacter("luff", 4, 15000, 224, false);
-	addCharacter("usagi", 5, 15000, 293, false);
-	addCharacter("iori", 6, 15000, 368, false);
+	addCharacter("miku", 1, 15000, 0, is_ai[1]);
+	addCharacter("nanxiaoniao", 2, 15000, 71, is_ai[2]);
+	addCharacter("jingtian", 3,15000, 149, is_ai[3]);
+	addCharacter("luff", 4, 15000, 224, is_ai[4]);
+	addCharacter("usagi", 5, 15000, 293, is_ai[5]);
+	addCharacter("iori", 6, 15000, 368, is_ai[6]);
 
 	//初始化神
 	initGod();

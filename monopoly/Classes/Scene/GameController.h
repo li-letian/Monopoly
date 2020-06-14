@@ -14,8 +14,22 @@ class ItemScene;
 class GameController : public Node
 {
 public:
-	CREATE_FUNC(GameController);
-	virtual bool init();
+	static GameController* create(std::vector<bool>is_ai)
+	{
+		auto pRet = new(std::nothrow) GameController();
+		if (pRet && pRet->init(is_ai))
+		{
+			pRet->autorelease();
+			return pRet;
+		}
+		else
+		{
+			delete pRet;
+			pRet = nullptr;
+			return nullptr;
+		}
+	}
+	bool init(std::vector<bool>is_ai);
 
 	void addEventListenerCustom();												   //添加自定义事件监听器
 	void addCharacter(const std::string& name, int tag, int money, int start_pos, bool is_ai); //添加角色

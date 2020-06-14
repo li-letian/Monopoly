@@ -84,6 +84,7 @@ public:
 		{
 			return true;
 		}
+		return false;
 	}
 	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置
 	CC_SYNTHESIZE(int, steps_scope_, StepsScope);	//一次可走的格数范围

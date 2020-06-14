@@ -20,7 +20,7 @@ bool StartScene::init()
 	}
 
 	auto bgm_sound = AudioEngine::play2d("BGM.mp3", true);
-	AudioEngine::setVolume(bgm_sound, 0.4);
+	AudioEngine::setVolume(bgm_sound, 0.4f);
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
