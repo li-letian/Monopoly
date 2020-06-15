@@ -57,8 +57,9 @@ bool GameController::init(std::vector<bool> is_ai)
 	}
 	whose_turn_ = 0;
 	//创建一个骰子
+
 	dice_ = Dice::create();
-	this->addChild(dice_);
+	this->addChild(dynamic_cast<Node*>(dice_), 50);
 	//创建map_scene、stock_scene
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, 500, "game_controller");
@@ -72,12 +73,12 @@ bool GameController::init(std::vector<bool> is_ai)
 	addEventListenerCustom();
 
 	//添加角色
-	addCharacter("miku", 1, 15000, 0, is_ai[1]);
-	addCharacter("nanxiaoniao", 2, 15000, 71, is_ai[2]);
-	addCharacter("jingtian", 3, 15000, 149, is_ai[3]);
-	addCharacter("luff", 4, 15000, 224, is_ai[4]);
-	addCharacter("usagi", 5, 15000, 293, is_ai[5]);
-	addCharacter("iori", 6, 15000, 394, is_ai[6]);
+	addCharacter("miku", 1, initial_money, 0, is_ai[1]);
+	addCharacter("nanxiaoniao", 2, initial_money, 71, is_ai[2]);
+	addCharacter("jingtian", 3, initial_money, 149, is_ai[3]);
+	addCharacter("luff", 4, initial_money, 224, is_ai[4]);
+	addCharacter("usagi", 5, initial_money, 293, is_ai[5]);
+	addCharacter("iori", 6, initial_money, 394, is_ai[6]);
 
 	//初始化神
 	initGod();
@@ -128,6 +129,13 @@ void GameController::addEventListenerCustom()
 					whose_turn_ = 0;
 					map_scene_->updateDay();
 					stock_layer_->stockUpdate();
+
+					for (auto c : characters_)
+					{
+						c->setLoan(c->getLoan() * 1.03f);
+						c->setDeposit(c->getDeposit() * 1.03f);
+					}
+
 				}
 
 				//找到当前角色
