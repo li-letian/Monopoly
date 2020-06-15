@@ -41,6 +41,7 @@ bool Hospital::onLand(Character* standing)
 {
 	if (standing->getIsAI())
 	{
+		SendMsg(msg_make_go_apper);
 		return false;
 	}
 	//要是没有出院证明就直接退出
