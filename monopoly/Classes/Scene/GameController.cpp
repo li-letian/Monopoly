@@ -34,6 +34,21 @@
 #include "Common/CommonMethod.h"
 
 #include "AudioEngine.h"
+
+void GameController::music_open()
+{
+	auto bgm_sound = AudioEngine::play2d("BGM.mp3", true);
+	AudioEngine::setVolume(bgm_sound, 0.4f);
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_close(); });
+}
+
+
+void GameController::music_close()
+{
+	AudioEngine::stopAll();
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_open(); });
+}
+
 bool GameController::init(std::vector<bool> is_ai)
 {
 	if (!Node::init())
@@ -51,6 +66,8 @@ bool GameController::init(std::vector<bool> is_ai)
 	//将当前场景替换为map_scene
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_close(); });
+
 	//添加自定义事件监听器
 	addEventListenerCustom();
 
@@ -60,7 +77,7 @@ bool GameController::init(std::vector<bool> is_ai)
 	addCharacter("jingtian", 3, 15000, 149, is_ai[3]);
 	addCharacter("luff", 4, 15000, 224, is_ai[4]);
 	addCharacter("usagi", 5, 15000, 293, is_ai[5]);
-	addCharacter("iori", 6, 15000, 368, is_ai[6]);
+	addCharacter("iori", 6, 15000, 394, is_ai[6]);
 
 	//初始化神
 	initGod();

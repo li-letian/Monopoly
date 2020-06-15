@@ -51,6 +51,10 @@ protected:
 	MapScene *map_scene_ = nullptr;					 //储存地图场景
 	Vector<Character*>characters_;//储存本局游戏所有角色的Vector
 	Vector<God*>gods_;			  //储存本局游戏所有神的Vector
+
+	void music_open();
+	void music_close();
+
 public:
 	Vector<Character*>& getCharacters()
 	{
