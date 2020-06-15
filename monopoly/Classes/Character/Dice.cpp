@@ -23,7 +23,7 @@ void Dice::RollTheDice(int steps_scope,Character*character)
 	}
 	else
 	{
-		steps_ = random(steps_scope) + 1;
+		steps_ = getARandomNumber(steps_scope) + 1;
 	}
 	dice_change_time_ = 0.1f;
 	if (walk_steps < steps_ && steps_<= speed_steps)
@@ -39,6 +39,7 @@ void Dice::RollTheDice(int steps_scope,Character*character)
 
 int Dice::getARandomNumber(int scope)
 {
+	if (!scope) return -1;
 	return random(scope);
 }
 

@@ -38,7 +38,7 @@ Character::~Character()
 }
 
 
-bool Character::init(const std::string& name, int tag, int money, int cur_pos)
+bool Character::init(const std::string& name, int tag, int money, int cur_pos, MapScene* map_scene)
 {
 	if (!Sprite::init())
 	{
@@ -54,6 +54,11 @@ bool Character::init(const std::string& name, int tag, int money, int cur_pos)
 	initAnimate();	//初始化动画对象
 	initSprite();	//设置人物初始形象
 	
+	mini_avatar_ = Sprite::create(StringUtils::format("%s_avatar.png", name.c_str()));
+	mini_avatar_->setAnchorPoint(Vec2(0.5f, 0.5f));
+	mini_avatar_->setScale(3.5f);
+	map_scene_ = map_scene;
+	map_scene_->getMiniMap()->addChild(mini_avatar_, 50);
 	return true;
 }
 
@@ -105,4 +110,9 @@ void Character::initSprite()
 	auto spf = character_frame_cache_->getSpriteFrameByName(StringUtils::format("%s-4.png", name_.c_str()));
 	this->initWithSpriteFrame(spf);
 	this->setAnchorPoint(Vec2(0.5f, 0.15f));
+}
+
+void Character::setMiniAvatar(int index)
+{
+	mini_avatar_->setPosition(map_scene_->pos(index));
 }

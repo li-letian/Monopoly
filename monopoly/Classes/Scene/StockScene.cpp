@@ -9,11 +9,21 @@
 #include "AudioEngine.h"
 using namespace std;
 Stock* Stock::create(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number) {
-	Stock* stock = new Stock(stock_code,stock_name,now_price,make_deal_price,percent,store_number);
-	stock->init();
-	stock->autorelease();
-	return stock;
+	auto pRet = new(std::nothrow) Stock(stock_code,stock_name,now_price,make_deal_price,percent,store_number);
+	if (pRet && pRet->init())
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	else
+	{
+		delete pRet;
+		pRet = nullptr;
+		return nullptr;
+	}
 }
+
+
 Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_deal_price, float percent, int store_number){
 	this->stock_code_ = stock_code;
 	this->stock_name_ = stock_name;
@@ -24,15 +34,11 @@ Stock::Stock(int stock_code, std::string stock_name, int now_price, int make_dea
 	int num[8] = { 0 };
 	vector<int> vec(num, num + 8);
 	this->store_number_ = vec;
-	/*
-	for (int i = 0; i < 4; i++) {
-		this->store_number_.pushBack(0);
-	}
-	*/
 	condition_ = normal;
 	duration_time_ = 0;
-
 }
+
+
 void StockScene::open(Ref* ref)
 {
 	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
@@ -306,7 +312,7 @@ void StockScene::stockUpdate() {
 void StockScene::remakeLabel(Character* player) {
 	auto stock_sprite = this->getChildByName("sprite");
 	stock_sprite->retain();
-	this->removeAllChildren();
+	this->removeAllChildrenWithCleanup(true);
 	this->addChild(stock_sprite, 24, "sprite");
 	stock_sprite->release();
 	initFirstLabel();

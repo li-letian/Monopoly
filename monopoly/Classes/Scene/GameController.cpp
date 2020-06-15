@@ -91,12 +91,17 @@ void GameController::addEventListenerCustom()
 			//当前人物开始走
 		case (msg_start_go):
 			go_button_menu_->setPosition(visible_size.width + 1000, 0);
+
+			listener_block_->setEnabled(true);
+
+
 			startGo();
 			break;
 			//当前人物回合结束，轮到下个人走
 		case (msg_make_go_apper):
 		{
 			//func函数将在一段时间后执行
+			listener_block_->setEnabled(true);
 			auto func = [=]() {
 				//定位到下一个角色
 				whose_turn_++;
@@ -131,6 +136,7 @@ void GameController::addEventListenerCustom()
 				//回到当前人物视角
 				returnToCharacter(character);
 
+				listener_block_->setEnabled(false);
 				//判断人物状态
 				switch (character->getCondition())
 				{
@@ -139,6 +145,7 @@ void GameController::addEventListenerCustom()
 						character->setInsurance(character->getInsurance() - 1);
 					if (character->getIsAI())
 					{
+						listener_block_->setEnabled(true);
 						startGo();
 					}
 					else
@@ -159,6 +166,7 @@ void GameController::addEventListenerCustom()
 					PopUpHospitalDialog(character);
 					break;
 				}
+				
 			};
 			auto seq = Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr);
 
@@ -193,8 +201,17 @@ void GameController::addEventListenerCustom()
 			break;
 		}
 	});
+	listener_block_ = EventListenerTouchOneByOne::create();
+	listener_block_->setSwallowTouches(true);
+	listener_block_->setEnabled(false);
+	listener_block_->onTouchBegan = [=](Touch* touch,Event *event)
+	{
+		return true;
+	};
+
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->getMap());
+	dispatcher->addEventListenerWithSceneGraphPriority(listener_block_, this);
 }
 
 void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos, bool is_ai)
@@ -312,6 +329,7 @@ int GameController::judgeDirection(int cur_pos)
 
 void GameController::moveOneStep(int direction)
 {
+	listener_block_->setEnabled(true);
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + character->getTowardDirection();
 	if (next_pos >= total_position)
@@ -346,10 +364,12 @@ void GameController::moveOneStep(int direction)
 	character->setCurPos(next_pos);
 	auto spawn_action = Sequence::create(Spawn::create(move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
+	character->setMiniAvatar(character->getCurPos());
 }
 
 void GameController::endGo()
 {
+	listener_block_->setEnabled(false);
 	steps_has_gone_++;
 	auto character = characters_.at(whose_turn_);
 	if (steps_has_gone_ < steps_to_go_)
@@ -359,6 +379,7 @@ void GameController::endGo()
 		auto &land = map_scene_->getLand(pos);
 		if (map_scene_->getType(pos) == land_bank)
 		{
+			
 			if (!land)
 				land = Bank::create(pos);
 			land->byLand(character);
@@ -467,6 +488,7 @@ void GameController::backToStand(Character *character)
 		character->setSpriteFrame(sprite_frame);
 		break;
 	}
+	character->setMiniAvatar(character->getCurPos());
 }
 
 void GameController::initGod()

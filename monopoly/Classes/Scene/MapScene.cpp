@@ -229,7 +229,7 @@ void MapScene::updateInformation(Character *player)
 	if (info_on_display_ != tag)
 		return;
 	auto information_layer = panel_->getChildByName("information_layer");
-	information_layer->removeAllChildren();
+	information_layer->removeAllChildrenWithCleanup(true);
 
 	Size visible_size = Director::getInstance()->getVisibleSize();
 
