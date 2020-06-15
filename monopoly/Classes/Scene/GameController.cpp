@@ -43,6 +43,7 @@ bool GameController::init(std::vector<bool> is_ai)
 	whose_turn_ = 0;
 	//创建一个骰子
 	dice_ = Dice::create();
+	this->addChild(dice_);
 	//创建map_scene、stock_scene
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, 500, "game_controller");
