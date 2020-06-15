@@ -203,11 +203,11 @@ bool MapScene::panelInit()
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 
-	setting_item->setCallback([=](Ref *render) {
+	/*setting_item->setCallback([=](Ref *render) {
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = SettingScene::createScene();
 		Director::getInstance()->pushScene(scene);
-	});
+	});*/
 	return true;
 }
 
