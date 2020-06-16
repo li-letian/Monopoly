@@ -46,10 +46,15 @@ public:
 	void backToStand(Character* character);													   //回到站立状态，在endGo中调用
 	void updateGod(int god_type);															   //更新神仙在地图上的位置
 protected:
+	EventListenerTouchOneByOne* listener_block_ = nullptr;
 	Dice *dice_ = nullptr;							 //储存本局游戏的随机数
 	MapScene *map_scene_ = nullptr;					 //储存地图场景
 	Vector<Character*>characters_;//储存本局游戏所有角色的Vector
 	Vector<God*>gods_;			  //储存本局游戏所有神的Vector
+
+	void music_open();
+	void music_close();
+
 public:
 	Vector<Character*>& getCharacters()
 	{

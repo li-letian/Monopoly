@@ -5,7 +5,7 @@
 
 USING_NS_CC;
 class Character;
-class Dice : public Ref {
+class Dice : public Node {
 public:
 	CREATE_FUNC(Dice);
 	virtual bool init();

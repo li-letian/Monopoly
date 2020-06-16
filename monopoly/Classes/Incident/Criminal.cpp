@@ -53,6 +53,8 @@ bool SendToJail(Character* character)
 	}
 	if (character->getStopTimes() > 0)
 	{
+		character->setVisible(false);
+		character->setCurPos(283);
 		return false;
 	}
 	else

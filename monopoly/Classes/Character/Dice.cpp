@@ -23,7 +23,7 @@ void Dice::RollTheDice(int steps_scope,Character*character)
 	}
 	else
 	{
-		steps_ = random(steps_scope) + 1;
+		steps_ = getARandomNumber(steps_scope) + 1;
 	}
 	dice_change_time_ = 0.1f;
 	if (walk_steps < steps_ && steps_<= speed_steps)
@@ -39,6 +39,7 @@ void Dice::RollTheDice(int steps_scope,Character*character)
 
 int Dice::getARandomNumber(int scope)
 {
+	if (!scope) return -1;
 	return random(scope);
 }
 
@@ -81,19 +82,19 @@ void Dice::decreaseNumber()
 	auto map_scene = GetMapScene();
 	map_scene->removeChildByName(StringUtils::format("number_%d", cur_point_), true);
 	cur_point_--;
-	if (cur_point_ != 0)
-	{
-		showCurNumber();
-	}
+	showCurNumber();
 }
 
 void Dice::showCurNumber()
 {
-	auto visible_size = Director::getInstance()->getVisibleSize();
-	auto number = Label::createWithSystemFont(StringUtils::format("%d", cur_point_), "华文琥珀", 70);
-	number->setColor(Color3B(0, 0, 0));
-	number->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-	number->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
-	auto map_scene = GetMapScene();
-	map_scene->addChild(number, 11, StringUtils::format("number_%d", cur_point_));
+	if (cur_point_ > 0 && cur_point_ <= steps_)
+	{
+		auto visible_size = Director::getInstance()->getVisibleSize();
+		auto number = Label::createWithSystemFont(StringUtils::format("%d", cur_point_), "华文琥珀", 70);
+		number->setColor(Color3B(0, 0, 0));
+		number->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+		number->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
+		auto map_scene = GetMapScene();
+		map_scene->addChild(number, 11, StringUtils::format("number_%d", cur_point_));
+	}
 }

@@ -47,6 +47,7 @@ public:
 	void close(Ref* ref);
 
 protected:
+	bool is_open_ = false;
 	Vector<Stock*>stock_vec_; //¹ÉÆ±vector
 	MapScene* map_scene_ = nullptr;
 	CC_SYNTHESIZE(int, condition_, Condition);

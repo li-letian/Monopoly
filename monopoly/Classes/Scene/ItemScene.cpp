@@ -115,7 +115,7 @@ Item *ItemScene::getItem(Character *player, std::string name)
 
 void ItemScene::updateMenu(Character *player)
 {
-	this->removeAllChildren();
+	this->removeAllChildrenWithCleanup(true);
 	auto item_sprite = Sprite::create("Item.png");
 	item_sprite->setAnchorPoint(Vec2(0, 0));
 	this->addChild(item_sprite, 24, "sprite");

@@ -203,11 +203,11 @@ bool MapScene::panelInit()
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
 
-	setting_item->setCallback([=](Ref *render) {
+	/*setting_item->setCallback([=](Ref *render) {
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = SettingScene::createScene();
 		Director::getInstance()->pushScene(scene);
-	});
+	});*/
 	return true;
 }
 
@@ -229,7 +229,7 @@ void MapScene::updateInformation(Character *player)
 	if (info_on_display_ != tag)
 		return;
 	auto information_layer = panel_->getChildByName("information_layer");
-	information_layer->removeAllChildren();
+	information_layer->removeAllChildrenWithCleanup(true);
 
 	Size visible_size = Director::getInstance()->getVisibleSize();
 

@@ -145,8 +145,9 @@ bool Bank::onLand(Character* standing)
 			});
 		pop->setPosition(Vec2::ZERO);
 		map_scene->addChild(pop, 50);
-		return true;
+		
 	}
+	return true;
 }
 
 bool Bank::byLand(Character* standing)

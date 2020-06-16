@@ -15,9 +15,8 @@ public:
 	static Character* create(const std::string& name, int tag, int money, int cur_pos,MapScene* map_scene)
 	{
 		auto pRet = new(std::nothrow) Character();
-		if (pRet && pRet->init(name, tag, money, cur_pos))
+		if (pRet && pRet->init(name, tag, money, cur_pos,map_scene))
 		{
-			pRet->map_scene_ = map_scene;
 			pRet->autorelease();
 			return pRet;
 		}
@@ -29,7 +28,7 @@ public:
 		}
 	}
 
-	bool init(const std::string& name, int tag, int money, int cur_pos);
+	bool init(const std::string& name, int tag, int money, int cur_pos, MapScene* map_scene);
 
 	//4个动画对象，分别存储人物向下、左、右、上移动的动画
 	CC_SYNTHESIZE(Animate*, character_anim_down_, CharacterAnimDown);
@@ -86,6 +85,12 @@ public:
 		}
 		return false;
 	}
+protected:
+	Sprite* mini_avatar_ = nullptr;
+	
+public:
+	void setMiniAvatar(int index);
+
 	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置
 	CC_SYNTHESIZE(int, steps_scope_, StepsScope);	//一次可走的格数范围
 

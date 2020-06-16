@@ -20,6 +20,7 @@
 #include "Land/Life.h"
 #include "Land/Chance.h"
 #include "Incident/Incident.h"
+#include "Incident/Stay.h"
 
 #include "God/God.h"
 #include "God/Angel.h"
@@ -34,6 +35,21 @@
 #include "Common/CommonMethod.h"
 
 #include "AudioEngine.h"
+
+void GameController::music_open()
+{
+	auto bgm_sound = AudioEngine::play2d("BGM.mp3", true);
+	AudioEngine::setVolume(bgm_sound, 0.4f);
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_close(); });
+}
+
+
+void GameController::music_close()
+{
+	AudioEngine::stopAll();
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_open(); });
+}
+
 bool GameController::init(std::vector<bool> is_ai)
 {
 	if (!Node::init())
@@ -42,7 +58,9 @@ bool GameController::init(std::vector<bool> is_ai)
 	}
 	whose_turn_ = 0;
 	//创建一个骰子
+
 	dice_ = Dice::create();
+	this->addChild(dynamic_cast<Node*>(dice_), 50);
 	//创建map_scene、stock_scene
 	map_scene_ = MapScene::createScene();
 	map_scene_->addChild(this, 500, "game_controller");
@@ -50,16 +68,18 @@ bool GameController::init(std::vector<bool> is_ai)
 	//将当前场景替换为map_scene
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, map_scene_, Color3B(0, 255, 255)));
 
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_close(); });
+
 	//添加自定义事件监听器
 	addEventListenerCustom();
 
 	//添加角色
-	addCharacter("miku", 1, 15000, 0, is_ai[1]);
-	addCharacter("nanxiaoniao", 2, 15000, 71, is_ai[2]);
-	addCharacter("jingtian", 3, 15000, 149, is_ai[3]);
-	addCharacter("luff", 4, 15000, 224, is_ai[4]);
-	addCharacter("usagi", 5, 15000, 293, is_ai[5]);
-	addCharacter("iori", 6, 15000, 368, is_ai[6]);
+	addCharacter("miku", 1, initial_money, 0, is_ai[1]);
+	addCharacter("nanxiaoniao", 2, initial_money, 71, is_ai[2]);
+	addCharacter("jingtian", 3, initial_money, 149, is_ai[3]);
+	addCharacter("luff", 4, initial_money, 224, is_ai[4]);
+	addCharacter("usagi", 5, initial_money, 293, is_ai[5]);
+	addCharacter("iori", 6, initial_money, 394, is_ai[6]);
 
 	//初始化神
 	initGod();
@@ -76,6 +96,15 @@ bool GameController::init(std::vector<bool> is_ai)
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
 	map_scene_->setInfoOnDisplay(characters_.at(whose_turn_));
 	map_scene_->updateInformation(characters_.at(whose_turn_));
+
+	for (auto character : characters_)
+	{
+		for (int i = 1; i <= 6; i++)
+		{
+			GetRandomItem(character, item_layer_);
+		}
+	}
+	item_layer_->updateMenu(characters_.at(whose_turn_));
 	return true;
 }
 
@@ -91,12 +120,19 @@ void GameController::addEventListenerCustom()
 			//当前人物开始走
 		case (msg_start_go):
 			go_button_menu_->setPosition(visible_size.width + 1000, 0);
+
+			listener_block_->setEnabled(true);
+
+
+
 			startGo();
 			break;
 			//当前人物回合结束，轮到下个人走
 		case (msg_make_go_apper):
 		{
 			//func函数将在一段时间后执行
+			characters_.at(whose_turn_)->setMiniAvatar(characters_.at(whose_turn_)->getCurPos());
+			listener_block_->setEnabled(true);
 			auto func = [=]() {
 				//定位到下一个角色
 				whose_turn_++;
@@ -105,6 +141,13 @@ void GameController::addEventListenerCustom()
 					whose_turn_ = 0;
 					map_scene_->updateDay();
 					stock_layer_->stockUpdate();
+
+					for (auto c : characters_)
+					{
+						c->setLoan(static_cast<int>(c->getLoan() * 1.03f));
+						c->setDeposit(static_cast<int>(c->getDeposit() * 1.03f));
+					}
+
 				}
 
 				//找到当前角色
@@ -131,6 +174,7 @@ void GameController::addEventListenerCustom()
 				//回到当前人物视角
 				returnToCharacter(character);
 
+				listener_block_->setEnabled(false);
 				//判断人物状态
 				switch (character->getCondition())
 				{
@@ -139,6 +183,7 @@ void GameController::addEventListenerCustom()
 						character->setInsurance(character->getInsurance() - 1);
 					if (character->getIsAI())
 					{
+						listener_block_->setEnabled(true);
 						startGo();
 					}
 					else
@@ -159,6 +204,7 @@ void GameController::addEventListenerCustom()
 					PopUpHospitalDialog(character);
 					break;
 				}
+				
 			};
 			auto seq = Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr);
 
@@ -193,8 +239,17 @@ void GameController::addEventListenerCustom()
 			break;
 		}
 	});
+	listener_block_ = EventListenerTouchOneByOne::create();
+	listener_block_->setSwallowTouches(true);
+	listener_block_->setEnabled(false);
+	listener_block_->onTouchBegan = [=](Touch* touch,Event *event)
+	{
+		return true;
+	};
+
 	auto dispatcher = map_scene_->getMap()->getEventDispatcher();
 	dispatcher->addEventListenerWithSceneGraphPriority(listener_custom_, map_scene_->getMap());
+	dispatcher->addEventListenerWithSceneGraphPriority(listener_block_, this);
 }
 
 void GameController::addCharacter(const std::string &name, int tag, int money, int start_pos, bool is_ai)
@@ -261,7 +316,18 @@ void GameController::startGo()
 		}
 
 		//掷骰子
-		dice_->RollTheDice(character->getStepsScope(), character);
+		if (character->getIsAI())
+		{
+			auto rollDiceCallFunc = CallFunc::create([=]() {
+				dice_->RollTheDice(character->getStepsScope(), character);
+				});
+			auto sequence = Sequence::create(DelayTime::create(0.5f), rollDiceCallFunc, nullptr);
+			this->runAction(sequence);
+		}
+		else
+		{
+			dice_->RollTheDice(character->getStepsScope(), character);
+		}
 	}
 }
 
@@ -312,6 +378,7 @@ int GameController::judgeDirection(int cur_pos)
 
 void GameController::moveOneStep(int direction)
 {
+	listener_block_->setEnabled(true);
 	auto character = characters_.at(whose_turn_);
 	int next_pos = character->getCurPos() + character->getTowardDirection();
 	if (next_pos >= total_position)
@@ -322,7 +389,8 @@ void GameController::moveOneStep(int direction)
 	{
 		next_pos = total_position - 1;
 	}
-	MoveTo *move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
+	MoveTo *character_move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
+	MoveBy* map_move_by = MoveBy::create(character_one_step_time, map_scene_->pos(character->getCurPos()) - map_scene_->pos(next_pos));
 	Repeat *repeat = nullptr;
 	switch (direction)
 	{
@@ -344,12 +412,15 @@ void GameController::moveOneStep(int direction)
 		this->endGo();
 	});
 	character->setCurPos(next_pos);
-	auto spawn_action = Sequence::create(Spawn::create(move_to, repeat, NULL), endGoCallBack, NULL);
+	auto spawn_action = Sequence::create(Spawn::create(character_move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
+	map_scene_->getMap()->runAction(map_move_by);
+	character->setMiniAvatar(character->getCurPos());
 }
 
 void GameController::endGo()
 {
+	listener_block_->setEnabled(false);
 	steps_has_gone_++;
 	auto character = characters_.at(whose_turn_);
 	if (steps_has_gone_ < steps_to_go_)
@@ -359,6 +430,7 @@ void GameController::endGo()
 		auto &land = map_scene_->getLand(pos);
 		if (map_scene_->getType(pos) == land_bank)
 		{
+			
 			if (!land)
 				land = Bank::create(pos);
 			land->byLand(character);
@@ -467,6 +539,7 @@ void GameController::backToStand(Character *character)
 		character->setSpriteFrame(sprite_frame);
 		break;
 	}
+	character->setMiniAvatar(character->getCurPos());
 }
 
 void GameController::initGod()
