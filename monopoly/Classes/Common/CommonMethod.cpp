@@ -58,18 +58,21 @@ MapScene* GetMapScene()
 GameController* GetGameController()
 {
 	auto map_scene = GetMapScene();
+	if (!map_scene) return nullptr;
 	return dynamic_cast<GameController*>(map_scene->getChildByName("game_controller"));
 }
 
 StockScene* GetStockScene()
 {
 	auto map_scene = GetMapScene();
+	if (!map_scene) return nullptr;
 	return dynamic_cast<StockScene*>(map_scene->getChildByName("stock_scene"));
 }
 
 ItemScene* GetItemScene()
 {
 	auto map_scene = GetMapScene();
+	if (!map_scene) return nullptr;
 	return dynamic_cast<ItemScene*>(map_scene->getChildByName("item_scene"));
 }
 

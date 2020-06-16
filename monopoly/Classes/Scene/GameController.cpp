@@ -20,6 +20,7 @@
 #include "Land/Life.h"
 #include "Land/Chance.h"
 #include "Incident/Incident.h"
+#include "Incident/Stay.h"
 
 #include "God/God.h"
 #include "God/Angel.h"
@@ -95,6 +96,15 @@ bool GameController::init(std::vector<bool> is_ai)
 	stock_layer_->remakeLabel(characters_.at(whose_turn_));
 	map_scene_->setInfoOnDisplay(characters_.at(whose_turn_));
 	map_scene_->updateInformation(characters_.at(whose_turn_));
+
+	for (auto character : characters_)
+	{
+		for (int i = 1; i <= 6; i++)
+		{
+			GetRandomItem(character, item_layer_);
+		}
+	}
+	item_layer_->updateMenu(characters_.at(whose_turn_));
 	return true;
 }
 
@@ -114,12 +124,14 @@ void GameController::addEventListenerCustom()
 			listener_block_->setEnabled(true);
 
 
+
 			startGo();
 			break;
 			//当前人物回合结束，轮到下个人走
 		case (msg_make_go_apper):
 		{
 			//func函数将在一段时间后执行
+			characters_.at(whose_turn_)->setMiniAvatar(characters_.at(whose_turn_)->getCurPos());
 			listener_block_->setEnabled(true);
 			auto func = [=]() {
 				//定位到下一个角色
@@ -132,8 +144,8 @@ void GameController::addEventListenerCustom()
 
 					for (auto c : characters_)
 					{
-						c->setLoan(c->getLoan() * 1.03f);
-						c->setDeposit(c->getDeposit() * 1.03f);
+						c->setLoan(static_cast<int>(c->getLoan() * 1.03f));
+						c->setDeposit(static_cast<int>(c->getDeposit() * 1.03f));
 					}
 
 				}
