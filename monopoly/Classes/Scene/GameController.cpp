@@ -296,7 +296,18 @@ void GameController::startGo()
 		}
 
 		//ÖÀ÷»×Ó
-		dice_->RollTheDice(character->getStepsScope(), character);
+		if (character->getIsAI())
+		{
+			auto rollDiceCallFunc = CallFunc::create([=]() {
+				dice_->RollTheDice(character->getStepsScope(), character);
+				});
+			auto sequence = Sequence::create(DelayTime::create(0.5f), rollDiceCallFunc, nullptr);
+			this->runAction(sequence);
+		}
+		else
+		{
+			dice_->RollTheDice(character->getStepsScope(), character);
+		}
 	}
 }
 
@@ -358,7 +369,8 @@ void GameController::moveOneStep(int direction)
 	{
 		next_pos = total_position - 1;
 	}
-	MoveTo *move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
+	MoveTo *character_move_to = MoveTo::create(character_one_step_time, map_scene_->pos(next_pos));
+	MoveBy* map_move_by = MoveBy::create(character_one_step_time, map_scene_->pos(character->getCurPos()) - map_scene_->pos(next_pos));
 	Repeat *repeat = nullptr;
 	switch (direction)
 	{
@@ -380,8 +392,9 @@ void GameController::moveOneStep(int direction)
 		this->endGo();
 	});
 	character->setCurPos(next_pos);
-	auto spawn_action = Sequence::create(Spawn::create(move_to, repeat, NULL), endGoCallBack, NULL);
+	auto spawn_action = Sequence::create(Spawn::create(character_move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
+	map_scene_->getMap()->runAction(map_move_by);
 	character->setMiniAvatar(character->getCurPos());
 }
 
