@@ -50,6 +50,22 @@ void GameController::music_close()
 	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_open(); });
 }
 
+GameController* GameController::create(std::vector<bool>is_ai)
+{
+	auto pRet = new(std::nothrow) GameController();
+	if (pRet && pRet->init(is_ai))
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	else
+	{
+		delete pRet;
+		pRet = nullptr;
+		return nullptr;
+	}
+}
+
 bool GameController::init(std::vector<bool> is_ai)
 {
 	if (!Node::init())
@@ -119,13 +135,9 @@ void GameController::addEventListenerCustom()
 		{
 			//当前人物开始走
 		case (msg_start_go):
-			go_button_menu_->setPosition(visible_size.width + 1000, 0);
-
+			map_scene_->removeChildByName("go_button", true);
 			listener_block_->setEnabled(true);
-
-
-
-			startGo();
+			ReadyToStartGo();
 			break;
 			//当前人物回合结束，轮到下个人走
 		case (msg_make_go_apper):
@@ -184,11 +196,11 @@ void GameController::addEventListenerCustom()
 					if (character->getIsAI())
 					{
 						listener_block_->setEnabled(true);
-						startGo();
+						ReadyToStartGo();
 					}
 					else
 					{
-						go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
+						addGoButton();
 					}
 					break;
 				case in_jail:
@@ -233,7 +245,7 @@ void GameController::addEventListenerCustom()
 		//只将GoButton隐藏
 		//通常道具使用时才会发送这个消息
 		case msg_hide_go_only:
-			go_button_menu_->setPosition(visible_size.width + 1000, 0);
+			map_scene_->removeChildByName("go_button", true);
 			steps_to_go_ = 0;
 			steps_has_gone_ = 0;
 			break;
@@ -271,21 +283,55 @@ void GameController::returnToCharacter(Character *character)
 void GameController::addGoButton()
 {
 	auto visible_size = Director::getInstance()->getVisibleSize();
+	int button_type = normal_button;
+	auto cur_character = getCurCharacter();
+	switch (cur_character->getStepsScope())
+	{
+	case walk_steps:
+		button_type = normal_button;
+		break;
+	case speed_steps:
+		button_type = speed_button;
+		break;
+	case flying_steps:
+		button_type = fly_button;
+		break;
+	case turtle_steps:
+		cur_character->setTurtleTimes(cur_character->getTurtleTimes() - 1);
+		if (cur_character->getTurtleTimes() == 0)
+		{
+			button_type = normal_button;
+			cur_character->setStepsScope(walk_steps);
+		}
+		else
+		{
+			button_type = turtle_button;
+		}
+	}
+	auto go_button = ui::Button::create(
+		StringUtils::format("go_%d.png", button_type),
+		StringUtils::format("go_%d_selected.png", button_type),
+		StringUtils::format("go_%d_disabled.png", button_type));
 
-	auto go_button = MenuItemImage::create("go.png", "go.png");
-	go_button->setCallback([=](Ref *render) {
-		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
-		SendMsg(msg_start_go);
-	});
-	go_button_menu_ = Menu::create(go_button, NULL);
+	go_button->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			SendMsg(msg_start_go);
+			break;
+		default:
+			break;
+		}
 
-	go_button_menu_->setAnchorPoint(Vec2(0.5f, 0.5f));
-	go_button_menu_->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
-
-	map_scene_->addChild(go_button_menu_, 11);
+		});
+	go_button->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+	go_button->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));
+	map_scene_->addChild(go_button, 11, "go_button");
 }
 
-void GameController::startGo()
+void GameController::ReadyToStartGo()
 {
 	auto character = characters_.at(whose_turn_);
 
@@ -305,16 +351,6 @@ void GameController::startGo()
 	}
 	else
 	{
-		//对于乌龟卡的判断
-		if (character->getStepsScope() == turtle_steps)
-		{
-			character->setTurtleTimes(character->getTurtleTimes() - 1);
-			if (character->getTurtleTimes() == 0)
-			{
-				character->setStepsScope(walk_steps);
-			}
-		}
-
 		//掷骰子
 		if (character->getIsAI())
 		{

@@ -121,4 +121,9 @@ constexpr int AI_withdraw_money = 1;
 
 constexpr int AI_yes = 0;
 constexpr int AI_no = 1;
+
+constexpr int normal_button = 0;
+constexpr int speed_button = 1;
+constexpr int fly_button = 2;
+constexpr int turtle_button = 3;
 #endif

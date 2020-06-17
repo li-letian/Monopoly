@@ -23,6 +23,8 @@ bool SetSpeedShoes(Character* character)
 	else
 	{
 		character->setStepsScope(speed_steps);
+		GetMapScene()->removeChildByName("go_button", true);
+		GetGameController()->addGoButton();
 		return true;
 	}
 }
@@ -36,6 +38,8 @@ bool SetFlyingShoes(Character* character)
 	else
 	{
 		character->setStepsScope(flying_steps);
+		GetMapScene()->removeChildByName("go_button", true);
+		GetGameController()->addGoButton();
 		return true;
 	}
 }
@@ -50,6 +54,8 @@ bool SetTurtle(Character* character)
 	{
 		character->setStepsScope(turtle_steps);
 		character->setTurtleTimes(init_turtle_times);
+		GetMapScene()->removeChildByName("go_button", true);
+		GetGameController()->addGoButton();
 		return true;
 	}
 }
@@ -63,6 +69,8 @@ bool DestroySpecialShoes(Character* character)
 	else
 	{
 		character->setStepsScope(walk_steps);
+		GetMapScene()->removeChildByName("go_button", true);
+		GetGameController()->addGoButton();
 		return true;
 	}
 }
