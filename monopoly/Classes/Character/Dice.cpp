@@ -90,7 +90,7 @@ void Dice::showCurNumber()
 	if (cur_point_ > 0 && cur_point_ <= steps_)
 	{
 		auto visible_size = Director::getInstance()->getVisibleSize();
-		auto number = Label::createWithSystemFont(StringUtils::format("%d", cur_point_), "»ªÎÄçúçê", 70);
+		auto number = Label::createWithSystemFont(StringUtils::format("%d", cur_point_), "fonts/STHUPO.ttf", 70);
 		number->setColor(Color3B(0, 0, 0));
 		number->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
 		number->setPosition(Vec2(visible_size.height / 2, visible_size.height / 8));

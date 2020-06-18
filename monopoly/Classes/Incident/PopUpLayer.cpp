@@ -11,11 +11,11 @@ bool PopUpLayer::init()
 	{
 		return false;
 	}
-	
+
 	//添加屏蔽层
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(true);
-	listener->onTouchBegan = [](Touch* touch, Event* event) {
+	listener->onTouchBegan = [](Touch *touch, Event *event) {
 		return true;
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
@@ -27,22 +27,22 @@ bool PopUpLayer::init()
 	back_ground_width_ = back_ground_->getContentSize().width;
 	back_ground_height_ = back_ground_->getContentSize().height;
 	back_ground_->setPosition(Vec2((visible_size.width - grid_distance * 16) / 2,
-		visible_size.height *0.75f));
+								   visible_size.height * 0.75f));
 	this->addChild(back_ground_);
 
 	return true;
 }
 
-void PopUpLayer::setTitle(const std::string& title)
+void PopUpLayer::setTitle(const std::string &title)
 {
-	auto title_label = Label::createWithSystemFont(ZH(title), "华文琥珀", 30);
+	auto title_label = Label::createWithSystemFont(ZH(title), "fonts/STHUPO.ttf", 30);
 	title_label->setColor(Color3B(0, 0, 0));
 	title_label->setAnchorPoint(Vec2(0.5f, 0.5f));
 	title_label->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - 2 * grid_distance));
 	back_ground_->addChild(title_label);
 }
 
-void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<std::function<void(Ref* ref)>>callback)
+void PopUpLayer::setMenu(const std::vector<std::string> pic, const std::vector<std::function<void(Ref *ref)>> callback)
 {
 	if (GetGameController()->getCurCharacter()->getIsAI())
 	{
@@ -51,25 +51,26 @@ void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<
 		};
 		return;
 	}
-	for (decltype(pic.size()) i = 0; i < pic.size(); i+=4)
+	for (decltype(pic.size()) i = 0; i < pic.size(); i += 4)
 	{
 		auto menu = Menu::create();
 		for (decltype(i) j = i; j < i + 4; j++)
 		{
-			if (j >= pic.size()) break;
-			auto menu_item = MenuItemImage::create(pic.at(j), pic.at(j), [=](Ref* ref) { callback.at(j)(ref); this->removeFromParentAndCleanup(true); });
+			if (j >= pic.size())
+				break;
+			auto menu_item = MenuItemImage::create(pic.at(j), pic.at(j), [=](Ref *ref) { callback.at(j)(ref); this->removeFromParentAndCleanup(true); });
 			menu->addChild(menu_item);
 		}
-		if (!menu->getChildrenCount()) break;
+		if (!menu->getChildrenCount())
+			break;
 		menu->alignItemsHorizontally();
 		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
-		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - (7+i) * grid_distance));
+		menu->setPosition(Vec2(back_ground_width_ / 2, back_ground_height_ - (7 + i) * grid_distance));
 		back_ground_->addChild(menu);
 	}
 }
 
-
-void PopUpLayer::setMenu(const std::vector<std::function<void(Ref* ref)>>callback, const std::vector<std::string>txt)
+void PopUpLayer::setMenu(const std::vector<std::function<void(Ref *ref)>> callback, const std::vector<std::string> txt)
 {
 	if (GetGameController()->getCurCharacter()->getIsAI())
 	{
@@ -78,29 +79,31 @@ void PopUpLayer::setMenu(const std::vector<std::function<void(Ref* ref)>>callbac
 		};
 		return;
 	}
-	MenuItemFont::setFontName("华文琥珀");
+	MenuItemFont::setFontName("fonts/STHUPO.ttf");
 	MenuItemFont::setFontSize(30);
 	for (decltype(txt.size()) i = 0; i < txt.size(); i += 4)
 	{
 		auto menu = Menu::create();
 		for (decltype(i) j = i; j < i + 4; j++)
 		{
-			if (j >= txt.size()) break;
-			auto menu_item = MenuItemFont::create(ZH(txt.at(j)), [=](Ref* ref) { callback.at(j)(ref); });
+			if (j >= txt.size())
+				break;
+			auto menu_item = MenuItemFont::create(ZH(txt.at(j)), [=](Ref *ref) { callback.at(j)(ref); });
 			menu->setColor(Color3B(0, 0, 0));
 			menu->addChild(menu_item);
 		}
-		if (!menu->getChildrenCount()) break;
+		if (!menu->getChildrenCount())
+			break;
 		menu->alignItemsHorizontally();
 		menu->setAnchorPoint(Vec2(0.5f, 0.5f));
-		menu->setPosition(Vec2(back_ground_width_ / 2.0f, back_ground_height_ - (7.0f + i*0.6f) * grid_distance));
+		menu->setPosition(Vec2(back_ground_width_ / 2.0f, back_ground_height_ - (7.0f + i * 0.6f) * grid_distance));
 		back_ground_->addChild(menu);
 	}
 }
 
-void PopUpLayer::setContent(const std::string& content)
+void PopUpLayer::setContent(const std::string &content)
 {
-	auto content_label = Label::createWithSystemFont(ZH(content), "华文琥珀", 20);
+	auto content_label = Label::createWithSystemFont(ZH(content), "fonts/STHUPO.ttf", 20);
 	content_label->setColor(Color3B(0, 0, 0));
 	content_label->setDimensions(back_ground_width_ - 4 * grid_distance, back_ground_height_ - 10 * grid_distance);
 	content_label->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -108,7 +111,7 @@ void PopUpLayer::setContent(const std::string& content)
 	back_ground_->addChild(content_label);
 }
 
-void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back,const std::string text)
+void PopUpLayer::setCallBack(std::function<void(Ref *render)> confirm_call_back, const std::string text)
 {
 	if (GetGameController()->getCurCharacter()->getIsAI())
 	{
@@ -120,9 +123,9 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	else
 	{
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
-		MenuItemFont::setFontName("华文琥珀");
+		MenuItemFont::setFontName("fonts/STHUPO.ttf");
 		MenuItemFont::setFontSize(25);
-		auto confirm_item = MenuItemFont::create(ZH(text), [=](Ref* ref) {
+		auto confirm_item = MenuItemFont::create(ZH(text), [=](Ref *ref) {
 			confirm_call_back(ref);
 			this->removeFromParentAndCleanup(true); });
 		confirm_item->setColor(Color3B(0, 0, 0));
@@ -135,7 +138,7 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	}
 }
 
-void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back, std::function<void(Ref * render)> cancel_call_back)
+void PopUpLayer::setCallBack(std::function<void(Ref *render)> confirm_call_back, std::function<void(Ref *render)> cancel_call_back)
 {
 	if (GetGameController()->getCurCharacter()->getIsAI())
 	{
@@ -147,10 +150,10 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 	else
 	{
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
-		MenuItemFont::setFontName("华文琥珀");
+		MenuItemFont::setFontName("fonts/STHUPO.ttf");
 		MenuItemFont::setFontSize(25);
 
-		auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref* ref) {
+		auto confirm_item = MenuItemFont::create(ZH("确认"), [=](Ref *ref) {
 			auto sound_effect = AudioEngine::play2d("bottom_up.mp3", false);
 			confirm_call_back(ref);
 			this->removeFromParentAndCleanup(true); });
@@ -158,7 +161,7 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 		confirm_item->setAnchorPoint(Vec2(0, 0));
 		confirm_item->setPosition(Vec2(2 * grid_distance, 2 * grid_distance));
 
-		auto cancel_item = MenuItemFont::create(ZH("取消"), [=](Ref* ref) {
+		auto cancel_item = MenuItemFont::create(ZH("取消"), [=](Ref *ref) {
 			auto sound_effect = AudioEngine::play2d("bottom_up.mp3", false);
 			cancel_call_back(ref);
 			this->removeFromParentAndCleanup(true);
@@ -169,7 +172,7 @@ void PopUpLayer::setCallBack(std::function<void(Ref * render)> confirm_call_back
 
 		auto menu = Menu::create(confirm_item, cancel_item, nullptr);
 		menu->setAnchorPoint(Vec2(0, 0));
-		menu->setPosition(Vec2(0,0));
+		menu->setPosition(Vec2(0, 0));
 		back_ground_->addChild(menu);
 	}
 }
