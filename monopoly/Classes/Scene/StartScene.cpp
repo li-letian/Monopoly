@@ -3,6 +3,7 @@
 #include "Scene/SettingScene.h"
 #include "Common/CommonMethod.h"
 #include "AudioEngine.h"
+
 USING_NS_CC;
 
 Scene* StartScene::createScene()
@@ -11,18 +12,18 @@ Scene* StartScene::createScene()
 }
 
 
-void StartScene::music_open()
+void StartScene::music_open(MenuItem* setting_item)
 {
 	auto bgm_sound = AudioEngine::play2d("BGM.mp3", true);
 	AudioEngine::setVolume(bgm_sound, 0.4f);
-	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_close(); });
+	setting_item->setCallback([=](Ref* ref) {music_close( setting_item); });
 }
 
 
-void StartScene::music_close()
+void StartScene::music_close(MenuItem* setting_item)
 {
 	AudioEngine::stopAll();
-	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_open(); });
+	setting_item->setCallback([=](Ref* ref) {music_open(setting_item); });
 }
 
 
@@ -48,19 +49,19 @@ bool StartScene::init()
 	MenuItemFont::setFontName("华文琥珀");
 	MenuItemFont::setFontSize(40);
 
-	auto select_item = MenuItemFont::create(ZH("| 开始游戏 |"), [&](Ref* render)
+	auto select_item = MenuItemFont::create(ZH("| 开始游戏 |"), [=](Ref* render)
 	{
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 		auto scene = SelectScene::createScene();
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
 	});
-	auto setting_item = MenuItemFont::create(ZH("| 游戏设置 |"), [&](Ref* render)
+	auto setting_item = MenuItemFont::create(ZH("| 背景音乐 |"));
+	setting_item->setCallback([=](Ref* render)
 	{
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
-		auto scene = SettingScene::createScene();
-		Director::getInstance()->pushScene(scene);
+		music_close(setting_item);
 	});
-	auto close_item = MenuItemFont::create(ZH("| 退出游戏 |"), [&](Ref* render)
+	auto close_item = MenuItemFont::create(ZH("| 退出游戏 |"), [=](Ref* render)
 	{
 		auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 		Director::getInstance()->end();
