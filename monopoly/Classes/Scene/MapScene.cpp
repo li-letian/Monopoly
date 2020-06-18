@@ -37,7 +37,7 @@ bool MapScene::init()
 		return false;
 	}
 
-	MenuItemFont::setFontName("»ªÎÄçúçê");
+	MenuItemFont::setFontName("fonts/STHUPO.ttf");
 	MenuItemFont::setFontSize(45);
 
 	if (!MapScene::mapInit())
@@ -384,24 +384,25 @@ bool MapScene::perspectiveJump(float x, float y)
 
 bool MapScene::touchInit()
 {
-	
+
 	auto len = static_cast<int>(pos_.size());
 	auto tile_size = map_->getTileSize();
 	auto map_size = map_->getMapSize();
 	lands_.resize(pos_.size(), nullptr);
 	gods_.resize(pos_.size(), nullptr);
-	for (int c=0; c < len; c++)
+	for (int c = 0; c < len; c++)
 	{
 		auto x = static_cast<int>(pos_.at(c).x / tile_size.width);
 		auto y = static_cast<int>((map_size.height * tile_size.height - pos_.at(c).y) / tile_size.height);
-		idx_.insert(std::make_pair((x * 100 + y),c));
+		idx_.insert(std::make_pair((x * 100 + y), c));
 	}
 	auto listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = [=](Touch* touch, Event* event) {
+	listener->onTouchBegan = [=](Touch *touch, Event *event) {
 		auto tile_size = map_->getTileSize();
 		auto index = touchIndex(touch->getLocation());
-		if (index == -1) return false;
-		auto& land = lands_.at(index);
+		if (index == -1)
+			return false;
+		auto &land = lands_.at(index);
 		if (!land)
 		{
 			switch (type_.at(index))
@@ -445,13 +446,13 @@ bool MapScene::touchInit()
 				break;
 			}
 		}
-		if (!land) return false;
+		if (!land)
+			return false;
 		auto label = Label::createWithSystemFont(ZH(land->getName()), "fonts/arial.ttf", 40);
 		auto position = pos(index);
-		label->setPosition(position.x, position.y-tile_size.height * 2);
+		label->setPosition(position.x, position.y - tile_size.height * 2);
 		map_->addChild(label);
-		auto fun = CallFunc::create([=]()
-		{
+		auto fun = CallFunc::create([=]() {
 			label->removeFromParentAndCleanup(true);
 		});
 		auto seq = Sequence::create(DelayTime::create(0.3f), fun, nullptr);

@@ -11,33 +11,35 @@ Scene *SelectScene::createScene()
 	return SelectScene::create();
 }
 
-bool SelectScene::transformToAi(int i,Ref* render, Sprite* ai,Sprite* player,MenuItemFont* item)
+bool SelectScene::transformToAi(int i, Ref *render, Sprite *ai, Sprite *player, MenuItemFont *item)
 {
-	if (i == 1) return false;
+	if (i == 1)
+		return false;
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	is_ai_.at(i) = true;
 	ai->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f / 10.f));
 	player->setPosition(Vec2(visible_size.width * 10.f, visible_size.height * 10.f));
-	
-	item->setCallback([=](Ref* ref) {transformToPlayer(i, ref, ai, player, item); });
+
+	item->setCallback([=](Ref *ref) { transformToPlayer(i, ref, ai, player, item); });
 	return true;
 }
-bool SelectScene::transformToPlayer(int i, Ref* render, Sprite* ai, Sprite* player, MenuItemFont* item)
+bool SelectScene::transformToPlayer(int i, Ref *render, Sprite *ai, Sprite *player, MenuItemFont *item)
 {
-	if (i == 1) return false;
+	if (i == 1)
+		return false;
 	auto visible_size = Director::getInstance()->getVisibleSize();
 	auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
 	is_ai_.at(i) = false;
 	ai->setPosition(Vec2(visible_size.width * 10.f, visible_size.height * 10));
 	player->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f / 10.f));
-	item->setCallback([=](Ref* ref) {transformToAi(i, ref, ai, player, item); });
+	item->setCallback([=](Ref *ref) { transformToAi(i, ref, ai, player, item); });
 	return true;
 }
 
 bool SelectScene::addOption(int i)
 {
-	MenuItemFont::setFontName("华文琥珀");
+	MenuItemFont::setFontName("fonts/STHUPO.ttf");
 	MenuItemFont::setFontSize(25);
 	auto visible_size = Director::getInstance()->getVisibleSize();
 
@@ -49,7 +51,7 @@ bool SelectScene::addOption(int i)
 	auto label = Label::createWithSystemFont(player_name[i], "fonts/arial.ttf", 22);
 	label->setTextColor(Color4B::WHITE);
 	label->setAnchorPoint(Vec2(0.5, 0.5));
-	label->setPosition(Vec2(visible_size.width * (1.5f+i) / 10.f, visible_size.height * 8.f / 10.f));
+	label->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 8.f / 10.f));
 	this->addChild(label, 26);
 	auto ai = Sprite::create("ai_image.png");
 	ai->setAnchorPoint(Vec2(0.5, 0.5));
@@ -57,13 +59,14 @@ bool SelectScene::addOption(int i)
 	this->addChild(ai, 50);
 	auto player = Sprite::create("player_image.png");
 	player->setAnchorPoint(Vec2(0.5, 0.5));
-	player->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f/10.f));
+	player->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 7.f / 10.f));
 	this->addChild(player, 50);
 
-	if (i == 1) return true;
+	if (i == 1)
+		return true;
 	auto item = MenuItemFont::create("Switch");
-	item->setCallback([=](Ref* render) {
-		transformToAi(i,render,ai,player,item);
+	item->setCallback([=](Ref *render) {
+		transformToAi(i, render, ai, player, item);
 	});
 	item->setPosition(Vec2(visible_size.width * (1.5f + i) / 10.f, visible_size.height * 6.f / 10.f));
 
@@ -89,17 +92,17 @@ bool SelectScene::init()
 	background->setPosition(origin);
 	this->addChild(background, 0);
 
-	MenuItemFont::setFontName("华文琥珀");
+	MenuItemFont::setFontName("fonts/STHUPO.ttf");
 	MenuItemFont::setFontSize(50);
-	
-	for(int i=1;i<=7;i++)
+
+	for (int i = 1; i <= 7; i++)
 		is_ai_.push_back(false);
 	for (int i = 1; i <= 6; i++)
 	{
 		addOption(i);
 	}
 
-	MenuItemFont::setFontName("华文琥珀");
+	MenuItemFont::setFontName("fonts/STHUPO.ttf");
 	MenuItemFont::setFontSize(50);
 
 	auto exit_item = MenuItemFont::create("Exit", [=](Ref *render) {
