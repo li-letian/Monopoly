@@ -20,12 +20,13 @@ bool SendToJail(Character* character)
 	if (item != nullptr)
 	{
 		auto pop = PopUpLayer::create();
-		std::vector<std::string>name;
+		std::vector<std::string>pic;
 		std::vector<std::function<void(Ref*)>>fun;
 		auto characters = GetGameController()->getCharacters();
 		for (auto c : characters)
 		{
-			name.push_back(c->getPlayerName());
+			if (character->getTag() == c->getTag()) continue;
+			pic.push_back(c->getPlayerName() + std::string("_avatar.png"));
 			fun.push_back([=](Ref* ref)
 			{
 				if (c->getStopTimes() > 0)
@@ -46,7 +47,7 @@ bool SendToJail(Character* character)
 			});
 		}
 		pop->setTitle("ÇëÑ¡Ôñ¼Þ»ö¸ø");
-		pop->setMenu(fun, name);
+		pop->setMenu(pic,fun);
 		item->worked(character);
 		pop->setOnScene();
 		return true;

@@ -44,6 +44,13 @@ void PopUpLayer::setTitle(const std::string& title)
 
 void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<std::function<void(Ref* ref)>>callback)
 {
+	if (GetGameController()->getCurCharacter()->getIsAI())
+	{
+		call_back_func_ = [=]() {
+			this->removeFromParent();
+		};
+		return;
+	}
 	for (decltype(pic.size()) i = 0; i < pic.size(); i+=4)
 	{
 		auto menu = Menu::create();
@@ -64,6 +71,13 @@ void PopUpLayer::setMenu(const std::vector < std::string>pic, const std::vector<
 
 void PopUpLayer::setMenu(const std::vector<std::function<void(Ref* ref)>>callback, const std::vector<std::string>txt)
 {
+	if (GetGameController()->getCurCharacter()->getIsAI())
+	{
+		call_back_func_ = [=]() {
+			this->removeFromParent();
+		};
+		return;
+	}
 	MenuItemFont::setFontName("»ªÎÄçúçê");
 	MenuItemFont::setFontSize(30);
 	for (decltype(txt.size()) i = 0; i < txt.size(); i += 4)
