@@ -59,6 +59,7 @@ bool Character::init(const std::string& name, int tag, int money, int cur_pos, M
 	mini_avatar_->setScale(3.5f);
 	map_scene_ = map_scene;
 	map_scene_->getMiniMap()->addChild(mini_avatar_, 50);
+	setCurPos(cur_pos);
 	return true;
 }
 

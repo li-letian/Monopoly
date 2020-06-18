@@ -9,6 +9,8 @@ public:
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();
+	void music_open();
+	void music_close();
 
 	CREATE_FUNC(StartScene);
 };

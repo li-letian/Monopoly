@@ -11,6 +11,22 @@ Scene* StartScene::createScene()
 }
 
 
+void StartScene::music_open()
+{
+	auto bgm_sound = AudioEngine::play2d("BGM.mp3", true);
+	AudioEngine::setVolume(bgm_sound, 0.4f);
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_close(); });
+}
+
+
+void StartScene::music_close()
+{
+	AudioEngine::stopAll();
+	map_scene_->setMenuCallback("setting", [=](Ref* ref) {music_open(); });
+}
+
+
+
 bool StartScene::init()
 {
 

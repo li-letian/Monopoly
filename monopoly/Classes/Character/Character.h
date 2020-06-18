@@ -91,7 +91,19 @@ protected:
 public:
 	void setMiniAvatar(int index);
 
-	CC_SYNTHESIZE(int, cur_pos_, CurPos);			//当前所处位置
+protected:
+	int cur_pos_;
+public:
+	//当前所处位置
+	int getCurPos()
+	{
+		return cur_pos_;
+	}
+	void setCurPos(int cur_pos)
+	{
+		cur_pos_ = cur_pos;
+		setMiniAvatar(cur_pos);
+	}
 	CC_SYNTHESIZE(int, steps_scope_, StepsScope);	//一次可走的格数范围
 
 	CC_SYNTHESIZE(int, stop_times_, StopTimes);		//停止时间（可能在医院、监狱、度假)

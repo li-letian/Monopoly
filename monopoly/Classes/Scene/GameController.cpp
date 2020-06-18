@@ -143,7 +143,6 @@ void GameController::addEventListenerCustom()
 		case (msg_make_go_apper):
 		{
 			//func函数将在一段时间后执行
-			characters_.at(whose_turn_)->setMiniAvatar(characters_.at(whose_turn_)->getCurPos());
 			listener_block_->setEnabled(true);
 			auto func = [=]() {
 				//定位到下一个角色
@@ -451,7 +450,6 @@ void GameController::moveOneStep(int direction)
 	auto spawn_action = Sequence::create(Spawn::create(character_move_to, repeat, NULL), endGoCallBack, NULL);
 	character->runAction(spawn_action);
 	map_scene_->getMap()->runAction(map_move_by);
-	character->setMiniAvatar(character->getCurPos());
 }
 
 void GameController::endGo()
@@ -575,7 +573,6 @@ void GameController::backToStand(Character *character)
 		character->setSpriteFrame(sprite_frame);
 		break;
 	}
-	character->setMiniAvatar(character->getCurPos());
 }
 
 void GameController::initGod()

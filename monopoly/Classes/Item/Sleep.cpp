@@ -15,6 +15,6 @@ bool Sleep::init()
 		return false;
 	}
 	name_ = "度假卡";
-	content_ = "世界这么大，我想去看看";
+	content_ = "世界这么大，我想去看看，让所有对手都去度假";
 	return true;
 }
