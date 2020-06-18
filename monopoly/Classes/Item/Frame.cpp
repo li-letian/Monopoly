@@ -10,11 +10,12 @@ void Frame::work(Character* player) {
 	auto game_controller = GetGameController();
 	auto pop = PopUpLayer::create();
 	pop->setTitle("«Î—°‘Ò");
-	std::vector<std::string>txt;
+	std::vector<std::string>pic;
 	std::vector<std::function<void(Ref*)>>fun;
 	for (auto character : game_controller->getCharacters())
 	{
-		txt.push_back(character->getPlayerName());
+		if (character->getTag() == player->getTag()) continue;
+		pic.push_back(character->getPlayerName() + std::string("_avatar.png"));
 		fun.push_back([=](Ref* ref)
 		{
 			SendToJail(character);
@@ -25,10 +26,9 @@ void Frame::work(Character* player) {
 				SendToJail(player);
 				GetItemScene()->removeItem(character, item);
 			}
-			pop->removeFromParentAndCleanup(true);
 		});
 	}
-	pop->setMenu(fun,txt);
+	pop->setMenu(pic,fun);
 	pop->setOnScene(51);
 
 }

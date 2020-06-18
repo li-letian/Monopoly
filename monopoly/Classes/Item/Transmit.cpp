@@ -13,7 +13,7 @@ bool Transmit::init()
 	{
 		return false;
 	}
-	name_ = "超时空传送仪";
+	name_ = "传送仪";
 	content_ = "在地图上指定一个角色，然后传动这个角色到指定的另一有效位置，可拖动空地选取地点";
 	return true;
 }

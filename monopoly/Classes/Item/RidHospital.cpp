@@ -14,6 +14,6 @@ bool RidHospital::init()
 		return false;
 	}
 	name_ = "出院证明";
-	content_ = "给一个人办理出院手续";
+	content_ = "给一个人办理出院手续，被动触发，点击确认则作废";
 	return true;
 }
