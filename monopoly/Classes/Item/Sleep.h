@@ -9,9 +9,6 @@ public:
 	virtual void work(Character* player);
 	CREATE_FUNC(Sleep);
 	virtual bool init();
-private:
-	std::string name_ = std::string("");
-	std::string content_ = std::string("");
 };
 
 #endif

@@ -40,7 +40,9 @@
 void GetRandomItem(Character* standing)
 {
 	auto item_scene = GetItemScene();
-	switch (rand() % 29)
+	auto temp = rand() % 29;
+	log("item get case%d", temp);
+	switch (temp)
 	{
 	case	0:	item_scene->addItem(standing, AngelCard::create());	break;
 	case	1:	item_scene->addItem(standing, ControlDice::create());	break;
@@ -78,7 +80,9 @@ void GetRandomItem(Character* standing)
 
 void GetRandomItem(Character* standing,ItemScene* item_scene)
 {
-	switch (rand() % 29)
+	auto temp = rand() % 29;
+	log("item get case%d", temp);
+	switch (temp)
 	{
 	case	0:	item_scene->addItem(standing, AngelCard::create());	break;
 	case	1:	item_scene->addItem(standing, ControlDice::create());	break;

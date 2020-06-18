@@ -64,7 +64,6 @@ bool Hospital::onLand(Character* standing)
 				character->setStopTimes(0);
 				PopUpHospitalDialog(character);
 				GetItemScene()->removeItem(standing, item);
-				SendMsg(msg_make_go_apper);
 			});
 		}
 	}

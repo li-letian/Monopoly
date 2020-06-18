@@ -115,7 +115,7 @@ bool GameController::init(std::vector<bool> is_ai)
 
 	for (auto character : characters_)
 	{
-		for (int i = 1; i <= 6; i++)
+		for (int i = 1; i <= 10; i++)
 		{
 			GetRandomItem(character, item_layer_);
 		}

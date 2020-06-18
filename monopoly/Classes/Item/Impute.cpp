@@ -20,6 +20,6 @@ bool Impute::init()
 		return false;
 	}
 	name_ = "嫁祸卡";
-	content_ = "可以将刑事处罚嫁祸给他人";
+	content_ = "可以将刑事处罚嫁祸给他人，被动触发，点击确认则作废";
 	return true;
 }

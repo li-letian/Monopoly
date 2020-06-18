@@ -20,6 +20,6 @@ bool Escape::init()
 		return false;
 	}
 	name_ = "逍遥法外";
-	content_ = "可以免受一次刑事处罚";
+	content_ = "可以免受一次刑事处罚，被动触发，点击确认则作废";
 	return true;
 }
