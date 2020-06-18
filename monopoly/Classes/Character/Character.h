@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "Scene/MapScene.h"
+#include "Common/CommonConstant.h"
 
 USING_NS_CC;
 
@@ -47,7 +48,7 @@ private:
 	CC_SYNTHESIZE(std::string, name_, PlayerName);	//名字
 protected:
 	int money_=0;//金钱
-	int deposit_=0;//存款
+	int deposit_=initial_money*2/3;//存款
 	int loan_=0;//贷款
 public:
 	int getMoney()const
