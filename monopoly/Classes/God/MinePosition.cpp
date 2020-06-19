@@ -30,11 +30,11 @@ bool MinePosition::onLand(Character* standing)
 		auto pop = PopUpLayer::create();
 		pop->setTitle("地雷爆炸");
 		pop->setContent(standing->getPlayerName() + std::string("踩到了地雷，被炸伤住院"));
-		pop->setOnScene();
 		pop->setCallBack([=](Ref* render) {
 			SendToHospital(standing);
 			SendMsg(msg_make_go_apper);
 			});
+		pop->setOnScene();
 		return true;
 	}
 	else
