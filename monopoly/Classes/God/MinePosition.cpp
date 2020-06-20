@@ -32,7 +32,7 @@ bool MinePosition::onLand(Character* standing)
 		pop->setContent(standing->getPlayerName() + std::string("踩到了地雷，被炸伤住院"));
 		pop->setCallBack([=](Ref* render) {
 			SendToHospital(standing);
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 			});
 		pop->setOnScene();
 		return true;

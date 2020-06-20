@@ -41,12 +41,16 @@ bool Hospital::onLand(Character* standing)
 {
 	if (standing->getIsAI())
 	{
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		return false;
 	}
 	//要是没有出院证明就直接退出
 	auto item = GetItemScene()->getItem(standing, "出院证明");
-	if (item == nullptr) return false;
+	if (item == nullptr)
+	{
+		SendMsg(msg_make_go_appear);
+		return false;
+	}
 	auto map_scene = GetMapScene();
 	auto tile_size = map_scene->getMap()->getTileSize();
 	auto& characters = dynamic_cast<GameController*>(Director::getInstance()->getRunningScene()->getChildByName("game_controller"))->getCharacters();
@@ -68,7 +72,7 @@ bool Hospital::onLand(Character* standing)
 		}
 	}
 	pop->setMenu(pic, callback);
-	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
+	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_appear); }, "取消");
 	pop->setPosition(Vec2(0, 0));
 	map_scene->addChild(pop, 51);
 	return true;

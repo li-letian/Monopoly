@@ -140,7 +140,7 @@ void GameController::addEventListenerCustom()
 			ReadyToStartGo();
 			break;
 			//当前人物回合结束，轮到下个人走
-		case (msg_make_go_apper):
+		case (msg_make_go_appear):
 		{
 			//func函数将在一段时间后执行
 			listener_block_->setEnabled(true);
@@ -545,7 +545,7 @@ void GameController::dealWithLand()
 	if (land)
 		land->onLand(character);
 	else
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 }
 
 void GameController::backToStand(Character *character)

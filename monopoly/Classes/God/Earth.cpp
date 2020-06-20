@@ -28,7 +28,7 @@ void Earth::popUpDialog()
 	pop->setTitle("土地公生效");
 	pop->setContent("强占所在土地");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

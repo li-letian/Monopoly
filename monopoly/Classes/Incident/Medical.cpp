@@ -72,7 +72,7 @@ bool SendToHospital(Character*user,Vector<Character*>characters_to_hospital)
 				if (characters_to_hospital.at(i) == user)
 				{
 					SendMsg(msg_hide_go_only);
-					SendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_appear);
 				}
 			}
 			});
@@ -85,7 +85,7 @@ bool SendToHospital(Character*user,Vector<Character*>characters_to_hospital)
 			if (characters_to_hospital.at(i) == user)
 			{
 				SendMsg(msg_hide_go_only);
-				SendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_appear);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ void PopUpHospitalDialog(Character* character)
 	pop->setTitle("出院消息");
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* sender) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

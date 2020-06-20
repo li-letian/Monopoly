@@ -28,7 +28,7 @@ void Rich::popUpDialog()
 	pop->setTitle("财神生效");
 	pop->setContent("本次过路费免除");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

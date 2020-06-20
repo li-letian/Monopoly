@@ -28,7 +28,7 @@ void Unluck::popUpDialog()
 	pop->setTitle("衰神生效");
 	pop->setContent("投资失败");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

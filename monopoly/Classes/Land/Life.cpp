@@ -144,7 +144,7 @@ bool Life::onLand(Character* standing)
 		break;
 	}
 	pop->setContent(txt);
-	pop->setCallBack([=](Ref* ref) {fun(ref); SendMsg(msg_make_go_apper); });
+	pop->setCallBack([=](Ref* ref) {fun(ref); SendMsg(msg_make_go_appear); });
 	pop->setOnScene(51);
 	return true;
 }

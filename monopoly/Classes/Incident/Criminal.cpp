@@ -91,7 +91,7 @@ void PopUpJailDialog(Character* character)
 	pop->setTitle("³öÓüÔ¤¸æ");
 	pop->setContent(text);
 	pop->setCallBack([=](Ref* sender) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }
