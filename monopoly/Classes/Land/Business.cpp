@@ -173,7 +173,7 @@ bool Business::demote()
 bool Business::onBusinessLand(Character* standing)
 {
 	auto map_scene = GetMapScene();
-	if (standing->getTag() == owner_->getTag())
+	if (standing->getTag() == owner_->getTag() && standing->getIsAI() == false)
 	{
 		if (type_ == land_institute)
 		{
@@ -190,61 +190,61 @@ bool Business::onBusinessLand(Character* standing)
 					GetItemScene()->addItem(standing, AngelCard::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 遥控骰子 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, ControlDice::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 改建证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, HouseChange::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 请神符 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Pray::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 出院证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RidHospital::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 度假卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Sleep::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 乌龟座驾 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Turtle::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 共同富裕 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Average::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 恶魔卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, DevilCard::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 怪兽卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, HouseDestory::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				break;
 			case 1:
 				txt.push_back(" 地雷 ");
@@ -252,61 +252,61 @@ bool Business::onBusinessLand(Character* standing)
 					GetItemScene()->addItem(standing, Mine::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 红卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RedCard::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 保释证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RidJail::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 停留卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Stop::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 机器工人 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Worker::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 黑卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, BlackCard::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 逍遥法外 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Escape::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 购地证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, HouseExchange::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 导弹 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Missile::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 复仇卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Revenge::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				break;
 			default:
 				txt.push_back(" 涨价卡 ");
@@ -314,60 +314,60 @@ bool Business::onBusinessLand(Character* standing)
 					GetItemScene()->addItem(standing, RisePrice::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 传送机 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Transmit::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 飞鞋 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Car::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 陷害卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Frame::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 嫁祸卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Impute::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 远行鞋 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Motor::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 送神符 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RidGod::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 机器娃娃 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Robot::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
+					});
 				txt.push_back(" 转向卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, TurnAround::create());
 					pop->removeFromParentAndCleanup(true);
 					SendMsg(msg_make_go_appear);
-				});
-			 break;
+					});
+				break;
 			}
 
-			pop->setMenu(callback,txt);
-			pop->setCallBack([=](Ref* ref) {},"取消");
+			pop->setMenu(callback, txt);
+			pop->setCallBack([=](Ref* ref) {}, "取消");
 			pop->setPosition(Vec2(0, 0));
 			map_scene->addChild(pop, 51);
 		}
@@ -397,7 +397,6 @@ bool Business::onBusinessLand(Character* standing)
 				}
 				else
 				{
-					//这里弄破产
 					SendMsg(msg_make_go_appear);
 				}
 			};
