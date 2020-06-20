@@ -440,3 +440,9 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		break;
 	}	
 }
+
+void Hotel::totallyDestroy()
+{
+	color_->removeFromParentAndCleanup(true);
+	this->removeFromParentAndCleanup(true);
+}

@@ -4,6 +4,7 @@
 #include "Scene/MapScene.h"
 #include "Scene/ItemScene.h"
 #include "Scene/StockScene.h"
+#include "Scene/StartScene.h"
 
 #include "Character/Character.h"
 #include "Character/Dice.h"
@@ -147,75 +148,103 @@ void GameController::addEventListenerCustom()
 			auto func = [=]() {
 				//定位到下一个角色
 				whose_turn_++;
-				if (whose_turn_ >= characters_.size())
+				if (characters_.size() == 1)
 				{
-					whose_turn_ = 0;
-					map_scene_->updateDay();
-					stock_layer_->stockUpdate();
-
-					for (auto c : characters_)
-					{
-						c->setLoan(static_cast<int>(c->getLoan() * 1.03f));
-						c->setDeposit(static_cast<int>(c->getDeposit() * 1.03f));
-					}
-
+					auto pop = PopUpLayer::create();
+					pop->setTitle("游戏结束");
+					pop->setContent(std::string(characters_.at(0)->getPlayerName()) + std::string("获得了游戏的胜利"));
+					pop->setCallBack([=](Ref* ref) {
+						auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
+						AudioEngine::stopAll();
+						auto scene = StartScene::createScene();
+						Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
+						});
+					pop->setOnScene();
 				}
-
-				//找到当前角色
-				auto character = characters_.at(whose_turn_);
-
-				if (character->getGodPossessed() != normal)
+				else if (characters_.size() == 0)
 				{
-					character->setGodTimes(character->getGodTimes() - 1);
-					if (character->getGodTimes() <= 0)
-					{
-						character->setGodPossessed(normal);
-						gods_.pushBack(dynamic_cast<God *>(character->getChildByName("god")));
-						character->removeChildByName("god", true);
-						updateGod(no_god);
-					}
+					auto pop = PopUpLayer::create();
+					pop->setTitle("游戏结束");
+					pop->setContent(std::string("本局游戏无人胜利"));
+					pop->setCallBack([=](Ref* ref) {
+						auto sound_effect = AudioEngine::play2d("bottom_down.mp3", false);
+						AudioEngine::stopAll();
+						auto scene = StartScene::createScene();
+						Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene, Color3B(0, 255, 255)));
+						});
+					pop->setOnScene();
 				}
-
-				//更新一些信息
-				stock_layer_->remakeLabel(character);
-				map_scene_->setInfoOnDisplay(character);
-				map_scene_->updateInformation(character);
-				item_layer_->updateMenu(characters_.at(whose_turn_));
-
-				//回到当前人物视角
-				returnToCharacter(character);
-
-				listener_block_->setEnabled(false);
-				//判断人物状态
-				switch (character->getCondition())
+				else
 				{
-				case normal:
-					if (character->getInsurance() > 0)
-						character->setInsurance(character->getInsurance() - 1);
-					if (character->getIsAI())
+					if (whose_turn_ >= characters_.size())
 					{
-						listener_block_->setEnabled(true);
-						ReadyToStartGo();
+						whose_turn_ = 0;
+						map_scene_->updateDay();
+						stock_layer_->stockUpdate();
+
+						for (auto c : characters_)
+						{
+							c->setLoan(static_cast<int>(c->getLoan() * 1.03f));
+							c->setDeposit(static_cast<int>(c->getDeposit() * 1.03f));
+						}
+
 					}
-					else
+
+					//找到当前角色
+					auto character = characters_.at(whose_turn_);
+
+					if (character->getGodPossessed() != normal)
 					{
-						addGoButton();
+						character->setGodTimes(character->getGodTimes() - 1);
+						if (character->getGodTimes() <= 0)
+						{
+							character->setGodPossessed(normal);
+							gods_.pushBack(dynamic_cast<God*>(character->getChildByName("god")));
+							character->removeChildByName("god", true);
+							updateGod(no_god);
+						}
 					}
-					break;
-				case in_jail:
-					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpJailDialog(character);
-					break;
-				case on_holiday:
-					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpHolidayDialog(character);
-					break;
-				case in_hospital:
-					character->setStopTimes(character->getStopTimes() - 1);
-					PopUpHospitalDialog(character);
-					break;
+
+					//更新一些信息
+					stock_layer_->remakeLabel(character);
+					map_scene_->setInfoOnDisplay(character);
+					map_scene_->updateInformation(character);
+					item_layer_->updateMenu(characters_.at(whose_turn_));
+
+					//回到当前人物视角
+					returnToCharacter(character);
+
+					listener_block_->setEnabled(false);
+					//判断人物状态
+					switch (character->getCondition())
+					{
+					case normal:
+						if (character->getInsurance() > 0)
+							character->setInsurance(character->getInsurance() - 1);
+						if (character->getIsAI())
+						{
+							listener_block_->setEnabled(true);
+							ReadyToStartGo();
+						}
+						else
+						{
+							addGoButton();
+						}
+						break;
+					case in_jail:
+						character->setStopTimes(character->getStopTimes() - 1);
+						PopUpJailDialog(character);
+						break;
+					case on_holiday:
+						character->setStopTimes(character->getStopTimes() - 1);
+						PopUpHolidayDialog(character);
+						break;
+					case in_hospital:
+						character->setStopTimes(character->getStopTimes() - 1);
+						PopUpHospitalDialog(character);
+						break;
+					}
 				}
-				
 			};
 			auto seq = Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr);
 
@@ -230,6 +259,28 @@ void GameController::addEventListenerCustom()
 				pop->setCallBack([=](Ref *render) {
 					characters_.erase(whose_turn_);
 					whose_turn_--;
+
+					//遍历地图，找到所有破产者的地产并摧毁
+					for (int i = 0; i < map_scene_->totalPosition(); i++)
+					{
+						if (map_scene_->getType(i) == land_hotel)
+						{
+							auto hotel = dynamic_cast<Hotel*>(map_scene_->getLand(i));
+							if (hotel->getOwner() == character)
+							{
+								hotel->totallyDestroy();
+							}
+						}
+						else if (map_scene_->getType(i) == land_business)
+						{
+							auto business = dynamic_cast<Business*>(map_scene_->getLand(i));
+							if (business->getOwner() == character)
+							{
+								business->totallyDestroy();
+							}
+						}
+					}
+
 					character->removeFromParent();
 					this->runAction(Sequence::create(DelayTime::create(0.5f), CallFunc::create(func), nullptr));
 				});

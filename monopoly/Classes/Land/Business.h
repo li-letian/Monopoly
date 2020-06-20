@@ -24,10 +24,16 @@ public:
 	bool onBusinessLand(Character* standing);
 	bool promote(bool house_change = false);
 	bool demote();
-	Character* getOwner() {
+	Character* getOwner() 
+	{
 		return owner_;
 	}
+	void setOwner(Character* owner)
+	{
+		owner_ = owner;
+	}
 	static Business* create( int index);
+	void totallyDestroy();
 };
 
 #endif // !_BUSINESS_H_

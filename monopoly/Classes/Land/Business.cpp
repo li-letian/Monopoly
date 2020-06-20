@@ -540,3 +540,10 @@ bool Business::onLand(Character* standing)
 	}
 	return true;
 }
+
+void Business::totallyDestroy()
+{
+	color_->removeFromParentAndCleanup(true);
+	color_larger_->removeFromParentAndCleanup(true);
+	this->removeFromParentAndCleanup(true);
+}
