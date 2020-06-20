@@ -155,8 +155,8 @@ void GameController::addEventListenerCustom()
 
 					for (auto c : characters_)
 					{
-						c->setLoan(static_cast<int>(c->getLoan() * 1.03f));
-						c->setDeposit(static_cast<int>(c->getDeposit() * 1.03f));
+						c->setLoan(static_cast<int>(c->getLoan() * 1.015f));
+						c->setDeposit(static_cast<int>(c->getDeposit() * 1.005f));
 					}
 
 				}
