@@ -170,6 +170,13 @@ bool Business::demote()
 	return true;
 }
 
+void Business::totallyDestroy()
+{
+	color_->removeFromParentAndCleanup(true);
+	color_larger_->removeFromParentAndCleanup(true);
+	this->removeFromParentAndCleanup(true);
+}
+
 bool Business::onBusinessLand(Character* standing)
 {
 	auto map_scene = GetMapScene();
@@ -541,9 +548,3 @@ bool Business::onLand(Character* standing)
 	return true;
 }
 
-void Business::totallyDestroy()
-{
-	color_->removeFromParentAndCleanup(true);
-	color_larger_->removeFromParentAndCleanup(true);
-	this->removeFromParentAndCleanup(true);
-}

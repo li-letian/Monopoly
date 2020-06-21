@@ -265,18 +265,24 @@ void GameController::addEventListenerCustom()
 					{
 						if (map_scene_->getType(i) == land_hotel)
 						{
-							auto hotel = dynamic_cast<Hotel*>(map_scene_->getLand(i));
+							auto& land = map_scene_->getLand(i);
+							if (!land) continue;
+							auto hotel = dynamic_cast<Hotel*>(land);
 							if (hotel->getOwner() == character)
 							{
 								hotel->totallyDestroy();
+								land = nullptr;
 							}
 						}
 						else if (map_scene_->getType(i) == land_business)
 						{
-							auto business = dynamic_cast<Business*>(map_scene_->getLand(i));
+							auto& land = map_scene_->getLand(i);
+							if (!land) continue;
+							auto business = dynamic_cast<Business*>(land);
 							if (business->getOwner() == character)
 							{
 								business->totallyDestroy();
+								land = nullptr;
 							}
 						}
 					}
