@@ -72,7 +72,7 @@ bool Bank::onLand(Character* standing)
 				{
 					standing->setMoney(standing->getMoney() + base_money);
 					standing->setDeposit(standing->getDeposit() - base_money);
-					auto call_back_func = CallFunc::create([=]() {SendMsg(msg_make_go_apper); });
+					auto call_back_func = CallFunc::create([=]() {SendMsg(msg_make_go_appear); });
 					auto sequence = Sequence::create(DelayTime::create(0.5f), call_back_func, nullptr);
 					game_controller->runAction(sequence);
 					break;
@@ -80,7 +80,7 @@ bool Bank::onLand(Character* standing)
 			}
 			break;
 		}
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 	}
 	else
 	{
@@ -124,7 +124,7 @@ bool Bank::onLand(Character* standing)
 							standing->setMoney(standing->getMoney() + loan_value);
 							standing->setLoan(loan_value);
 							pop1->removeFromParentAndCleanup(true);
-							SendMsg(msg_make_go_apper);
+							SendMsg(msg_make_go_appear);
 						});
 				}
 				else
@@ -135,11 +135,11 @@ bool Bank::onLand(Character* standing)
 							standing->setMoney(standing->getMoney() - loan_value);
 							standing->setLoan(0);
 							pop1->removeFromParentAndCleanup(true);
-							SendMsg(msg_make_go_apper);
+							SendMsg(msg_make_go_appear);
 						});
 				}
 				pop1->setMenu(fun1, txt1);
-				pop1->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
+				pop1->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_appear); }, "取消");
 				pop1->setPosition(Vec2::ZERO);
 				map_scene->addChild(pop1, 51);
 			});

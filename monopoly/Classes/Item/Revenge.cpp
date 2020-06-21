@@ -13,7 +13,7 @@ void Revenge::worked(Character* player)
 	auto seq = Sequence::create(DelayTime::create(0.3f), CallFunc::create([=]() {
 		pop->removeFromParentAndCleanup(true);
 		SendMsg(msg_hide_go_only);
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 	}), nullptr);
 	pop->runAction(seq);
 	pop->setOnScene();

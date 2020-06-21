@@ -28,7 +28,7 @@ void Angel::popUpDialog()
 	pop->setTitle("天使生效");
 	pop->setContent("众生平等，加盖一层楼");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 	});
 	pop->setOnScene();
 }

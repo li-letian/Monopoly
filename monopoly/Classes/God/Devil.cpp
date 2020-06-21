@@ -28,7 +28,7 @@ void Devil::popUpDialog()
 	pop->setTitle("恶魔生效");
 	pop->setContent("强制破坏一层楼");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

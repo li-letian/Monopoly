@@ -28,7 +28,7 @@ void Poor::popUpDialog()
 	pop->setTitle("穷神生效");
 	pop->setContent("本次过路费翻倍");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

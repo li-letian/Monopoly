@@ -28,7 +28,7 @@ void Luck::popUpDialog()
 	pop->setTitle("福神生效");
 	pop->setContent("免费加盖一层");
 	pop->setCallBack([=](Ref* render) {
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		});
 	pop->setOnScene();
 }

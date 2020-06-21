@@ -157,7 +157,7 @@ bool Hotel::onLand(Character* standing)
 						auto fail = PopUpLayer::create();
 						fail->setTitle("购买失败");
 						fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
-						fail->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); });
+						fail->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_appear); });
 						fail->setPosition(Vec2(0, 0));
 						map_scene->addChild(fail, 51);
 					}
@@ -192,7 +192,7 @@ bool Hotel::onLand(Character* standing)
 			}
 			else
 			{
-				SendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_appear);
 			}
 		}
 		else
@@ -336,7 +336,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 	switch (standing->getGodPossessed())
 	{
 	case no_god:
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		break;
 	case angel:
 		if (rank_ >= 0 && rank_ < 4)
@@ -349,7 +349,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	case devil:
@@ -363,7 +363,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	case earth:
@@ -374,7 +374,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	case luck:
@@ -388,7 +388,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	case poor:
@@ -401,7 +401,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	case rich:
@@ -414,7 +414,7 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	case unluck:
@@ -435,8 +435,14 @@ void Hotel::godExecute(Character* standing,bool do_promote,int rent_value)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 		break;
 	}	
+}
+
+void Hotel::totallyDestroy()
+{
+	color_->removeFromParentAndCleanup(true);
+	this->removeFromParentAndCleanup(true);
 }

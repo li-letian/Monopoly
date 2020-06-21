@@ -15,6 +15,6 @@ bool RisePrice::init()
 		return false;
 	}
 	name_ = "涨价卡";
-	content_ = "让当前的街区过路费涨价";
+	content_ = "让当前的街区的地产价格涨价";
 	return true;
 }

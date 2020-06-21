@@ -52,7 +52,7 @@ constexpr int speed_steps = 2 * walk_steps;
 constexpr int flying_steps = 3 * walk_steps;
 
 constexpr int msg_start_go = 1;
-constexpr int msg_make_go_apper = 2;
+constexpr int msg_make_go_appear = 2;
 constexpr int msg_hide_go_only = 3;
 
 constexpr float grid_distance = 16.0f;

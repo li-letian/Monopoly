@@ -41,14 +41,14 @@ bool Jail::onLand(Character* standing)
 {
 	if (standing->getIsAI())
 	{
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		return true;
 	}
 	//要是没有保释证明就直接退出
 	auto item = GetItemScene()->getItem(standing, "保释证明");
 	if (item == nullptr)
 	{
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 		return true;
 	}
 	auto map_scene = GetMapScene();
@@ -72,7 +72,7 @@ bool Jail::onLand(Character* standing)
 		}
 	}
 	pop->setMenu(pic, callback);
-	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
+	pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_appear); }, "取消");
 	pop->setPosition(Vec2(0, 0));
 	map_scene->addChild(pop, 51);
 	return true;

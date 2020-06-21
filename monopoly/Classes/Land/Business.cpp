@@ -96,7 +96,7 @@ bool Business::promote(bool house_change)
 		initWithFile("park.png");
 		setAnchorPoint(Vec2(0.5f, 0.0f));
 		setPosition(x, y);
-		SendMsg(msg_make_go_apper);
+		SendMsg(msg_make_go_appear);
 	}
 	else
 	{
@@ -118,7 +118,7 @@ bool Business::promote(bool house_change)
 			initWithFile("park.png");
 			setAnchorPoint(Vec2(0.5f, 0.0f));
 			setPosition(x, y);
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 			});
 		pic.push_back("resort.png");
 		callback.push_back([=](Ref* ref) {
@@ -127,7 +127,7 @@ bool Business::promote(bool house_change)
 			initWithFile("resort.png");
 			setAnchorPoint(Vec2(0.5f, 0.0f));
 			setPosition(x, y);
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 			});
 		pic.push_back("mall.png");
 		callback.push_back([=](Ref* ref) {
@@ -136,7 +136,7 @@ bool Business::promote(bool house_change)
 			initWithFile("mall.png");
 			setAnchorPoint(Vec2(0.5f, 0.0f));
 			setPosition(x, y);
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 			});
 		pic.push_back("institute.png");
 		callback.push_back([=](Ref* ref) {
@@ -148,7 +148,7 @@ bool Business::promote(bool house_change)
 			onBusinessLand(owner_);
 			});
 		pop->setMenu(pic, callback);
-		pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_apper); }, "取消");
+		pop->setCallBack([=](Ref* ref) {SendMsg(msg_make_go_appear); }, "取消");
 		pop->setPosition(Vec2(0, 0));
 		map_scene->addChild(pop, 51);
 		return true;
@@ -170,10 +170,17 @@ bool Business::demote()
 	return true;
 }
 
+void Business::totallyDestroy()
+{
+	color_->removeFromParentAndCleanup(true);
+	color_larger_->removeFromParentAndCleanup(true);
+	this->removeFromParentAndCleanup(true);
+}
+
 bool Business::onBusinessLand(Character* standing)
 {
 	auto map_scene = GetMapScene();
-	if (standing->getTag() == owner_->getTag())
+	if (standing->getTag() == owner_->getTag() && standing->getIsAI() == false)
 	{
 		if (type_ == land_institute)
 		{
@@ -189,191 +196,191 @@ bool Business::onBusinessLand(Character* standing)
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, AngelCard::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 遥控骰子 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, ControlDice::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 改建证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, HouseChange::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 请神符 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Pray::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 出院证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RidHospital::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 度假卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Sleep::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 乌龟座驾 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Turtle::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 共同富裕 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Average::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 恶魔卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, DevilCard::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 怪兽卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, HouseDestory::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				break;
 			case 1:
 				txt.push_back(" 地雷 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Mine::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 红卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RedCard::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 保释证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RidJail::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 停留卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Stop::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 机器工人 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Worker::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 黑卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, BlackCard::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 逍遥法外 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Escape::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 购地证明 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, HouseExchange::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 导弹 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Missile::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 复仇卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Revenge::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				break;
 			default:
 				txt.push_back(" 涨价卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RisePrice::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 传送机 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Transmit::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 飞鞋 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Car::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 陷害卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Frame::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 嫁祸卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Impute::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 远行鞋 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Motor::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 送神符 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, RidGod::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 机器娃娃 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, Robot::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
+					SendMsg(msg_make_go_appear);
+					});
 				txt.push_back(" 转向卡 ");
 				callback.push_back([=](Ref* ref) {
 					GetItemScene()->addItem(standing, TurnAround::create());
 					pop->removeFromParentAndCleanup(true);
-					SendMsg(msg_make_go_apper);
-				});
-			 break;
+					SendMsg(msg_make_go_appear);
+					});
+				break;
 			}
 
-			pop->setMenu(callback,txt);
-			pop->setCallBack([=](Ref* ref) {},"取消");
+			pop->setMenu(callback, txt);
+			pop->setCallBack([=](Ref* ref) {}, "取消");
 			pop->setPosition(Vec2(0, 0));
 			map_scene->addChild(pop, 51);
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 	}
 	if(standing->getTag() != owner_->getTag())
@@ -393,12 +400,11 @@ bool Business::onBusinessLand(Character* standing)
 					owner_->setGainValue(owner_->getGainValue() + rent_value);
 					owner_->setMoney(owner_->getMoney() + rent_value);
 					GoOnHoliday(standing);
-					SendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_appear);
 				}
 				else
 				{
-					//这里弄破产
-					SendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_appear);
 				}
 			};
 			pop->setCallBack(yes);
@@ -418,12 +424,12 @@ bool Business::onBusinessLand(Character* standing)
 					standing->setMoney(money - rent_value);
 					owner_->setGainValue(owner_->getGainValue() + rent_value);
 					owner_->setMoney(owner_->getMoney() + rent_value);
-					SendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_appear);
 				}
 				else
 				{
 					//这里弄破产
-					SendMsg(msg_make_go_apper);
+					SendMsg(msg_make_go_appear);
 				}
 			};
 			pop->setCallBack(yes);
@@ -431,7 +437,7 @@ bool Business::onBusinessLand(Character* standing)
 		}
 		else
 		{
-			SendMsg(msg_make_go_apper);
+			SendMsg(msg_make_go_appear);
 		}
 	}
 	return true;
@@ -457,7 +463,7 @@ bool Business::onLand(Character* standing)
 				color_->setAnchorPoint(Vec2(0.5f, 0.5f));
 				map_scene->getMap()->addChild(color_, 1);
 				map_scene->getMap()->addChild(color_larger_, 1);
-				SendMsg(msg_make_go_apper);
+				SendMsg(msg_make_go_appear);
 				//画点东西表示已经买完了
 			}
 			else
@@ -466,12 +472,12 @@ bool Business::onLand(Character* standing)
 				fail->setTitle("购买失败");
 				fail->setContent("钱都不够了咋还还剁手呢？快去整点钱吧");
 				fail->setCallBack([=](Ref* ref) {
-					SendMsg(msg_make_go_apper); });
+					SendMsg(msg_make_go_appear); });
 				fail->setPosition(Vec2(0, 0));
 				map_scene->addChild(fail, 51);
 			}
 		};
-		auto no = [=](Ref* ref) { SendMsg(msg_make_go_apper); };
+		auto no = [=](Ref* ref) { SendMsg(msg_make_go_appear); };
 		//如果是AI
 		if (standing->getIsAI())
 		{
@@ -510,7 +516,7 @@ bool Business::onLand(Character* standing)
 			{
 				promote();
 			};
-			auto no = [=](Ref* ref) {SendMsg(msg_make_go_apper); };
+			auto no = [=](Ref* ref) {SendMsg(msg_make_go_appear); };
 			if (standing->getIsAI())
 			{
 				switch (random(2))
@@ -541,3 +547,4 @@ bool Business::onLand(Character* standing)
 	}
 	return true;
 }
+
