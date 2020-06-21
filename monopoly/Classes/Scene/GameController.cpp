@@ -20,7 +20,11 @@
 #include "Land/Bank.h"
 #include "Land/Life.h"
 #include "Land/Chance.h"
-#include "Incident/Incident.h"
+
+#include "Incident/PopUpLayer.h"
+#include "Incident/Medical.h"
+#include "Incident/Criminal.h"
+#include "Incident/Holiday.h"
 #include "Incident/Stay.h"
 
 #include "God/God.h"

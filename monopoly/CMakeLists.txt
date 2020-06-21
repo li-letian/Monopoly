@@ -73,7 +73,6 @@ list(APPEND GAME_SOURCE
 
      Classes/Incident/Criminal.cpp
      Classes/Incident/Finance.cpp
-     Classes/Incident/Incident.cpp
      Classes/Incident/Realtor.cpp
      Classes/Incident/Stay.cpp
      Classes/Incident/Economy.cpp
@@ -81,6 +80,7 @@ list(APPEND GAME_SOURCE
      Classes/Incident/Medical.cpp
      Classes/Incident/Staff.cpp
      Classes/Incident/PopUpLayer.cpp
+     Classes/Incident/Incident.cpp
 
      Classes/Item/AngelCard.cpp
      Classes/Item/ControlDice.cpp
@@ -115,11 +115,9 @@ list(APPEND GAME_SOURCE
 
      Classes/Land/Aviation.cpp
      Classes/Land/Business.cpp
-     Classes/Land/Enterprise.cpp
-	 Classes/Land/Insurance.cpp
-	 Classes/Land/Hotel.cpp
+     Classes/Land/Insurance.cpp
+     Classes/Land/Hotel.cpp
      Classes/Land/Land.cpp
-     Classes/Land/Lottery.cpp
      Classes/Land/Bank.cpp
      Classes/Land/Chance.cpp
      Classes/Land/Hospital.cpp
@@ -128,13 +126,10 @@ list(APPEND GAME_SOURCE
      Classes/Land/Oil.cpp
      Classes/Land/Technology.cpp
 
-     Classes/Scene/BankScene.cpp
      Classes/Scene/ItemScene.cpp
      Classes/Scene/MapScene.cpp
      Classes/Scene/SettingScene.cpp
      Classes/Scene/StockScene.cpp
-     Classes/Scene/ExchangeScene.cpp
-     Classes/Scene/LotteryScene.cpp
      Classes/Scene/SelectScene.cpp
      Classes/Scene/StartScene.cpp
      Classes/Scene/GameController.cpp
@@ -160,7 +155,6 @@ list(APPEND GAME_HEADER
 
      Classes/Incident/Criminal.h
      Classes/Incident/Finance.h
-     Classes/Incident/Incident.h
      Classes/Incident/Realtor.h
      Classes/Incident/Stay.h
      Classes/Incident/Economy.h
@@ -168,6 +162,7 @@ list(APPEND GAME_HEADER
      Classes/Incident/Medical.h
      Classes/Incident/Staff.h
      Classes/Incident/PopUpLayer.h
+     Classes/Incident/Incident.h
 
      Classes/Item/AngelCard.h
      Classes/Item/ControlDice.h
@@ -202,11 +197,9 @@ list(APPEND GAME_HEADER
 
      Classes/Land/Aviation.h
      Classes/Land/Business.h
-     Classes/Land/Enterprise.h
      Classes/Land/Hotel.h
      Classes/Land/Insurance.h
      Classes/Land/Land.h
-     Classes/Land/Lottery.h
      Classes/Land/Oil.h
      Classes/Land/Bank.h
      Classes/Land/Chance.h
@@ -215,13 +208,10 @@ list(APPEND GAME_HEADER
      Classes/Land/Life.h
      Classes/Land/Technology.h
 
-     Classes/Scene/BankScene.h
      Classes/Scene/ItemScene.h
      Classes/Scene/MapScene.h
      Classes/Scene/SettingScene.h
      Classes/Scene/StockScene.h
-     Classes/Scene/ExchangeScene.h
-     Classes/Scene/LotteryScene.h
      Classes/Scene/SelectScene.h
      Classes/Scene/StartScene.h
      Classes/Scene/GameController.h
