@@ -4,7 +4,7 @@
 #include "Common/CommonConstant.h"
 #include <ctime>
 #include <vector>
-#include "Incident/Incident.h"
+#include "Incident/Finance.h"
 #include "MapScene.h"
 #include "AudioEngine.h"
 using namespace std;
